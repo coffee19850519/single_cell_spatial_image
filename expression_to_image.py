@@ -120,23 +120,24 @@ def plot_box_for_RGB(RGB_data):
 def save_transformed_RGB_to_image_and_csv(X, X_transformed, data_file_name):
 
     # full size spot number
-    spot_row = X.loc[:, 'pxl_row_in_fullres'].values
-    spot_col = X.loc[:, 'pxl_col_in_fullres'].values
+    spot_row = X.loc[:, 'pxl_col_in_fullres'].values
+    spot_col = X.loc[:, 'pxl_row_in_fullres'].values
 
-    max_row = np.max(spot_row)
-    max_col = np.max(spot_col)
+    max_row = np.int(np.max(spot_row + 1))
+    max_col = np.int(np.max(spot_col + 1))
 
-    img = np.ones(shape=(max_row, max_col, 3), dtype= np.uint8) * 255
+    img = np.ones(shape=(max_row + 1, max_col + 1, 3), dtype=np.uint8) * 255
 
-    # mask = np.ones(shape=(max_row + 1, max_col + 1), dtype=np.uint8)
-    # should follow the spot permutation at full resolution image
     for index in range(len(X_transformed)):
-        # plot dot according to RGB, ra
-        # img[spot_row[index], spot_col[index]] = np.uint8(X_transformed[index])
-
-        cv2.circle(img, (spot_row[index], spot_col[index]), radius= 65,
-                   color= (int(X_transformed[index][0]),int(X_transformed[index][1]),int(X_transformed[index][2])),
-                   thickness= -1)
+        # img[spot_row[index], spot_col[index]] = values[index]
+        # radius = 60
+        # cv2.rectangle(img, (spot_col[index] - radius-7, spot_row[index] - radius),
+        #               (spot_col[index] + radius+7, spot_row[index]+ radius),
+        #               color=(int(values[index][0]), int(values[index][1]), int(values[index][2])),
+        #               thickness=-1)
+        cv2.circle(img, (spot_col[index], spot_row[index]), radius=68,
+                   color=(int(X_transformed[index][0]), int(X_transformed[index][1]), int(X_transformed[index][2])),
+                   thickness=-1)
         # mask[spot_row[index], spot_col[index]] = 0
 
     # cv2.imwrite(r'/home/fei/Desktop/1.1.0/image.jpg', img)
