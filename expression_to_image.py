@@ -5,6 +5,7 @@ import cv2
 import os
 import matplotlib.pyplot as plt
 from scipy.stats import pearsonr
+from sklearn.decomposition import PCA
 from itertools import permutations
 from tkinter import *
 import tkinter.messagebox as messagebox
@@ -12,7 +13,7 @@ import tkinter.messagebox as messagebox
 def scale_to_RGB(channel,truncated_percent):
     truncated_down = np.percentile(channel, truncated_percent)
     truncated_up = np.percentile(channel, 100 - truncated_percent)
-    channel_new = (255 / (truncated_up - truncated_down)) * channel
+    channel_new = ((channel - truncated_down) / (truncated_up - truncated_down)) * 255
     channel_new[channel_new < 0] = 0
     channel_new[channel_new > 255] = 255
     return np.uint8(channel_new)
@@ -41,18 +42,25 @@ def transform_expression_to_RGB(expression_file):
     # save_spot_RGB_to_image(X, expression_file)
 
     values = X.iloc[:, 9:].values
-    transformer = umap.UMAP(n_neighbors= 10, min_dist=0.2, n_components=3)
+
+    best_pcc = 0
+    # best_pca_ratio = 0
+    best_perm = (0,1,2)
+    best_percentile_0 = 0
+    best_percentile_1 = 0
+    best_percentile_2 = 0
+
+    # for pca_ratio in np.arange(0.75, 1.1, 0.01):
+        # apply PCA to denoise first
+    pac_model = PCA(n_components=50, svd_solver = 'full')
+    transformer = umap.UMAP(n_neighbors=10, min_dist=0.2, n_components=3)
     try:
+        values = pac_model.fit_transform(values)
         X_transformed = transformer.fit(values).transform(values)
     except Exception as e:
         print(str(e))
         return
 
-    best_pcc = 0
-    best_perm = (0,1,2)
-    best_percentile_0 = 0
-    best_percentile_1 = 0
-    best_percentile_2 = 0
     #do grid search for the percentile parameters
     for percentile_0 in range(0, 50):
         for percentile_1 in range(0, 50):
@@ -63,9 +71,10 @@ def transform_expression_to_RGB(expression_file):
                 temp_X_transform[:, 1] = scale_to_RGB(X_transformed[:, 1], percentile_1)
                 temp_X_transform[:, 2] = scale_to_RGB(X_transformed[:, 2], percentile_2)
 
-                pcc, perm = correlation_between_images(X.iloc[:, 6:9].values, X_transformed)
+                pcc, perm = correlation_between_images(X.iloc[:, 6:9].values, temp_X_transform)
                 if best_pcc < pcc:
                     best_pcc = pcc
+                    # best_transformed_X = temp_X_transform[:, perm]
                     best_perm = perm
                     best_percentile_0 = percentile_0
                     best_percentile_1 = percentile_1
@@ -79,8 +88,7 @@ def transform_expression_to_RGB(expression_file):
 
     print('the best pcc for the file {:s} is {:.3f}'.format(expression_file,best_pcc))
 
-    save_transformed_RGB_to_image_and_csv(X, X_transformed[:, best_perm], expression_file)
-
+    save_transformed_RGB_to_image_and_csv(X,X_transformed[:, best_perm], expression_file)
 
 
     del X_transformed, data, X, values, transformer
@@ -88,28 +96,6 @@ def transform_expression_to_RGB(expression_file):
 
 
 
-def contour_detection(img, mask):
-
-    # imputed_img = cv2.inpaint(img, mask, 1, cv2.INPAINT_TELEA)
-
-    #GaussianBlur
-    blurred_img = cv2.GaussianBlur(img, (3, 3), 0)
-
-    # Grayscale
-    gray_img = cv2.cvtColor(blurred_img.astype(np.float32), cv2.COLOR_RGB2GRAY)
-    # Find Canny edges
-    edge_img = cv2.Canny(gray_img.astype(np.uint8), 30, 100)
-    # Finding Contours
-    contours, hierarchy = cv2.findContours(edge_img, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_TC89_L1)
-
-    # Draw all contours
-    # -1 signifies drawing all contours
-    # cv2.drawContours(imputed_img, contours, -1, (0, 0, 0), 1)
-    # cv2.imwrite(os.path.splitext(expression_file)[0] + '_contour.jpg', imputed_img)
-
-    del blurred_img, gray_img, edge_img, mask
-
-    return contours, hierarchy
 
 def plot_box_for_RGB(RGB_data):
     fig = plt.figure()
@@ -218,9 +204,11 @@ class Application(Frame):
 # # 主消息循环:
 # app.mainloop()
 
-
-data_folder = r'/home/fei/Desktop/test/expression/'
+#
+data_folder = r'/home/fei/Desktop/test/Brain/'
 for expression_file in os.listdir(data_folder):
     if os.path.splitext(expression_file)[1] == '.csv':
         transform_expression_to_RGB(os.path.join(data_folder, expression_file))
         # save_spot_RGB_to_image(os.path.join(data_folder, expression_file))
+
+
