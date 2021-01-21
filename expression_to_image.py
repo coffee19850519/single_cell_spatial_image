@@ -32,12 +32,25 @@ def nan_check_in_datframe():
     pass
 
 
-def transform_expression_to_RGB(expression_file):
+
+
+'''
+expression_file: file path for processed expression matrix
+pca_conponent_num (50 in default): number of principle components remains in PCA denoising
+umap_neighbor_num (10 in default): the size of the local neighborhood in UMAP
+umap_min_dist (0.2 in default): control how tightly UMAP is allowed to pack points
+
+'''
+def transform_expression_to_RGB(expression_file, pca_conponent_num = 50, umap_neighbor_num = 10, umap_min_dist = 0.2 ):
     data = pd.read_csv(expression_file)
 
     X = data.loc[data['in_tissue'] != 0]
 
-    # X.iloc[[199,203, 205, 2793, 2575, 2578, 2580, 2582], :].to_csv(expression_file[:-4] + '_nan.csv',index = False)
+    # read RGB columns to see if needing RGB optimization
+    if np.sum(data.loc[:, ['R','G','B']].values) == 0:
+        original_RGB = True
+    else:
+        original_RGB = False
 
     # save_spot_RGB_to_image(X, expression_file)
 
@@ -52,44 +65,49 @@ def transform_expression_to_RGB(expression_file):
 
     # for pca_ratio in np.arange(0.75, 1.1, 0.01):
         # apply PCA to denoise first
-    pac_model = PCA(n_components=50, svd_solver = 'full')
-    transformer = umap.UMAP(n_neighbors=10, min_dist=0.2, n_components=3)
+    pac_model = PCA(n_components=pca_conponent_num, svd_solver = 'full')
+    transformer = umap.UMAP(n_neighbors=umap_neighbor_num, min_dist=umap_min_dist, n_components=3)
     try:
         values = pac_model.fit_transform(values)
         X_transformed = transformer.fit(values).transform(values)
     except Exception as e:
         print(str(e))
         return
+    if original_RGB:
+        #do grid search for the percentile parameters
+        for percentile_0 in range(0, 50):
+            for percentile_1 in range(0, 50):
+                for percentile_2 in range(0, 50):
+                    # plot_box_for_RGB(X_transformed)
+                    temp_X_transform = np.zeros_like(X_transformed, np.int8)
+                    temp_X_transform[:, 0] = scale_to_RGB(X_transformed[:, 0], percentile_0)
+                    temp_X_transform[:, 1] = scale_to_RGB(X_transformed[:, 1], percentile_1)
+                    temp_X_transform[:, 2] = scale_to_RGB(X_transformed[:, 2], percentile_2)
 
-    #do grid search for the percentile parameters
-    for percentile_0 in range(0, 50):
-        for percentile_1 in range(0, 50):
-            for percentile_2 in range(0, 50):
-                # plot_box_for_RGB(X_transformed)
-                temp_X_transform = np.zeros_like(X_transformed, np.int8)
-                temp_X_transform[:, 0] = scale_to_RGB(X_transformed[:, 0], percentile_0)
-                temp_X_transform[:, 1] = scale_to_RGB(X_transformed[:, 1], percentile_1)
-                temp_X_transform[:, 2] = scale_to_RGB(X_transformed[:, 2], percentile_2)
+                    pcc, perm = correlation_between_images(X.iloc[:, 6:9].values, temp_X_transform)
+                    if best_pcc < pcc:
+                        best_pcc = pcc
+                        # best_transformed_X = temp_X_transform[:, perm]
+                        best_perm = perm
+                        best_percentile_0 = percentile_0
+                        best_percentile_1 = percentile_1
+                        best_percentile_2 = percentile_2
+                    del temp_X_transform
 
-                pcc, perm = correlation_between_images(X.iloc[:, 6:9].values, temp_X_transform)
-                if best_pcc < pcc:
-                    best_pcc = pcc
-                    # best_transformed_X = temp_X_transform[:, perm]
-                    best_perm = perm
-                    best_percentile_0 = percentile_0
-                    best_percentile_1 = percentile_1
-                    best_percentile_2 = percentile_2
-                del temp_X_transform
+        #re-produce optimal RGB projection result
+        X_transformed[:, 0] = scale_to_RGB(X_transformed[:, 0], best_percentile_0)
+        X_transformed[:, 1] = scale_to_RGB(X_transformed[:, 1], best_percentile_1)
+        X_transformed[:, 2] = scale_to_RGB(X_transformed[:, 2], best_percentile_2)
 
-    #re-produce optimal RGB projection result
-    X_transformed[:, 0] = scale_to_RGB(X_transformed[:, 0], best_percentile_0)
-    X_transformed[:, 1] = scale_to_RGB(X_transformed[:, 1], best_percentile_1)
-    X_transformed[:, 2] = scale_to_RGB(X_transformed[:, 2], best_percentile_2)
+        print('the best pcc for the file {:s} is {:.3f}'.format(expression_file,best_pcc))
 
-    print('the best pcc for the file {:s} is {:.3f}'.format(expression_file,best_pcc))
+    else:
+        # directly rescale embeddings to RGB range
+        X_transformed[:, 0] = scale_to_RGB(X_transformed[:, 0], 100)
+        X_transformed[:, 1] = scale_to_RGB(X_transformed[:, 1], 100)
+        X_transformed[:, 2] = scale_to_RGB(X_transformed[:, 2], 100)
 
     save_transformed_RGB_to_image_and_csv(X,X_transformed[:, best_perm], expression_file)
-
 
     del X_transformed, data, X, values, transformer
 
@@ -209,6 +227,7 @@ data_folder = r'/home/fei/Desktop/test/Brain/'
 for expression_file in os.listdir(data_folder):
     if os.path.splitext(expression_file)[1] == '.csv':
         transform_expression_to_RGB(os.path.join(data_folder, expression_file))
-        # save_spot_RGB_to_image(os.path.join(data_folder, expression_file))
+        save_spot_RGB_to_image(os.path.join(data_folder, expression_file))
+
 
 
