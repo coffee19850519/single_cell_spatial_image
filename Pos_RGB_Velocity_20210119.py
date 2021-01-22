@@ -77,31 +77,42 @@ for item in List_Velocity:
     # color conversion
     img = cv2.cvtColor(img,cv2.COLOR_BGR2RGB)
 
+    # do image enhancement here
+    gray_img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    equa = cv2.equalizeHist(gray_img)
+
+    cv2.imwrite(os.path.splitext(spatial_vel_full_output)[0]+'_enhancement.png' , equa)
+
     print('********check img.shape********')
     print(img.shape)
 
     RGB_list = []
+    equa_list = []
     for i in range(len(tissue_positions_new)):
         a = tissue_positions_new['pxl_row_in_fullres'][i]-rad
         b = tissue_positions_new['pxl_row_in_fullres'][i]+rad+1
         c = tissue_positions_new['pxl_col_in_fullres'][i]-rad
         d = tissue_positions_new['pxl_col_in_fullres'][i]+rad+1
         rgb = list(cv2.mean(img[c:d,a:b]))
+        equa_gray  = cv2.mean(img[c:d,a:b])
         #print(rgb)
         RGB_list.append(rgb)
+
+        equa_list.append(equa_gray)
         #print(RGB_list)
 
     tissue_positions_new['RGB'] = RGB_list
-
+    tissue_positions_new['equa'] = equa_list
     tissue_positions_new['R'] = tissue_positions_new['RGB'].str[0]
     tissue_positions_new['G'] = tissue_positions_new['RGB'].str[1]
     tissue_positions_new['B'] = tissue_positions_new['RGB'].str[2]
+
     tissue_positions_new = tissue_positions_new.drop(columns = 'RGB')
     print('********check tissue_positions_new PLUS RGB********')
     print(tissue_positions_new.head)
 
 
-
+    del gray_img, equa, RGB_list, equa_list
 
     # merge velocity to spatial csv
     spatial_vel_full = pd.merge(tissue_positions_new, velocity_new, how='inner', on='barcode')
