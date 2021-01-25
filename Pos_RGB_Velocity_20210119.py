@@ -94,11 +94,11 @@ for item in List_Velocity:
         c = tissue_positions_new['pxl_col_in_fullres'][i]-rad
         d = tissue_positions_new['pxl_col_in_fullres'][i]+rad+1
         rgb = list(cv2.mean(img[c:d,a:b]))
-        equa_gray  = cv2.mean(img[c:d,a:b])
+        equa_gray  = cv2.mean(equa[c:d,a:b])
         #print(rgb)
         RGB_list.append(rgb)
 
-        equa_list.append(equa_gray)
+        equa_list.append(equa_gray[0])
         #print(RGB_list)
 
     tissue_positions_new['RGB'] = RGB_list
