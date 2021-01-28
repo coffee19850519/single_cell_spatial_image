@@ -78,7 +78,7 @@ for item in List_Velocity:
     img = cv2.cvtColor(img,cv2.COLOR_BGR2RGB)
 
     # do image enhancement here
-    gray_img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    gray_img = cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)
     equa = cv2.equalizeHist(gray_img)
 
     cv2.imwrite(os.path.splitext(spatial_vel_full_output)[0]+'_enhancement.png' , equa)

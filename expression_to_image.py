@@ -45,7 +45,7 @@ def correlation_between_enhanced_images(X, transformed_RGB):
         for index in range(len(transformed_RGB)):
             img[spot_row[index], spot_col[index]] = transformed_RGB[index]
         img = np.uint8(img)
-        transformed_gray_img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+        transformed_gray_img = cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)
         transformed_gray_values = []
         for index in range(len(transformed_RGB)):
             transformed_gray_values.append(transformed_gray_img[spot_row[index], spot_col[index]])
