@@ -5,7 +5,7 @@ import cv2
 import os
 import matplotlib.pyplot as plt
 from scipy.stats import pearsonr
-from sklearn.decomposition import PCA
+from sklearn.decomposition import IncrementalPCA
 from itertools import permutations
 
 def scale_to_RGB(channel,truncated_percent):
@@ -71,7 +71,7 @@ umap_neighbor_num (10 in default): the size of the local neighborhood in UMAP
 umap_min_dist (0.2 in default): control how tightly UMAP is allowed to pack points
 
 '''
-def transform_expression_to_RGB(expression_file, original_RGB = True, pca_conponent_num = 50, umap_neighbor_num = 10, umap_min_dist = 0.2 ):
+def transform_expression_to_RGB(expression_file, original_RGB = True, pca_conponent_num = 50, pca_batch_size = 200, umap_neighbor_num = 10, umap_min_dist = 0.2 ):
     data = pd.read_csv(expression_file)
 
     X = data.loc[data['in_tissue'] != 0]
@@ -101,7 +101,7 @@ def transform_expression_to_RGB(expression_file, original_RGB = True, pca_conpon
 
     # for pca_ratio in np.arange(0.75, 1.1, 0.01):
         # apply PCA to denoise first
-    pac_model = PCA(n_components=pca_conponent_num, svd_solver = 'full')
+    pac_model = IncrementalPCA(n_components=pca_conponent_num, batch_size= pca_batch_size)
     transformer = umap.UMAP(n_neighbors=umap_neighbor_num, min_dist=umap_min_dist, n_components=3)
     try:
         values = pac_model.fit_transform(values)
