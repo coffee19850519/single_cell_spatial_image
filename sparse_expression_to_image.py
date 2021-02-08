@@ -97,7 +97,7 @@ umap_min_dist (0.2 in default): control how tightly UMAP is allowed to pack poin
 def transform_expression_to_RGB(sparse_expression_file, pca_conponent_num = 50, umap_neighbor_num = 10, umap_min_dist = 0.2 ):
     values = scipy.sparse.load_npz(sparse_expression_file)
     try:
-        meta_data = pd.read_csv(os.path.splitext(sparse_expression_file)[0] + '.csv' )
+        meta_data = pd.read_csv(os.path.splitext(sparse_expression_file)[0][:-9] + '_meta_data.csv' )
     except Exception:
         print('cannot find the meta-data file with the same file name')
 
