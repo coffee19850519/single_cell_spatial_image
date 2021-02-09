@@ -88,24 +88,26 @@ def save_transformed_RGB_to_image_and_csv(spot_row_in_fullres, spot_col_in_fullr
     del img, spot_row_in_fullres, spot_col_in_fullres#, mask, inpaint_img,  resize_contour#resize_img,
 
 '''
-expression_file: file path for processed expression matrix
+sparse_expression_file: file path for sparse expression matrix (npz format)
+meta_data_file: file path for the corresponding meta-data file (csv format)
+original_RGB:whether or not include original RGB of spots in meta-data (boolean)
+max_iteration (25 in default): the max iteration number in RGB optimization
 pca_conponent_num (50 in default): number of principle components remains in PCA denoising
 umap_neighbor_num (10 in default): the size of the local neighborhood in UMAP
 umap_min_dist (0.2 in default): control how tightly UMAP is allowed to pack points
-
 '''
-def transform_expression_to_RGB(sparse_expression_file, pca_conponent_num = 50, umap_neighbor_num = 10, umap_min_dist = 0.2 ):
+def transform_expression_to_RGB(sparse_expression_file, meta_data_file, original_RGB = True, max_iteration = 25, batch_size = 50, pca_conponent_num = 50, umap_neighbor_num = 10, umap_min_dist = 0.2 ):
     values = scipy.sparse.load_npz(sparse_expression_file)
     try:
-        meta_data = pd.read_csv(os.path.splitext(sparse_expression_file)[0][:-9] + '_meta_data.csv' )
+        meta_data = pd.read_csv(meta_data_file )
     except Exception:
         print('cannot find the meta-data file with the same file name')
 
     # # read RGB columns to see if needing RGB optimization
-    if np.sum(meta_data.loc[:, ['R','G','B']].values) != 0:
-        original_RGB = False
-    else:
-        original_RGB = True
+    # if np.sum(meta_data.loc[:, ['R','G','B']].values) != 0:
+    #     original_RGB = True
+    # else:
+    #     original_RGB = False
 
 
     #TODO: read enhanced image here
@@ -128,7 +130,7 @@ def transform_expression_to_RGB(sparse_expression_file, pca_conponent_num = 50, 
 
     # for pca_ratio in np.arange(0.75, 1.1, 0.01):
         # apply PCA to denoise first
-    pac_model = IncrementalPCA(n_components=pca_conponent_num, batch_size= 50)
+    pac_model = IncrementalPCA(n_components=pca_conponent_num, batch_size= batch_size)
     transformer = umap.UMAP(n_neighbors=umap_neighbor_num, min_dist=umap_min_dist, n_components=3)
     try:
         #TODO: assert shapes of sparse matrix and pca_component_num and batch_size here
@@ -144,9 +146,9 @@ def transform_expression_to_RGB(sparse_expression_file, pca_conponent_num = 50, 
         # save original image at spot level
         # save_spot_RGB_to_image(X, expression_file)
         #do grid search for the percentile parameters
-        for percentile_0 in range(0, 50):
-            for percentile_1 in range(0, 50):
-                for percentile_2 in range(0, 50):
+        for percentile_0 in range(0, max_iteration):
+            for percentile_1 in range(0, max_iteration):
+                for percentile_2 in range(0, max_iteration):
                     # plot_box_for_RGB(X_transformed)
                     # optimize pseudo-RGB according to spatial image
                     temp_X_transform = X_transformed.copy()
@@ -190,5 +192,18 @@ def transform_expression_to_RGB(sparse_expression_file, pca_conponent_num = 50, 
     del X_transformed, meta_data, values, transformer
 
 if __name__ == "__main__":
-    sparse_file_name = r'/home/fei/Desktop/Human_Cerebellum_Whole_Transcriptome_Analysis_sparse.npz'
-    transform_expression_to_RGB(sparse_expression_file= sparse_file_name)
+    
+    sparse_file_name = r'/home/fei/Desktop/mobilenet/Human_Cerebellum_Whole_Transcriptome_Analysis.npz'
+    meta_data = r'/home/fei/Desktop/mobilenet/Human_Cerebellum_Whole_Transcriptome_Analysis.csv'
+
+    '''
+    sparse_expression_file: file path for sparse expression matrix (npz format)
+    meta_data_file: file path for the corresponding meta-data file (csv format)
+    original_RGB:whether or not include original RGB of spots in meta-data (boolean)
+    max_iteration (25 in default): the max iteration number in RGB optimization
+    pca_conponent_num (50 in default): number of principle components remains in PCA denoising
+    umap_neighbor_num (10 in default): the size of the local neighborhood in UMAP
+    umap_min_dist (0.2 in default): control how tightly UMAP is allowed to pack points
+    '''
+
+    transform_expression_to_RGB(sparse_expression_file= sparse_file_name, meta_data_file= meta_data, max_iteration = 2)
