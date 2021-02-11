@@ -69,18 +69,19 @@ expression_file: file path for processed expression matrix
 pca_conponent_num (50 in default): number of principle components remains in PCA denoising
 umap_neighbor_num (10 in default): the size of the local neighborhood in UMAP
 umap_min_dist (0.2 in default): control how tightly UMAP is allowed to pack points
-
+plot_spot_radius (68 in default): spot radius in plotting pseudo-RGB image
 '''
-def transform_expression_to_RGB(expression_file, original_RGB = True, pca_conponent_num = 50, pca_batch_size = 200, umap_neighbor_num = 10, umap_min_dist = 0.2 ):
+def transform_expression_to_RGB(expression_file, original_RGB = True, pca_conponent_num = 50,
+                                pca_batch_size = 200, umap_neighbor_num = 10, umap_min_dist = 0.2,plot_spot_radius = 68):
     data = pd.read_csv(expression_file)
 
     X = data.loc[data['in_tissue'] != 0]
 
     # # read RGB columns to see if needing RGB optimization
     # if np.sum(X.loc[:, ['R','G','B']].values) != 0:
-    #     original_RGB = False
-    # else:
     #     original_RGB = True
+    # else:
+    #     original_RGB = False
 
     if 'equa' in data.columns:
         #set gene start idex
@@ -104,7 +105,7 @@ def transform_expression_to_RGB(expression_file, original_RGB = True, pca_conpon
     pac_model = IncrementalPCA(n_components=pca_conponent_num, batch_size= pca_batch_size)
     transformer = umap.UMAP(n_neighbors=umap_neighbor_num, min_dist=umap_min_dist, n_components=3)
     try:
-        values = pac_model.fit_transform(values)
+        values = pac_model.fit_transform(val+ues)
         X_transformed = transformer.fit(values).transform(values)
     except Exception as e:
         print(str(e))
@@ -151,7 +152,7 @@ def transform_expression_to_RGB(expression_file, original_RGB = True, pca_conpon
         X_transformed[:, 1] = scale_to_RGB(X_transformed[:, 1], 100)
         X_transformed[:, 2] = scale_to_RGB(X_transformed[:, 2], 100)
 
-    save_transformed_RGB_to_image_and_csv(X,X_transformed[:, best_perm], expression_file)
+    save_transformed_RGB_to_image_and_csv(X,X_transformed[:, best_perm], expression_file, plot_spot_radius)
 
     del X_transformed, data, X, values, transformer
 
@@ -165,14 +166,14 @@ def plot_box_for_RGB(RGB_data):
     plt.xticks([1,2,3], ['R\'','G\'','B\''],  rotation=0)
     plt.show()
 
-def save_transformed_RGB_to_image_and_csv(X, X_transformed ,data_file_name):
+def save_transformed_RGB_to_image_and_csv(X, X_transformed ,data_file_name, plot_spot_radius):
 
     # full size spot number
     spot_row = X['pxl_col_in_fullres'].values
     spot_col = X['pxl_row_in_fullres'].values
 
-    max_row = np.int(np.max(spot_row + 1))
-    max_col = np.int(np.max(spot_col + 1))
+    max_row = np.int(np.max(spot_row + 1) + plot_spot_radius)
+    max_col = np.int(np.max(spot_col + 1) + plot_spot_radius)
 
     img = np.ones(shape=(max_row + 1, max_col + 1, 3), dtype=np.uint8) * 255
 
@@ -183,7 +184,7 @@ def save_transformed_RGB_to_image_and_csv(X, X_transformed ,data_file_name):
         #               (spot_col[index] + radius+7, spot_row[index]+ radius),
         #               color=(int(values[index][0]), int(values[index][1]), int(values[index][2])),
         #               thickness=-1)
-        cv2.circle(img, (spot_col[index], spot_row[index]), radius=68,
+        cv2.circle(img, (spot_col[index], spot_row[index]), radius= plot_spot_radius,
                    color=(int(X_transformed[index][0]), int(X_transformed[index][1]), int(X_transformed[index][2])),
                    thickness=-1)
 

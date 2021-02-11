@@ -55,10 +55,11 @@ def correlation_between_enhanced_images(gray_values, spot_row, spot_col, transfo
     return best_pcc, best_perm
 
 
-def save_transformed_RGB_to_image_and_csv(spot_row_in_fullres, spot_col_in_fullres, X_transformed ,data_file_name):
+def save_transformed_RGB_to_image_and_csv(spot_row_in_fullres, spot_col_in_fullres, X_transformed ,data_file_name,
+                                          plot_spot_radius):
 
-    max_row = np.int(np.max(spot_row_in_fullres + 1))
-    max_col = np.int(np.max(spot_col_in_fullres + 1))
+    max_row = np.int(np.max(spot_row_in_fullres + 1) + plot_spot_radius)
+    max_col = np.int(np.max(spot_col_in_fullres + 1) + plot_spot_radius)
 
     img = np.ones(shape=(max_row + 1, max_col + 1, 3), dtype=np.uint8) * 255
 
@@ -69,7 +70,7 @@ def save_transformed_RGB_to_image_and_csv(spot_row_in_fullres, spot_col_in_fullr
         #               (spot_col[index] + radius+7, spot_row[index]+ radius),
         #               color=(int(values[index][0]), int(values[index][1]), int(values[index][2])),
         #               thickness=-1)
-        cv2.circle(img, (spot_col_in_fullres[index], spot_row_in_fullres[index]), radius=68,
+        cv2.circle(img, (spot_col_in_fullres[index], spot_row_in_fullres[index]), radius=plot_spot_radius,
                    color=(int(X_transformed[index][0]), int(X_transformed[index][1]), int(X_transformed[index][2])),
                    thickness=-1)
 
@@ -95,8 +96,11 @@ max_iteration (25 in default): the max iteration number in RGB optimization
 pca_conponent_num (50 in default): number of principle components remains in PCA denoising
 umap_neighbor_num (10 in default): the size of the local neighborhood in UMAP
 umap_min_dist (0.2 in default): control how tightly UMAP is allowed to pack points
+plot_spot_radius (68 in default): spot radius in plotting pseudo-RGB image
 '''
-def transform_expression_to_RGB(sparse_expression_file, meta_data_file, original_RGB = True, max_iteration = 25, batch_size = 50, pca_conponent_num = 50, umap_neighbor_num = 10, umap_min_dist = 0.2 ):
+def transform_expression_to_RGB(sparse_expression_file, meta_data_file, original_RGB = True, max_iteration = 25,
+                                batch_size = 50, pca_conponent_num = 50, umap_neighbor_num = 10, umap_min_dist = 0.2,
+                                plot_spot_radius = 68):
     values = scipy.sparse.load_npz(sparse_expression_file)
     try:
         meta_data = pd.read_csv(meta_data_file )
@@ -187,7 +191,8 @@ def transform_expression_to_RGB(sparse_expression_file, meta_data_file, original
 
     save_transformed_RGB_to_image_and_csv(meta_data['pxl_col_in_fullres'].values,
                                           meta_data['pxl_row_in_fullres'].values,
-                                          X_transformed[:, best_perm], sparse_expression_file)
+                                          X_transformed[:, best_perm], sparse_expression_file,
+                                          plot_spot_radius)
 
     del X_transformed, meta_data, values, transformer
 
@@ -204,6 +209,7 @@ if __name__ == "__main__":
     pca_conponent_num (50 in default): number of principle components remains in PCA denoising
     umap_neighbor_num (10 in default): the size of the local neighborhood in UMAP
     umap_min_dist (0.2 in default): control how tightly UMAP is allowed to pack points
+    plot_spot_radius (68 in default): spot radius in plotting pseudo-RGB image  
     '''
 
     transform_expression_to_RGB(sparse_expression_file= sparse_file_name, meta_data_file= meta_data, max_iteration = 2)
