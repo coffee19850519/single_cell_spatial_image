@@ -105,7 +105,7 @@ def transform_expression_to_RGB(expression_file, original_RGB = True, pca_conpon
     pac_model = IncrementalPCA(n_components=pca_conponent_num, batch_size= pca_batch_size)
     transformer = umap.UMAP(n_neighbors=umap_neighbor_num, min_dist=umap_min_dist, n_components=3)
     try:
-        values = pac_model.fit_transform(val+ues)
+        values = pac_model.fit_transform(values)
         X_transformed = transformer.fit(values).transform(values)
     except Exception as e:
         print(str(e))
