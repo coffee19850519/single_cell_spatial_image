@@ -1,6 +1,6 @@
-# Project Title
+# RESEPT: a computational framework for REconstructing and Segmenting Expression pseudo-image based on sPatially resolved Transcriptomics
  
-One Paragraph of project description goes here
+A novel method to reconstruct a pseudo-image of spots using the sequencing data from spatially resolved transcriptomics to identify spatial context and functional zonation.
  
 ## Getting Started
  
@@ -11,7 +11,10 @@ These instructions will get you a copy of the project up and running on your loc
 What things you need to install the software and how to install them
  
 ```
-Give examples
+pip install umap-learn
+pip install scikit-learn
+pip install python-opencv
+pip install mmsegmentation
 ```
  
 ## Running the tests
@@ -28,17 +31,13 @@ Give an example
  
 ## Built With
  
-* [Dropwizard](http://www.dropwizard.io/1.0.2/docs/) - The web framework used
-* [Maven](https://maven.apache.org/) - Dependency Management
-* [ROME](https://rometools.github.io/rome/) - Used to generate RSS Feeds
+* [opencv](https://opencv.org/) - The image processing library used
+* [scikit-learn](https://scikit-learn.org/stable/) - The machine learning library used
+* [mmSegmentation](https://github.com/open-mmlab/mmsegmentation) - Used to train the deep learning based image segmentation model
  
 ## Contributing
  
 Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c63ec426) for details on our code of conduct, and the process for submitting pull requests to us.
- 
-## Versioning
- 
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags). 
   
 ## License
  
