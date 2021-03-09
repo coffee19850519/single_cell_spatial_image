@@ -100,7 +100,7 @@ def sparse_to_dense_gene_name_bc_df(filtered_matrix_h5):
 # Start to work with spatial csv
 
 
-def gen_meta_data(filtered_matrix_h5, spatial_csv, spatial_json_file, image, full_output, full_exp_output, meta_data, panel_gene_file=None, output_panel=None, exp_panel_output=None):
+def gen_spa_meta(filtered_matrix_h5, spatial_csv, spatial_json_file, image, full_output, meta_data, panel_gene_file, panel_output):
     tissue_positions = pd.read_table(spatial_csv, sep=',', header=None)
     print(f"spatial csv file in {spatial_csv}")
 
@@ -130,7 +130,8 @@ def gen_meta_data(filtered_matrix_h5, spatial_csv, spatial_json_file, image, ful
     gray_img = cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)
     equa = cv2.equalizeHist(gray_img)
 
-    cv2.imwrite(os.path.splitext(full_output)[0][:-9]+'_enhancement.png', equa)
+    # Generate enhanced grey figure
+    #cv2.imwrite(os.path.splitext(full_output)[0][:-9]+'_enhancement.png', equa)
 
     print('********check img.shape********')
     print(img.shape)
@@ -193,14 +194,13 @@ def gen_meta_data(filtered_matrix_h5, spatial_csv, spatial_json_file, image, ful
     # save the meta data of spots_in_tissue
     spots_in_tissue.iloc[:, :10].to_csv(meta_data, index=False)
 
-    # Save without RGB information
-    spots_in_tissue_norgb = spots_in_tissue.drop(columns=['R', 'G', 'B', 'equa']).iloc[:, 6:]
-    print('********spots_in_tissue_norgb check********')
-    print(spots_in_tissue_norgb.iloc[:10, :15])
-    spots_in_tissue_norgb_arr = spots_in_tissue_norgb.to_numpy().astype(float)
-    spots_in_tissue_spa_exp = sp_sparse.csc_matrix(spots_in_tissue_norgb_arr)
-    sp_sparse.save_npz(full_exp_output, spots_in_tissue_spa_exp)
-    print(f"Full Expression data saved in {full_exp_output}")
+    # save the column names
+    with open(os.path.join(out_dir, (os.path.splitext(file)[0] + '_gene_name.txt')), 'w') as f:
+        for item in list(gene_name_bc_df)[10:]:
+            f.write("%s\n" % item)
+        f.close()
+
+    del spots_in_tissue_arr, positions_bc_gene_name_full
 
     if panel_gene_file is not None:
         panel_gene = pd.read_table(panel_gene_file, sep='\t', header=None)
@@ -233,34 +233,32 @@ def gen_meta_data(filtered_matrix_h5, spatial_csv, spatial_json_file, image, ful
         # only save in tissue to sparse matrix
         panel_spots_in_tissue = positions_bc_gene_name_panel_1.loc[positions_bc_gene_name_panel_1['in_tissue'] != 0]
         panel_spots_in_tissue_spa = sp_sparse.csc_matrix(panel_spots_in_tissue.iloc[:, 10:].to_numpy().astype(float))
-        sp_sparse.save_npz(output_panel, panel_spots_in_tissue_spa)
-        print(f"output saved in {output_panel}")
+        sp_sparse.save_npz(panel_output, panel_spots_in_tissue_spa)
+        print(f"output saved in {panel_output}")
 
-        # Save without RGB information
-        print("notice this is 'positions_bc_gene_name_full'")
-        print(list(positions_bc_gene_name_full.drop(columns=['R', 'G', 'B']).columns)[:12])
-        print("this is for 'panel_spots_in_tissue'")
-        print(list(panel_spots_in_tissue.drop(columns=['R', 'G', 'B']).columns)[:12])
-        # save to sparse matrix
-        panel_spots_in_tissue_spa_exp = sp_sparse.csc_matrix(panel_spots_in_tissue.drop(columns=['R', 'G', 'B', 'equa']).iloc[:, 6:].to_numpy().astype(float))
-        sp_sparse.save_npz(exp_panel_output, panel_spots_in_tissue_spa_exp)
-        print(f"panel genes expression data saved in {exp_panel_output}")
 
-# filtered_matrix_h5, spatial_csv, spatial_json_file, image, full_output, full_exp_output,meta_data
 
 input_dir = r'/group/xulab/Su_Li/Yuzhou_sptl/Data_source/Spatial_Gene_expression1.2.0/'
-out_dir_withRGB = r'/group/xulab/Su_Li/Yuzhou_sptl/Processed_data/Exp_sparse_mtx/Spatial_Gene_expression1.2.0/withRGB/'
-out_dir_withoutRGB = r'/group/xulab/Su_Li/Yuzhou_sptl/Processed_data/Exp_sparse_mtx/Spatial_Gene_expression1.2.0/withoutRGB/'
+out_dir = r'/group/xulab/Su_Li/Yuzhou_sptl/Processed_data/Exp_sparse_mtx/Spatial_Gene_expression1.2.0/'
+
 
 for file in os.listdir(input_dir):
+    # here it has strict requirement of the structure of the files. It need to be used by broad user,
+    # need to set those files carefully.
     filtered_matrix_h5 = glob.glob(input_dir + file + "/*.h5")[0]
     spatial_csv = glob.glob(input_dir + file + "/spatial/*.csv")[0]
     spatial_json_file = open(glob.glob(input_dir + file + "/spatial/*.json")[0],)
     image = glob.glob(input_dir + file + "/*.tif")[0]
-    full_output = os.path.join(out_dir_withRGB, (os.path.splitext(file)[0] + '_spa_full.npz'))
-    full_exp_output = os.path.join(out_dir_withoutRGB, (os.path.splitext(file)[0] + '_spa_exp_only.npz'))
-    meta_data = os.path.join(out_dir_withRGB, (os.path.splitext(file)[0] + '_meta_data.csv'))
-    if file == 'Human_Cerebellum_Whole_Transcriptome_Analysis':
-        gen_meta_data(filtered_matrix_h5, spatial_csv, spatial_json_file, image, full_output, full_exp_output, meta_data)
-## todo :
-# need to update output_panel & exp_panel_output
+    full_output = os.path.join(out_dir, (os.path.splitext(file)[0] + '_spa_full.npz'))
+    meta_data = os.path.join(out_dir, (os.path.splitext(file)[0] + '_meta_data.csv'))
+    # check if panel gene list is provided
+    try:
+        panel_gene_file = glob.glob(input_dir + file + "/*.txt")[0]
+    except IndexError:
+        panel_gene_file = None
+        panel_output = None
+    else:
+        panel_output = os.path.join(out_dir, (os.path.splitext(file)[0] + '_spa_panel.npz'))
+
+    gen_spa_meta(filtered_matrix_h5, spatial_csv, spatial_json_file, image, full_output, meta_data, panel_gene_file, panel_output)
+
