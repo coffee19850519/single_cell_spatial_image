@@ -2,7 +2,7 @@ import pandas as pd
 import scipy.sparse
 import numpy as np
 from sklearn.decomposition import IncrementalPCA
-import umap, os
+import umap, os, json
 import cv2
 from scipy.stats import pearsonr
 from itertools import permutations
@@ -55,29 +55,33 @@ def correlation_between_enhanced_images(gray_values, spot_row, spot_col, transfo
     return best_pcc, best_perm
 
 
-def save_transformed_RGB_to_image_and_csv(spot_row_in_fullres, spot_col_in_fullres, X_transformed ,data_file_name,
+def save_transformed_RGB_to_image_and_csv(spot_row_in_fullres,
+                                          spot_col_in_fullres,
+                                          max_row, max_col,
+                                          X_transformed,
+                                          data_file_name,
                                           plot_spot_radius):
-
-    max_row = np.int(np.max(spot_row_in_fullres + 1) + plot_spot_radius)
-    max_col = np.int(np.max(spot_col_in_fullres + 1) + plot_spot_radius)
 
     img = np.ones(shape=(max_row + 1, max_col + 1, 3), dtype=np.uint8) * 255
 
     for index in range(len(X_transformed)):
         # img[spot_row[index], spot_col[index]] = values[index]
         # radius = 60
-        # cv2.rectangle(img, (spot_col[index] - radius-7, spot_row[index] - radius),
-        #               (spot_col[index] + radius+7, spot_row[index]+ radius),
-        #               color=(int(values[index][0]), int(values[index][1]), int(values[index][2])),
-        #               thickness=-1)
-        cv2.circle(img, (spot_col_in_fullres[index], spot_row_in_fullres[index]), radius=plot_spot_radius,
-                   color=(int(X_transformed[index][0]), int(X_transformed[index][1]), int(X_transformed[index][2])),
-                   thickness=-1)
+        cv2.rectangle(img, (spot_col_in_fullres[index] - plot_spot_radius, spot_row_in_fullres[index] - plot_spot_radius),
+                      (spot_col_in_fullres[index] + plot_spot_radius, spot_row_in_fullres[index]+ plot_spot_radius),
+                      color=(int(X_transformed[index][0]), int(X_transformed[index][1]), int(X_transformed[index][2])),
+                      thickness=-1)
+
+        # cv2.circle(img, (spot_col_in_fullres[index], spot_row_in_fullres[index]), radius=plot_spot_radius,
+        #            color=(int(X_transformed[index][0]), int(X_transformed[index][1]), int(X_transformed[index][2])),
+        #            thickness=-1)
 
 
 
-    cv2.imwrite(os.path.splitext(data_file_name)[0] + '_transformed.jpg', img)
-
+    hi_img = cv2.resize(img, dsize= (2000,2000),  interpolation= cv2.INTER_CUBIC)
+    cv2.imwrite(os.path.splitext(data_file_name)[0] + '_transformed_hires.jpg', hi_img)
+    low_img = cv2.resize(img, dsize= (600, 600), interpolation= cv2.INTER_CUBIC)
+    cv2.imwrite(os.path.splitext(data_file_name)[0] + '_transformed_lowres.jpg', low_img)
     # save transformed_X back to csv file
     # X.insert(gene_start_idx, 'transformed_R',X_transformed[:, 0], True)
     # X.insert(gene_start_idx+1, 'transformed_G',X_transformed[:, 1], True)
@@ -86,7 +90,7 @@ def save_transformed_RGB_to_image_and_csv(spot_row_in_fullres, spot_col_in_fullr
     # # #then save to csv file
     # X.iloc[:, 0:gene_start_idx+3].to_csv(os.path.splitext(data_file_name)[0] + '_newRGB.csv', index = False)
 
-    del img, spot_row_in_fullres, spot_col_in_fullres#, mask, inpaint_img,  resize_contour#resize_img,
+    del img, spot_row_in_fullres, spot_col_in_fullres, hi_img, low_img#, mask, inpaint_img,  resize_contour#resize_img,
 
 '''
 sparse_expression_file: file path for sparse expression matrix (npz format)
@@ -98,9 +102,13 @@ umap_neighbor_num (10 in default): the size of the local neighborhood in UMAP
 umap_min_dist (0.2 in default): control how tightly UMAP is allowed to pack points
 plot_spot_radius (68 in default): spot radius in plotting pseudo-RGB image
 '''
-def transform_expression_to_RGB(sparse_expression_file, meta_data_file, original_RGB = True, max_iteration = 25,
-                                batch_size = 50, pca_conponent_num = 50, umap_neighbor_num = 10, umap_min_dist = 0.2,
-                                plot_spot_radius = 68):
+def transform_expression_to_RGB(sparse_expression_file, meta_data_file,
+                                scale_factor_file = None,
+                                original_RGB = True, max_iteration = 30,
+                                batch_size = 200, pca_conponent_num = 128,
+                                umap_neighbor_num = 10, umap_min_dist = 0.1
+                                # ,umap_metric = 'correlation'
+                                ):
     values = scipy.sparse.load_npz(sparse_expression_file)
     try:
         meta_data = pd.read_csv(meta_data_file )
@@ -115,8 +123,9 @@ def transform_expression_to_RGB(sparse_expression_file, meta_data_file, original
 
 
     #TODO: read enhanced image here
+
     # if 'equa' in data.columns:
-    #     #set gene start idex
+    #     #set gene start idx
     #     gene_start_idx = 10
     #     #save enhanced image at spot level
     #     save_enhanced_RGB_to_image(X, expression_file)
@@ -135,7 +144,10 @@ def transform_expression_to_RGB(sparse_expression_file, meta_data_file, original
     # for pca_ratio in np.arange(0.75, 1.1, 0.01):
         # apply PCA to denoise first
     pac_model = IncrementalPCA(n_components=pca_conponent_num, batch_size= batch_size)
-    transformer = umap.UMAP(n_neighbors=umap_neighbor_num, min_dist=umap_min_dist, n_components=3)
+    transformer = umap.UMAP(n_neighbors=umap_neighbor_num, min_dist=umap_min_dist,
+                            n_components=3
+                            # , metric= umap_metric
+                            )
     try:
         #TODO: assert shapes of sparse matrix and pca_component_num and batch_size here
 
@@ -160,7 +172,8 @@ def transform_expression_to_RGB(sparse_expression_file, meta_data_file, original
                     temp_X_transform[:, 1] = scale_to_RGB(X_transformed[:, 1], percentile_1)
                     temp_X_transform[:, 2] = scale_to_RGB(X_transformed[:, 2], percentile_2)
                     if 'equa' in meta_data.columns:
-                        pcc, perm = correlation_between_enhanced_images(meta_data['equa'].values,meta_data['array_row'].values,
+                        pcc, perm = correlation_between_enhanced_images(meta_data['equa'].values,
+                                                                        meta_data['array_row'].values,
                                                                         meta_data['array_col'].values, temp_X_transform)
                     else:
 
@@ -189,27 +202,77 @@ def transform_expression_to_RGB(sparse_expression_file, meta_data_file, original
         X_transformed[:, 1] = scale_to_RGB(X_transformed[:, 1], 100)
         X_transformed[:, 2] = scale_to_RGB(X_transformed[:, 2], 100)
 
+    if scale_factor_file is not None:
+        with open(scale_factor_file) as fp_scaler:
+            scaler =  json.load(fp_scaler)
+
+        radius = int(0.5 *  scaler['fiducial_diameter_fullres'] + 1)
+        # radius = int(scaler['spot_diameter_fullres'] + 1)
+        max_row = max_col = int((2000 / scaler['tissue_hires_scalef']) + 1)
+
+
+    else:
+        radius = 100 #
+        max_row = np.int(np.max(meta_data['pxl_col_in_fullres'].values + 1) + radius)
+        max_col = np.int(np.max(meta_data['pxl_row_in_fullres'].values + 1) + radius)
+
     save_transformed_RGB_to_image_and_csv(meta_data['pxl_col_in_fullres'].values,
                                           meta_data['pxl_row_in_fullres'].values,
-                                          X_transformed[:, best_perm], sparse_expression_file,
-                                          plot_spot_radius)
+                                          max_row,
+                                          max_col,
+                                          X_transformed[:, best_perm],
+                                          sparse_expression_file,
+                                          plot_spot_radius = radius)
 
     del X_transformed, meta_data, values, transformer
 
 if __name__ == "__main__":
-    
-    sparse_file_name = r'/home/fei/Desktop/mobilenet/Human_Cerebellum_Whole_Transcriptome_Analysis.npz'
-    meta_data = r'/home/fei/Desktop/mobilenet/Human_Cerebellum_Whole_Transcriptome_Analysis.csv'
+    data_fold = r'/run/media/fei/Entertainment/CPM_spa_out/'
+    # data_name = '151673_humanBrain'
 
-    '''
-    sparse_expression_file: file path for sparse expression matrix (npz format)
-    meta_data_file: file path for the corresponding meta-data file (csv format)
-    original_RGB:whether or not include original RGB of spots in meta-data (boolean)
-    max_iteration (25 in default): the max iteration number in RGB optimization
-    pca_conponent_num (50 in default): number of principle components remains in PCA denoising
-    umap_neighbor_num (10 in default): the size of the local neighborhood in UMAP
-    umap_min_dist (0.2 in default): control how tightly UMAP is allowed to pack points
-    plot_spot_radius (68 in default): spot radius in plotting pseudo-RGB image  
-    '''
 
-    transform_expression_to_RGB(sparse_expression_file= sparse_file_name, meta_data_file= meta_data, max_iteration = 2)
+    all_data_names = []
+    for file_name in os.listdir(data_fold):
+        # data_name = os.path.splitext(file_name)[0].rsplit('_',1)[0]
+        data_name = file_name.rsplit('_',2)[0]
+        if data_name not in all_data_names:
+            all_data_names.append(data_name)
+
+    for data_name in all_data_names:
+
+            sparse_file_name = os.path.join(data_fold, data_name + '_cpm_spaFull.npz')
+            meta_data = os.path.join(data_fold, data_name + '_cpm_metaData.csv')
+            scale_factor_file = os.path.join(data_fold, data_name + '_cpm_scaleFactors.json')
+            '''
+            sparse_expression_file: file path for sparse expression matrix (npz format)
+            meta_data_file: file path for the corresponding meta-data file (csv format)
+            original_RGB:whether or not include original RGB of spots in meta-data (boolean)
+            max_iteration (25 in default): the max iteration number in RGB optimization
+            pca_conponent_num (128 in default): number of principle components remains in PCA denoising
+            umap_neighbor_num (10 in default): the size of the local neighborhood in UMAP
+            umap_min_dist (0.2 in default): control how tightly UMAP is allowed to pack points
+            plot_spot_radius (68 in default): spot radius in plotting pseudo-RGB image  
+            '''
+
+            transform_expression_to_RGB(sparse_expression_file=sparse_file_name, meta_data_file=meta_data,
+                                        scale_factor_file = scale_factor_file,original_RGB= False
+                                        )
+
+        # sparse_file_name = r'/run/media/fei/Entertainment/4_expression_sparse_meta_out/151507_humanBrain_spaFull.npz'
+    # meta_data = r'/run/media/fei/Entertainment/151507_humanBrain_metaData.csv'
+    # scale_factor_file = r'/run/media/fei/Entertainment/151507_humanBrain_scaleFactors.json'
+    # # with open(json_file) as fp_scaler:
+    # #     scaler =  json.load(fp_scaler)
+    # '''
+    # sparse_expression_file: file path for sparse expression matrix (npz format)
+    # meta_data_file: file path for the corresponding meta-data file (csv format)
+    # original_RGB:whether or not include original RGB of spots in meta-data (boolean)
+    # max_iteration (25 in default): the max iteration number in RGB optimization
+    # pca_conponent_num (50 in default): number of principle components remains in PCA denoising
+    # umap_neighbor_num (10 in default): the size of the local neighborhood in UMAP
+    # umap_min_dist (0.2 in default): control how tightly UMAP is allowed to pack points
+    # plot_spot_radius (68 in default): spot radius in plotting pseudo-RGB image
+    # '''
+    #
+    # transform_expression_to_RGB(sparse_expression_file= sparse_file_name, meta_data_file= meta_data,
+    #                             scale_factor_file = scale_factor_file)
