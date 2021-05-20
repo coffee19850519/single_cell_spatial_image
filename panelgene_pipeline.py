@@ -26,9 +26,9 @@ def parse_args():
                         help='default:0.65 ,If you want resolution range, set -rl')
     parser.add_argument('-rl', '--resolution_list', type=float,nargs='*',
                         help='input range first,last and step.Like:0.2 0.7 0.05')
-    parser.add_argument('-ip', '--input_path', type=str, nargs='*', default='original',
+    parser.add_argument('-in', '--input_path', type=str, nargs='*', default='original',
                         help='original 10x file folder')
-    parser.add_argument('-op', '--output_path', type=str, nargs='*',default='generate_pseudo_images_panel_test',
+    parser.add_argument('-out', '--output_path', type=str, nargs='*',default='generate_pseudo_images_panel_test',
                         help='generate pseudo images folder')
     args = parser.parse_args()
     return args
