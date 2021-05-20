@@ -51,6 +51,7 @@ This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md
 
 ## Generate pseudo images 
 python  panelgene_pipeline.py 2-5 2-8 -p Cartpt Mfge8 -r 0.5 -rl 0.2 0.7 0.05 -in original -out generate_pseudo_images
+
 2-5 2-8... : sample list
 -p panel gene list
 -r specified resolution value,default:0.65
