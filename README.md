@@ -49,21 +49,22 @@ This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md
 * Inspiration
 * etc
 
-## Generate pseudo images 
+## Generate panelgene pseudo images 
 
 python  panelgene_pipeline.py -matrix *.h5 -csv *.csv -json *.json -out *
 
-* -matrix  10X data h5 file
-* -csv tissue positions list file
-* -json scalefactors json file
-* -out generate pseudo images folder
+* -matrix  10X data h5 file path
+* -csv tissue positions list file path
+* -json scalefactors json file path
+* -out output folder
+* -gene txt file path,one line is a panel gene
 
-## Segmentation optical images 
+## Segmentation optical image 
 
 python  optical_segmentation_pipeline.py -matrix *.h5 -csv *.csv -json *.json -optical *.png -out *
 
-* -matrix  10X data h5 file
-* -csv tissue positions list file
-* -json scalefactors json file
-* -optical optical image 
-* -out generate optical segmentation images folder
+* -matrix  10X data h5 file path
+* -csv tissue positions list file path
+* -json scalefactors json file path
+* -optical optical image path
+* -out output folder
