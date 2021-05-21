@@ -58,3 +58,13 @@ python  panelgene_pipeline.py 2-5 2-8 -p Cartpt Mfge8 -r 0.5 -rl 0.2 0.7 0.05 -i
 * -rl resolution range ,input first,last and step (alternative -r and -rl)
 * -in original file folder,contains 10x folders with the sample name
 * -out generate pseudo images folder
+
+## Segmentation optical images 
+python  segmentation_pipeline.py 2-5 2-8 -p Cartpt Mfge8 -r 0.5 -rl 0.2 0.7 0.05 -in original -out generate_pseudo_images
+
+* 2-5 2-8... : sample list
+* -p panel gene list
+* -r specified resolution value,default:0.65
+* -rl resolution range ,input first,last and step (alternative -r and -rl)
+* -in original file folder,contains 10x folders with the sample name
+* -out generate pseudo images folder
