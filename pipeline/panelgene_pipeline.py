@@ -14,7 +14,7 @@ def parse_args():
     parser.add_argument('-csv', type=str, nargs='+', help='metadata csv file path')
     parser.add_argument('-json', type=str, nargs='+', help='json file path')
     parser.add_argument('-out', '--output_path', type=str, nargs='*', default='output', help='generate output folder')
-    parser.add_argument('-gene', type=str, nargs='+', help='panel gene txt  path,one line is a panel gene')
+    parser.add_argument('-gene', type=str, nargs='+', help='panel gene txt  path,one line is a panel gene'，default=None)
     args = parser.parse_args()
     return args
 
