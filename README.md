@@ -57,7 +57,7 @@ python  panelgene_pipeline.py -matrix *.h5  -csv *.csv  -json *.json  -out *  -g
 * -csv tissue positions list file path
 * -json scalefactors json file path
 * -out output folder
-* -gene txt file path,one line is a panel gene. Default involved all genes. When specify gene list, involved sprcific genes. [optional][default:None]
+* -gene txt file path,one line is a panel gene. Default involved all genes. When specify gene list, use input genes only. [optional][default:None]
 
 ## Segmentation optical image 
 ```
