@@ -51,20 +51,47 @@ This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md
 
 ## Generate panelgene pseudo images 
 ```
-python  panelgene_pipeline.py -matrix *.h5  -csv *.csv  -json *.json  -out *  -gene *.txt
+python  pseudoimages_pipeline.py -matrix *.h5  -csv *.csv  -json *.json  -out * -method  -gene *.txt
 ```
 * -matrix  10X data h5 file path
 * -csv tissue positions list file path
 * -json scalefactors json file path
 * -out output folder
-* -gene txt file path,one line is a panel gene. Default involved all genes. When specify gene list, use input genes only. [optional][default:None]
+* -method scGNN or spaGCN  [default:scGNN]
+* -gene txt file path,one line is a panel gene. Default involved all genes. When specify gene list, involved sprcific genes. [optional][default:None]
+
+
+## Segmentation test 
+```
+python  test_pipeline.py -matrix *.h5  -csv *.csv  -json *.json  -out * -method -gene *.txt
+```
+* -matrix  10X data h5 file path
+* -csv tissue positions list file path
+* -json scalefactors json file path
+* -out output folder name [optional][default:output]
+* -method scGNN or spaGCN  [default:scGNN]
+* -gene txt file path,one line is a panel gene. Default involved all genes. When specify gene list, involved sprcific genes. [optional][default:None]
+
 
 ## Segmentation optical image 
 ```
-python  optical_segmentation_pipeline.py -matrix *.h5  -csv *.csv  -json *.json  -optical *.png  -out *
+python  optical_segmentation_pipeline.py -matrix *.h5  -csv *.csv  -json *.json  -optical *.png  -out * -method
 ```
 * -matrix  10X data h5 file path
 * -csv tissue positions list file path
 * -json scalefactors json file path
 * -optical optical image path
 * -out output folder name [optional][default:output]
+* -method scGNN or spaGCN  [default:scGNN]
+
+
+## Segmentation evaluation 
+```
+python  evaluation_pipeline.py py -matrix *.h5  -csv *.csv  -json *.json  -out *  -method  -label *.csv
+```
+* -matrix  10X data h5 file path
+* -csv tissue positions list file path
+* -json scalefactors json file path
+* -out output folder name [optional][default:output]
+* -method scGNN or spaGCN  [default:scGNN]
+* -label label file path. One column is barcode and one column is corresponding label.
