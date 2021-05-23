@@ -36,7 +36,7 @@ Give an example
 * [mmSegmentation](https://github.com/open-mmlab/mmsegmentation) - Used to train the deep learning based image segmentation model
  
 ## Contributing
- 
+
 Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c63ec426) for details on our code of conduct, and the process for submitting pull requests to us.
   
 ## License
@@ -49,7 +49,7 @@ This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md
 * Inspiration
 * etc
 
-## Generate panelgene pseudo images 
+## Generate pseudo-color images
 ```
 python  pseudoimages_pipeline.py -matrix *.h5  -csv *.csv  -json *.json  -out * -method *  -gene *.txt
 ```
@@ -58,10 +58,10 @@ python  pseudoimages_pipeline.py -matrix *.h5  -csv *.csv  -json *.json  -out * 
 * -json scalefactors json file path
 * -out output folder
 * -method scGNN or spaGCN  [default:scGNN]
-* -gene txt file path,one line is a panel gene. Default involved all genes. When specify gene list, involved sprcific genes. [optional][default:None]
+* -panel gene txt file path,one line is a panel gene. Default involved all genes. When specify gene list, involved sprcific genes. [optional][default:None]
 
 
-## Segmentation test 
+## Segmentation to pseudo-color images
 ```
 python  test_pipeline.py -matrix *.h5  -csv *.csv  -json *.json  -out * -method *  -gene *.txt
 ```
@@ -73,7 +73,7 @@ python  test_pipeline.py -matrix *.h5  -csv *.csv  -json *.json  -out * -method 
 * -gene txt file path,one line is a panel gene. Default involved all genes. When specify gene list, involved sprcific genes. [optional][default:None]
 
 
-## Segmentation optical image 
+## Segmentation to optical images 
 ```
 python  optical_segmentation_pipeline.py -matrix *.h5  -csv *.csv  -json *.json  -optical *.png  -out * -method * 
 ```
@@ -94,4 +94,4 @@ python  evaluation_pipeline.py py -matrix *.h5  -csv *.csv  -json *.json  -out *
 * -json scalefactors json file path
 * -out output folder name [optional][default:output]
 * -method scGNN or spaGCN  [default:scGNN]
-* -label label file path. One column is barcode and one column is corresponding label.
+* -label file path. One column is barcode and one column is corresponding label.
