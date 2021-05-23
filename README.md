@@ -51,7 +51,7 @@ This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md
 
 ## Generate panelgene pseudo images 
 ```
-python  pseudoimages_pipeline.py -matrix *.h5  -csv *.csv  -json *.json  -out * -method  -gene *.txt
+python  pseudoimages_pipeline.py -matrix *.h5  -csv *.csv  -json *.json  -out * -method *  -gene *.txt
 ```
 * -matrix  10X data h5 file path
 * -csv tissue positions list file path
@@ -63,7 +63,7 @@ python  pseudoimages_pipeline.py -matrix *.h5  -csv *.csv  -json *.json  -out * 
 
 ## Segmentation test 
 ```
-python  test_pipeline.py -matrix *.h5  -csv *.csv  -json *.json  -out * -method -gene *.txt
+python  test_pipeline.py -matrix *.h5  -csv *.csv  -json *.json  -out * -method *  -gene *.txt
 ```
 * -matrix  10X data h5 file path
 * -csv tissue positions list file path
@@ -75,7 +75,7 @@ python  test_pipeline.py -matrix *.h5  -csv *.csv  -json *.json  -out * -method 
 
 ## Segmentation optical image 
 ```
-python  optical_segmentation_pipeline.py -matrix *.h5  -csv *.csv  -json *.json  -optical *.png  -out * -method
+python  optical_segmentation_pipeline.py -matrix *.h5  -csv *.csv  -json *.json  -optical *.png  -out * -method * 
 ```
 * -matrix  10X data h5 file path
 * -csv tissue positions list file path
@@ -87,7 +87,7 @@ python  optical_segmentation_pipeline.py -matrix *.h5  -csv *.csv  -json *.json 
 
 ## Segmentation evaluation 
 ```
-python  evaluation_pipeline.py py -matrix *.h5  -csv *.csv  -json *.json  -out *  -method  -label *.csv
+python  evaluation_pipeline.py py -matrix *.h5  -csv *.csv  -json *.json  -out *  -method *  -label *.csv
 ```
 * -matrix  10X data h5 file path
 * -csv tissue positions list file path
