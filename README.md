@@ -95,3 +95,20 @@ python  evaluation_pipeline.py py -matrix *.h5  -csv *.csv  -json *.json  -out *
 * -out output folder name [optional][default:output]
 * -method scGNN or spaGCN  [default:scGNN]
 * -label file path. One column is barcode and one column is corresponding label.
+
+## Case study
+```
+python case_study_pipeline.py -matrix *.h5 -csv *.csv -json *.json -out * -gene *.txt  -method * -red_min * -red_max * -green_min *  -green_max * -blue_min * -blue_max *
+```
+* -matrix  10X data h5 file path
+* -csv tissue positions list file path
+* -json scalefactors json file path
+* -out output folder name [optional][default:output]
+* -gene txt file path,one line is a panel gene. Default involved all genes. When specify gene list, involved sprcific genes. [optional][default:None]
+* -method scGNN or spaGCN  [default:scGNN]
+* -red_min The lower limit of channel red[int]
+* -red_max The upper limit of channel red[int]
+* -green_min The lower limit of channel green[int]
+* -green_max The upper limit of channel green[int]
+* -blue_min The lower limit of channel blue[int]
+* -blue_max The upper limit of channel blue[int]
