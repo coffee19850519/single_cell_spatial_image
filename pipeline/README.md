@@ -49,18 +49,26 @@ This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md
 * Inspiration
 * etc
 
-## Generate pseudo-color images
-```
-python  pseudo-images_pipeline.py -matrix *.h5  -csv *.csv  -json *.json  -out * -method *  -gene *.txt -pca * -transform *
-```
+## Generate pseudo RGB images
+Program **pseudo-images_pipeline.py** is used to generate pseudo RGB images. It can also output the corresponding case study image according to the input panel gene txt file. Images generated in this step store in the pseudo_images folder under specified output folder. 
+
+In **pseudo-images_pipeline.py** ,these parameters are used:
+
+**Required**
 * **-matrix** 10X data h5 file path.
 * **-csv** tissue positions list file path.
 * **-json** scalefactors json file path.
 * **-out** output folder.
 * **-method** generate embedding method:scGNN or spaGCN  [default:scGNN]
-* **-panel** gene txt file path,one line is a panel gene. Default involved all genes. When specify gene list, involved sprcific genes. [optional][default:None]
+
+**Optional**
+* **-gene** gene txt file path,one line is a panel gene. Default involved all genes. When specify gene list, involved sprcific genes. [optional][default:None]
 * **-pca** pca option when generating  case study image. [optional][default:True]
 * **-transform** data preproccessing method: log or logcpm or None.[default:None]
+
+```
+python  pseudo-images_pipeline.py -matrix *.h5  -csv *.csv  -json *.json  -out * -method *  -gene *.txt -pca * -transform *
+```
 
 ## Segmentation to pseudo-color images
 ```
