@@ -51,64 +51,71 @@ This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md
 
 ## Generate pseudo-color images
 ```
-python  pseudoimages_pipeline.py -matrix *.h5  -csv *.csv  -json *.json  -out * -method *  -gene *.txt
+python  pseudo-images_pipeline.py -matrix *.h5  -csv *.csv  -json *.json  -out * -method *  -gene *.txt -pca * -transform *
 ```
-* -matrix  10X data h5 file path
-* -csv tissue positions list file path
-* -json scalefactors json file path
-* -out output folder
-* -method scGNN or spaGCN  [default:scGNN]
-* -panel gene txt file path,one line is a panel gene. Default involved all genes. When specify gene list, involved sprcific genes. [optional][default:None]
-
+* **-matrix** 10X data h5 file path.
+* **-csv** tissue positions list file path.
+* **-json** scalefactors json file path.
+* **-out** output folder.
+* **-method** generate embedding method:scGNN or spaGCN  [default:scGNN]
+* **-panel** gene txt file path,one line is a panel gene. Default involved all genes. When specify gene list, involved sprcific genes. [optional][default:None]
+* **-pca** pca option when generating  case study image. [optional][default:True]
+* **-transform** data preproccessing method: log or logcpm or None.[default:None]
 
 ## Segmentation to pseudo-color images
 ```
-python  test_pipeline.py -matrix *.h5  -csv *.csv  -json *.json  -out * -method *  -gene *.txt
+python  test_pipeline.py -matrix *.h5  -csv *.csv  -json *.json  -out * -method *  -gene *.txt -pca * -transform *
 ```
-* -matrix  10X data h5 file path
-* -csv tissue positions list file path
-* -json scalefactors json file path
-* -out output folder name [optional][default:output]
-* -method scGNN or spaGCN  [default:scGNN]
-* -gene txt file path,one line is a panel gene. Default involved all genes. When specify gene list, involved sprcific genes. [optional][default:None]
+* **-matrix** 10X data h5 file path.
+* **-csv** tissue positions list file path.
+* **-json** scalefactors json file path.
+* **-out** output folder name. [optional][default:output]
+* **-method** generate embedding method:scGNN or spaGCN.  [default:scGNN]
+* **-gene** txt file path,one line is a panel gene. Default involved all genes. When specify gene list, involved sprcific genes. [optional][default:None]
+* **-pca** pca option when generating  case study image. [optional][default:True]
+* **-transform** data preproccessing method: log or logcpm or None.[default:None]
 
 
 ## Segmentation to optical images 
 ```
-python  optical_segmentation_pipeline.py -matrix *.h5  -csv *.csv  -json *.json  -optical *.png  -out * -method * 
+python  optical_segmentation_pipeline.py -matrix *.h5  -csv *.csv  -json *.json  -optical *.png  -out * -method * -pca * -transform *
 ```
-* -matrix  10X data h5 file path
-* -csv tissue positions list file path
-* -json scalefactors json file path
-* -optical optical image path
-* -out output folder name [optional][default:output]
-* -method scGNN or spaGCN  [default:scGNN]
+* **-matrix** 10X data h5 file path
+* **-csv** tissue positions list file path
+* **-json** scalefactors json file path
+* **-optical** optical image path
+* **-out** output folder name [optional][default:output]
+* **-method** scGNN or spaGCN  [default:scGNN]
 
 
 ## Segmentation evaluation 
 ```
-python  evaluation_pipeline.py py -matrix *.h5  -csv *.csv  -json *.json  -out *  -method *  -label *.csv
+python  evaluation_pipeline.py py -matrix *.h5  -csv *.csv  -json *.json  -out *  -method * -pca * -transform * -label *.csv
 ```
-* -matrix  10X data h5 file path
-* -csv tissue positions list file path
-* -json scalefactors json file path
-* -out output folder name [optional][default:output]
-* -method scGNN or spaGCN  [default:scGNN]
-* -label file path. One column is barcode and one column is corresponding label.
+* **-matrix** 10X data h5 file path
+* **-csv** tissue positions list file path
+* **-json** scalefactors json file path
+* **-out** output folder name [optional][default:output]
+* **-method** generate embedding method:scGNN or spaGCN  [default:scGNN]
+* **-pca** pca option when generating  case study image. [optional][default:True]
+* **-transform** data preproccessing method: log or logcpm or None.[default:None]
+* **-label** csv file path. One column is barcode and one column is corresponding label.
 
 ## Case study
 ```
-python case_study_pipeline.py -matrix *.h5 -csv *.csv -json *.json -out * -gene *.txt  -method * -red_min * -red_max * -green_min *  -green_max * -blue_min * -blue_max *
+python case_study_pipeline.py -matrix *.h5 -csv *.csv -json *.json -out * -gene *.txt  -method * -pca * -transform * -red_min * -red_max * -green_min *  -green_max * -blue_min * -blue_max *
 ```
-* -matrix  10X data h5 file path
-* -csv tissue positions list file path
-* -json scalefactors json file path
-* -out output folder name [optional][default:output]
-* -gene txt file path,one line is a panel gene. Default involved all genes. When specify gene list, involved sprcific genes. [optional][default:None]
-* -method scGNN or spaGCN  [default:scGNN]
-* -red_min The lower limit of channel red [int]
-* -red_max The upper limit of channel red [int]
-* -green_min The lower limit of channel green [int]
-* -green_max The upper limit of channel green [int]
-* -blue_min The lower limit of channel blue [int]
-* -blue_max The upper limit of channel blue [int]
+* **-matrix** 10X data h5 file path
+* **-csv** tissue positions list file path
+* **-json** scalefactors json file path
+* **-out** output folder name [optional][default:output]
+* **-gene** txt file path,one line is a panel gene. Default involved all genes. When specify gene list, involved sprcific genes. [optional][default:None]
+* **-method** generate embedding method:scGNN or spaGCN  [default:scGNN]
+* **-pca** pca option when generating  case study image. [optional][default:True]
+* **-transform** data preproccessing method: log or logcpm or None.[default:None]
+* **-red_min** The lower limit of channel red [int]
+* **-red_max** The upper limit of channel red [int]
+* **-green_min** The lower limit of channel green [int]
+* **-green_max** The upper limit of channel green [int]
+* **-blue_min** The lower limit of channel blue [int]
+* **-blue_max** The upper limit of channel blue [int]
