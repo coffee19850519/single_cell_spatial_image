@@ -71,7 +71,7 @@ python  pseudo-images_pipeline.py -matrix *.h5  -csv *.csv  -json *.json  -out *
 ```
 
 ## Segmentation to pseudo RGB images
-Program **test_pipeline.py** is used to use the existing checkpoint to segmentation the generated pseudo RGB images. The top5 results generated after MI ranking are presented to the user. The category map, visualization and MI value corresponding to top5 are stored in the segmentation_test folder under specified output folder.
+Program **test_pipeline.py** is used to use the existing checkpoint to segmentation the generated pseudo RGB images. The top5 results generated after MI ranking are presented to the user. The category maps, visualizations and MI values corresponding to top5 are stored in the segmentation_test folder under specified output folder.
 
 In **test_pipeline.py** ,these parameters are used:
 
@@ -91,6 +91,7 @@ python  test_pipeline.py -matrix *.h5  -csv *.csv  -json *.json  -out * -method 
 ```
 
 ## Segmentation to optical images 
+
 ```
 python  optical_segmentation_pipeline.py -matrix *.h5  -csv *.csv  -json *.json  -optical *.png  -out * -method * -pca * -transform *
 ```
@@ -102,18 +103,26 @@ python  optical_segmentation_pipeline.py -matrix *.h5  -csv *.csv  -json *.json 
 * **-method** scGNN or spaGCN  [default:scGNN]
 
 
-## Segmentation evaluation 
-```
-python  evaluation_pipeline.py py -matrix *.h5  -csv *.csv  -json *.json  -out *  -method * -pca * -transform * -label *.csv
-```
-* **-matrix** 10X data h5 file path
-* **-csv** tissue positions list file path
-* **-json** scalefactors json file path
-* **-out** output folder name [optional][default:output]
+## Evaluation of segmentation results 
+Program **evaluation_pipeline.py** is used to evaluate the segmentation results. User submits 10X and the corresponding label file to generate the pseudo RGB images, the visualizations of the top5 after MI ranking and the corresponding values of the evaluation index such as ARI. These output files are stored in the segmentation_evaluation folder under specified output folder.
+
+In **test_pipeline.py** ,these parameters are used:
+
+**Required**
+* **-matrix** 10X data h5 file path.
+* **-csv** tissue positions list file path.
+* **-json** scalefactors json file path.
+* **-out** output folder.
 * **-method** generate embedding method:scGNN or spaGCN  [default:scGNN]
+* **-label** csv file path. One column is barcode and one column is corresponding label.
+
+**Optional**
 * **-pca** pca option when generating  case study image. [optional][default:True]
 * **-transform** data preproccessing method: log or logcpm or None.[default:None]
-* **-label** csv file path. One column is barcode and one column is corresponding label.
+
+```
+python  evaluation_pipeline.py  -matrix *.h5  -csv *.csv  -json *.json  -out *  -method * -pca * -transform * -label *.csv
+```
 
 ## Case study
 ```
