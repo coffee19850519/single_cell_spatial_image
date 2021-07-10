@@ -70,19 +70,25 @@ In **pseudo-images_pipeline.py** ,these parameters are used:
 python  pseudo-images_pipeline.py -matrix *.h5  -csv *.csv  -json *.json  -out * -method *  -gene *.txt -pca * -transform *
 ```
 
-## Segmentation to pseudo-color images
-```
-python  test_pipeline.py -matrix *.h5  -csv *.csv  -json *.json  -out * -method *  -gene *.txt -pca * -transform *
-```
+## Segmentation to pseudo RGB images
+Program **test_pipeline.py** is used to use the existing checkpoint to segmentation the generated pseudo RGB images. The top5 results generated after MI ranking are presented to the user. The category map, visualization and MI value corresponding to top5 are stored in the segmentation_test folder under specified output folder.
+
+In **test_pipeline.py** ,these parameters are used:
+
+**Required**
 * **-matrix** 10X data h5 file path.
 * **-csv** tissue positions list file path.
 * **-json** scalefactors json file path.
-* **-out** output folder name. [optional][default:output]
-* **-method** generate embedding method:scGNN or spaGCN.  [default:scGNN]
-* **-gene** txt file path,one line is a panel gene. Default involved all genes. When specify gene list, involved sprcific genes. [optional][default:None]
+* **-out** output folder.
+* **-method** generate embedding method:scGNN or spaGCN  [default:scGNN]
+
+**Optional**
+* **-gene** gene txt file path,one line is a panel gene. Default involved all genes. When specify gene list, involved sprcific genes. [optional][default:None]
 * **-pca** pca option when generating  case study image. [optional][default:True]
 * **-transform** data preproccessing method: log or logcpm or None.[default:None]
-
+```
+python  test_pipeline.py -matrix *.h5  -csv *.csv  -json *.json  -out * -method *  -gene *.txt -pca * -transform *
+```
 
 ## Segmentation to optical images 
 ```
