@@ -112,3 +112,15 @@ python case_study_pipeline.py -matrix *.h5 -csv *.csv -json *.json -out * -gene 
 * -green_max The upper limit of channel green [int]
 * -blue_min The lower limit of channel blue [int]
 * -blue_max The upper limit of channel blue [int]
+
+## Training pipeline
+```
+python training_pipeline.py -data */ -config *.py -model *.pth -out * -gene *.txt -method * 
+```
+* -matrix  10X data h5 file , tissue positions list file and scalefactors json file path
+* -config config file path
+* -model resume file path
+* -out output folder name [optional][default:output]
+* -gene txt file path,one line is a panel gene. Default involved all genes. When specify gene list, involved sprcific genes. [optional][default:None]
+* -method scGNN or spaGCN  [default:scGNN]
+
