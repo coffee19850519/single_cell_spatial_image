@@ -94,15 +94,21 @@ python  test_pipeline.py -matrix *.h5  -csv *.csv  -json *.json  -out * -method 
 ## Segmentation to optical images 
 Program **optical_segmentation_pipeline.py** is used to use the existing checkpoint to segmentation the optical images and generated pseudo RGB images. The category maps and visualizations are stored in the  optical_segmentation folder under specified output folder.
 
+**Required**
+* **-matrix** 10X data h5 file path.
+* **-csv** tissue positions list file path.
+* **-json** scalefactors json file path.
+* **-out** output folder.
+* **-method** generate embedding method:scGNN or spaGCN  [default:scGNN]
+* **-checkpoint** checkpoint path
+
+**Optional**
+* **-pca** pca option when generating  case study image. [optional][default:True]
+* **-transform** data preproccessing method: log or logcpm or None.[default:None]
 ```
-python  optical_segmentation_pipeline.py -matrix *.h5  -csv *.csv  -json *.json  -optical *.png  -out * -method * -pca * -transform *
 ```
-* **-matrix** 10X data h5 file path
-* **-csv** tissue positions list file path
-* **-json** scalefactors json file path
-* **-optical** optical image path
-* **-out** output folder name [optional][default:output]
-* **-method** scGNN or spaGCN  [default:scGNN]
+python  optical_segmentation_pipeline.py -matrix *.h5  -csv *.csv  -json *.json  -optical *.png  -out * -method * -pca * -transform * -checkpoint *
+```
 
 
 ## Evaluation of segmentation results 
@@ -129,17 +135,16 @@ python  evaluation_pipeline.py  -matrix *.h5  -csv *.csv  -json *.json  -out *  
 
 ## Case study
 Program **case_study_pipeline.py** is used to generate pseudo RGB images and use specific RGB parameters to obtain a filtered image of a specific area. The pseudo RGB images and filtered images are stored in the case_study folder under specified output folder.
-```
-python case_study_pipeline.py -matrix *.h5 -csv *.csv -json *.json -out * -gene *.txt  -method * -pca * -transform * -red_min * -red_max * -green_min *  -green_max * -blue_min * -blue_max *
-```
+
+In **case_study_pipeline.py** ,these parameters are used:
+
+**Required**
 * **-matrix** 10X data h5 file path
 * **-csv** tissue positions list file path
 * **-json** scalefactors json file path
 * **-out** output folder name [optional][default:output]
 * **-gene** txt file path,one line is a panel gene. Default involved all genes. When specify gene list, involved sprcific genes. [optional][default:None]
 * **-method** generate embedding method:scGNN or spaGCN  [default:scGNN]
-* **-pca** pca option when generating  case study image. [optional][default:True]
-* **-transform** data preproccessing method: log or logcpm or None.[default:None]
 * **-red_min** The lower limit of channel red [int]
 * **-red_max** The upper limit of channel red [int]
 * **-green_min** The lower limit of channel green [int]
@@ -147,11 +152,20 @@ python case_study_pipeline.py -matrix *.h5 -csv *.csv -json *.json -out * -gene 
 * **-blue_min** The lower limit of channel blue [int]
 * **-blue_max** The upper limit of channel blue [int]
 
+**Optional**
+* **-pca** pca option when generating  case study image. [optional][default:True]
+* **-transform** data preproccessing method: log or logcpm or None.[default:None]
+
+```
+python case_study_pipeline.py -matrix *.h5 -csv *.csv -json *.json -out * -gene *.txt  -method * -pca * -transform * -red_min * -red_max * -green_min *  -green_max * -blue_min * -blue_max *
+```
+
 ## Training pipeline
 Program **training_pipeline.py** is used to generate pseudo RGB images and fine-tune current model. Config file can be customized according to your needs. Cheakpoint files can be found on Baidu Cloud Disk[]. The new cheakpoint is stored in the work_dir folder.
-```
-python training_pipeline.py -data * -config * -model * -gene * -method * -pca * -transform *
-```
+
+In **training_pipeline.py** ,these parameters are used:
+
+**Required**
 * **-data** 10X data h5 file, tissue positions list file and scalefactors json file folder path.
 * **-config** training config file path.
 * **-model** resume model path.[default:None]
@@ -159,3 +173,11 @@ python training_pipeline.py -data * -config * -model * -gene * -method * -pca * 
 * **-method** generate embedding method:scGNN or spaGCN  [default:scGNN]
 * **-pca** pca option when generating  case study image. [optional][default:True]
 * **-transform** data preproccessing method: log or logcpm or None.[default:None]
+
+**Optional**
+* **-pca** pca option when generating  case study image. [optional][default:True]
+* **-transform** data preproccessing method: log or logcpm or None.[default:None]
+
+```
+python training_pipeline.py -data * -config * -model * -gene * -method * -pca * -transform *
+```
