@@ -91,6 +91,7 @@ python  test_pipeline.py -matrix *.h5  -csv *.csv  -json *.json  -out * -method 
 ```
 
 ## Segmentation to optical images 
+Program **optical_segmentation_pipeline.py** is used to use the existing checkpoint to segmentation the optical images and generated pseudo RGB images. The category maps and visualizations are stored in the  optical_segmentation folder under specified output folder.
 
 ```
 python  optical_segmentation_pipeline.py -matrix *.h5  -csv *.csv  -json *.json  -optical *.png  -out * -method * -pca * -transform *
@@ -125,6 +126,7 @@ python  evaluation_pipeline.py  -matrix *.h5  -csv *.csv  -json *.json  -out *  
 ```
 
 ## Case study
+Program **case_study_pipeline.py** is used to generate pseudo RGB images and use specific RGB parameters to obtain a filtered image of a specific area. The pseudo RGB images and filtered images are stored in the  case_study folder under specified output folder.
 ```
 python case_study_pipeline.py -matrix *.h5 -csv *.csv -json *.json -out * -gene *.txt  -method * -pca * -transform * -red_min * -red_max * -green_min *  -green_max * -blue_min * -blue_max *
 ```
@@ -144,6 +146,7 @@ python case_study_pipeline.py -matrix *.h5 -csv *.csv -json *.json -out * -gene 
 * **-blue_max** The upper limit of channel blue [int]
 
 ## Training pipeline
+Program **training_pipeline.py** is used to generate pseudo RGB images and fine-tune current model. Config file can be customized according to your needs. Cheakpoint files can be found on Baidu Cloud Disk[]. The new cheakpoint are stored in the work_dir folder.
 ```
 python training_pipeline.py -data * -config * -model * -gene * -method * -pca * -transform *
 ```
