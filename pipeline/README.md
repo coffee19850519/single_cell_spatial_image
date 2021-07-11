@@ -13,43 +13,17 @@ What things you need to install the software and how to install them
 ```
 pip install umap-learn
 pip install scikit-learn
-pip install python-opencv
+pip install scikit-image
+pip install mmcv-full
 pip install mmsegmentation
+pip install scanpy
+pip install opencv-python
+pip install anndata
 ```
  
 ## Running the tests
  
-Explain how to run the automated tests for this system
- 
-### And coding style tests
- 
-Explain what these tests test and why
- 
-```
-Give an example
-```
- 
-## Built With
- 
-* [opencv](https://opencv.org/) - The image processing library used
-* [scikit-learn](https://scikit-learn.org/stable/) - The machine learning library used
-* [mmSegmentation](https://github.com/open-mmlab/mmsegmentation) - Used to train the deep learning based image segmentation model
- 
-## Contributing
-
-Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c63ec426) for details on our code of conduct, and the process for submitting pull requests to us.
-  
-## License
- 
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
- 
-## Acknowledgments
- 
-* Hat tip to anyone whose code was used
-* Inspiration
-* etc
-
-## Generate pseudo RGB images
+### Generate pseudo RGB images
 Program **pseudo-images_pipeline.py** is used to generate pseudo RGB images. It can also output the corresponding case study image according to the input panel gene txt file. Images generated in this step store in the pseudo_images folder under specified output folder. 
 
 In **pseudo-images_pipeline.py** ,these parameters are used:
@@ -70,7 +44,7 @@ In **pseudo-images_pipeline.py** ,these parameters are used:
 python  pseudo-images_pipeline.py -matrix *.h5  -csv *.csv  -json *.json  -out * -method *  -gene *.txt -pca * -transform *
 ```
 
-## Segmentation to pseudo RGB images
+### Segmentation to pseudo RGB images
 Program **test_pipeline.py** is used to use the existing checkpoint to segmentation the generated pseudo RGB images. The top5 results generated after MI ranking are presented to the user. The category maps, visualizations and MI values corresponding to top5 are stored in the segmentation_test folder under specified output folder.
 
 In **test_pipeline.py** ,these parameters are used:
@@ -91,7 +65,7 @@ In **test_pipeline.py** ,these parameters are used:
 python  test_pipeline.py -matrix *.h5  -csv *.csv  -json *.json  -out * -method *  -gene *.txt -pca * -transform * -checkpoint *
 ```
 
-## Segmentation to optical images 
+### Segmentation to optical images 
 Program **optical_segmentation_pipeline.py** is used to use the existing checkpoint to segmentation the optical images and generated pseudo RGB images. The category maps and visualizations are stored in the  optical_segmentation folder under specified output folder.
 
 **Required**
@@ -105,13 +79,12 @@ Program **optical_segmentation_pipeline.py** is used to use the existing checkpo
 **Optional**
 * **-pca** pca option when generating  case study image. [optional][default:True]
 * **-transform** data preproccessing method: log or logcpm or None.[default:None]
-```
+
 ```
 python  optical_segmentation_pipeline.py -matrix *.h5  -csv *.csv  -json *.json  -optical *.png  -out * -method * -pca * -transform * -checkpoint *
 ```
 
-
-## Evaluation of segmentation results 
+### Evaluation of segmentation results 
 Program **evaluation_pipeline.py** is used to evaluate the segmentation results. User submits 10X and the corresponding label file to generate the pseudo RGB images, the visualizations of the top5 after MI ranking and the corresponding values of the evaluation index such as ARI. These output files are stored in the segmentation_evaluation folder under specified output folder.
 
 In **evaluation_pipeline.py** ,these parameters are used:
@@ -133,7 +106,7 @@ In **evaluation_pipeline.py** ,these parameters are used:
 python  evaluation_pipeline.py  -matrix *.h5  -csv *.csv  -json *.json  -out *  -method * -pca * -transform * -label *.csv -checkpoint *
 ```
 
-## Case study
+### Case study
 Program **case_study_pipeline.py** is used to generate pseudo RGB images and use specific RGB parameters to obtain a filtered image of a specific area. The pseudo RGB images and filtered images are stored in the case_study folder under specified output folder.
 
 In **case_study_pipeline.py** ,these parameters are used:
@@ -160,7 +133,7 @@ In **case_study_pipeline.py** ,these parameters are used:
 python case_study_pipeline.py -matrix *.h5 -csv *.csv -json *.json -out * -gene *.txt  -method * -pca * -transform * -red_min * -red_max * -green_min *  -green_max * -blue_min * -blue_max *
 ```
 
-## Training pipeline
+### Training pipeline
 Program **training_pipeline.py** is used to generate pseudo RGB images and fine-tune current model. Config file can be customized according to your needs. Cheakpoint files can be found on Baidu Cloud Disk[]. The new cheakpoint is stored in the work_dir folder.
 
 In **training_pipeline.py** ,these parameters are used:
@@ -181,3 +154,24 @@ In **training_pipeline.py** ,these parameters are used:
 ```
 python training_pipeline.py -data * -config * -model * -gene * -method * -pca * -transform *
 ```
+
+ 
+## Built With
+ 
+* [opencv](https://opencv.org/) - The image processing library used
+* [scikit-learn](https://scikit-learn.org/stable/) - The machine learning library used
+* [mmSegmentation](https://github.com/open-mmlab/mmsegmentation) - Used to train the deep learning based image segmentation model
+ 
+## Contributing
+
+Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c63ec426) for details on our code of conduct, and the process for submitting pull requests to us.
+  
+## License
+ 
+This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
+ 
+## Acknowledgments
+ 
+* Hat tip to anyone whose code was used
+* Inspiration
+* etc
