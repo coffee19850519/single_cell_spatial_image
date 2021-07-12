@@ -134,7 +134,7 @@ python case_study_pipeline.py -matrix *.h5 -csv *.csv -json *.json -out * -gene 
 ```
 
 ### Training pipeline
-Program **training_pipeline.py** is used to generate pseudo RGB images and fine-tune current model. You can prepare data according to the 10X data format in the training data folder. Config file can be customized according to your needs. Cheakpoint files can be found on Baidu Cloud Disk[Link：https://pan.baidu.com/s/16P8JdpfqdbGigSQbNPUYSg Key：6666]. The new cheakpoint is stored in the work_dir folder.
+Program **training_pipeline.py** is used to generate pseudo RGB images and fine-tune current model. You can prepare data according to the 10X data format in the training data folder. Config file can be customized according to your needs. Checkpoint files can be found on Baidu Cloud Disk[Link：https://pan.baidu.com/s/16P8JdpfqdbGigSQbNPUYSg Key：6666]. The new checkpoint is stored in the work_dir folder.
 
 In **training_pipeline.py** ,these parameters are used:
 
