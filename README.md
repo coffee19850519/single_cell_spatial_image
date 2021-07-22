@@ -1,6 +1,7 @@
 # RESEPT: a computational framework for REconstructing and Segmenting Expression pseudo-image based on sPatially resolved Transcriptomics
  
 A novel method to reconstruct a pseudo-image of spots using the sequencing data from spatially resolved transcriptomics to identify spatial context and functional zonation.
+![alt text](./image/figure1.png)
  
 ## Getting Started
  
