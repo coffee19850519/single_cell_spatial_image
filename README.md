@@ -180,10 +180,6 @@ python training_pipeline.py -data * -config * -model *.pt -gene * -method * -pca
 * [scikit-learn](https://scikit-learn.org/stable/) - The machine learning library used
 * [mmSegmentation](https://github.com/open-mmlab/mmsegmentation) - Used to train the deep learning based image segmentation model
  
-## Contributing
-
-Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c63ec426) for details on our code of conduct, and the process for submitting pull requests to us.
-  
 ## License
  
 This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
