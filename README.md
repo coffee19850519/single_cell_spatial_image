@@ -60,7 +60,7 @@ In **pseudo-images_pipeline.py** ,these parameters are used:
 **Optional**
 * **-gene** gene txt file path,one line is a panel gene. Default involved all genes. When specify gene list, involved sprcific genes. [optional][default:None]
 * **-pca** pca option when generating  case study image. [optional][default:True]
-* **-transform** data preproccessing method: log or logcpm or None.[default:None]
+* **-transform** data preprocessing method: log or logcpm or None.[default:None]
 
 ```
 python  pseudo-images_pipeline.py -matrix *.h5  -csv *.csv  -json *.json  -out * -method *  -gene *.txt -pca * -transform *
@@ -82,7 +82,7 @@ In **test_pipeline.py** ,these parameters are used:
 **Optional**
 * **-gene** gene txt file path,one line is a panel gene. Default involved all genes. When specify gene list, involved sprcific genes. [optional][default:None]
 * **-pca** pca option when generating  case study image. [optional][default:True]
-* **-transform** data preproccessing method: log or logcpm or None.[default:None]
+* **-transform** data preprocessing method: log or logcpm or None.[default:None]
 ```
 python  test_pipeline.py -matrix *.h5  -csv *.csv  -json *.json  -out * -method *  -gene *.txt -pca * -transform * -checkpoint *.pth
 ```
@@ -94,13 +94,14 @@ Program **optical_segmentation_pipeline.py** is used to use the existing checkpo
 * **-matrix** 10X data h5 file path.
 * **-csv** tissue positions list file path.
 * **-json** scalefactors json file path.
+* **-optical** optical image path.
 * **-out** output folder.
 * **-method** generate embedding method:scGNN or spaGCN  [default:scGNN]
 * **-checkpoint** checkpoint path
 
 **Optional**
 * **-pca** pca option when generating  case study image. [optional][default:True]
-* **-transform** data preproccessing method: log or logcpm or None.[default:None]
+* **-transform** data preprocessing method: log or logcpm or None.[default:None]
 
 ```
 python  optical_segmentation_pipeline.py -matrix *.h5  -csv *.csv  -json *.json  -optical *.png  -out * -method * -pca * -transform * -checkpoint *.pth
@@ -122,7 +123,7 @@ In **evaluation_pipeline.py** ,these parameters are used:
 
 **Optional**
 * **-pca** pca option when generating  case study image. [optional][default:True]
-* **-transform** data preproccessing method: log or logcpm or None.[default:None]
+* **-transform** data preprocessing method: log or logcpm or None.[default:None]
 
 ```
 python  evaluation_pipeline.py  -matrix *.h5  -csv *.csv  -json *.json  -out *  -method * -pca * -transform * -label *.csv -checkpoint *.pth
@@ -149,7 +150,7 @@ In **case_study_pipeline.py** ,these parameters are used:
 
 **Optional**
 * **-pca** pca option when generating  case study image. [optional][default:True]
-* **-transform** data preproccessing method: log or logcpm or None.[default:None]
+* **-transform** data preprocessing method: log or logcpm or None.[default:None]
 
 ```
 python case_study_pipeline.py -matrix *.h5 -csv *.csv -json *.json -out * -gene *.txt  -method * -pca * -transform * -red_min * -red_max * -green_min *  -green_max * -blue_min * -blue_max *
@@ -166,12 +167,10 @@ In **training_pipeline.py** ,these parameters are used:
 * **-model** resume model path.[default:None]
 * **-gene** txt file path,one line is a panel gene. Default involved all genes. When specify gene list, involved sprcific genes. [optional][default:None]
 * **-method** generate embedding method:scGNN or spaGCN  [default:scGNN]
-* **-pca** pca option when generating  case study image. [optional][default:True]
-* **-transform** data preproccessing method: log or logcpm or None.[default:None]
 
 **Optional**
 * **-pca** pca option when generating  case study image. [optional][default:True]
-* **-transform** data preproccessing method: log or logcpm or None.[default:None]
+* **-transform** data preprocessing method: log or logcpm or None.[default:None]
 
 ```
 python training_pipeline.py -data * -config * -model *.pth -gene * -method * -pca * -transform *
