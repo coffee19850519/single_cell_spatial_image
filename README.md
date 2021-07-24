@@ -38,7 +38,7 @@ pip install anndata
       |__mmseg/
       |__scGNNsp_space/
       |__checkpoint/ (optional)
-            |__ *.pt
+            |__ *.pth
        
       ```
  Original 10X data files of 16 samples and checkpoint file can be found on Baidu Cloud Disk[Link：https://pan.baidu.com/s/16P8JdpfqdbGigSQbNPUYSg Key：6666].
@@ -84,7 +84,7 @@ In **test_pipeline.py** ,these parameters are used:
 * **-pca** pca option when generating  case study image. [optional][default:True]
 * **-transform** data preproccessing method: log or logcpm or None.[default:None]
 ```
-python  test_pipeline.py -matrix *.h5  -csv *.csv  -json *.json  -out * -method *  -gene *.txt -pca * -transform * -checkpoint *.pt
+python  test_pipeline.py -matrix *.h5  -csv *.csv  -json *.json  -out * -method *  -gene *.txt -pca * -transform * -checkpoint *.pth
 ```
 
 ### Example 3. Segmentation to optical images 
@@ -103,7 +103,7 @@ Program **optical_segmentation_pipeline.py** is used to use the existing checkpo
 * **-transform** data preproccessing method: log or logcpm or None.[default:None]
 
 ```
-python  optical_segmentation_pipeline.py -matrix *.h5  -csv *.csv  -json *.json  -optical *.png  -out * -method * -pca * -transform * -checkpoint *.pt
+python  optical_segmentation_pipeline.py -matrix *.h5  -csv *.csv  -json *.json  -optical *.png  -out * -method * -pca * -transform * -checkpoint *.pth
 ```
 
 ### Example 4. Evaluation of segmentation results 
@@ -125,7 +125,7 @@ In **evaluation_pipeline.py** ,these parameters are used:
 * **-transform** data preproccessing method: log or logcpm or None.[default:None]
 
 ```
-python  evaluation_pipeline.py  -matrix *.h5  -csv *.csv  -json *.json  -out *  -method * -pca * -transform * -label *.csv -checkpoint *.pt
+python  evaluation_pipeline.py  -matrix *.h5  -csv *.csv  -json *.json  -out *  -method * -pca * -transform * -label *.csv -checkpoint *.pth
 ```
 
 ### Example 5. Case study
@@ -174,7 +174,7 @@ In **training_pipeline.py** ,these parameters are used:
 * **-transform** data preproccessing method: log or logcpm or None.[default:None]
 
 ```
-python training_pipeline.py -data * -config * -model *.pt -gene * -method * -pca * -transform *
+python training_pipeline.py -data * -config * -model *.pth -gene * -method * -pca * -transform *
 ```
 
  
