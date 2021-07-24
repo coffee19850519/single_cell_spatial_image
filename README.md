@@ -2,7 +2,11 @@
  
 A novel method to reconstruct a pseudo-image of spots using the sequencing data from spatially resolved transcriptomics to identify spatial context and functional zonation.
 
-![image](./image/figure1.png)
+<p align="center">
+  <img height="300" width="1800" src="./image/figure1.png" />
+</p>
+
+
  
 ## Getting Started
  
