@@ -1,6 +1,6 @@
-# RESEPT: a computational framework for REconstructing and Segmenting Expression pseudo-image based on sPatially resolved Transcriptomics
+# RESEPT: a computational framework for REconstructing and Segmenting Expression RGB image based on sPatially resolved Transcriptomics
  
-A novel method to reconstruct a pseudo-image of spots using the sequencing data from spatially resolved transcriptomics to identify spatial context and functional zonation.
+A novel method to reconstruct a RGB image of spots using the sequencing data from spatially resolved transcriptomics to identify spatial context and functional zonation.
 
 <p align="center">
   <img height="300" width="700" src="./image/figure1.png" />
@@ -46,9 +46,9 @@ pip install anndata
 ## Running the tests
  
 ### Example 1. Generate pseudo RGB images
-Program **pseudo-images_pipeline.py** is used to generate pseudo RGB images. It can also output the corresponding case study image according to the input panel gene txt file. Images generated in this step store in the pseudo_images folder under specified output folder.  Original 10X data files of 16 samples can be found on Baidu Cloud Disk[Link：https://pan.baidu.com/s/16P8JdpfqdbGigSQbNPUYSg Key：6666].
+Program **RGB images_pipeline.py** is used to generate pseudo RGB images. It can also output the corresponding case study image according to the input panel gene txt file. Images generated in this step store in the pseudo_images folder under specified output folder.  Original 10X data files of 16 samples can be found on Baidu Cloud Disk[Link：https://pan.baidu.com/s/16P8JdpfqdbGigSQbNPUYSg Key：6666].
 
-In **pseudo-images_pipeline.py** ,these parameters are used:
+In **RGB_images_pipeline.py** ,these parameters are used:
 
 **Required**
 * **-matrix** 10X data h5 file path.
@@ -63,7 +63,7 @@ In **pseudo-images_pipeline.py** ,these parameters are used:
 * **-transform** data preprocessing method: log or logcpm or None.[default:None]
 
 ```
-python  pseudo-images_pipeline.py -matrix *.h5  -csv *.csv  -json *.json  -out * -method *  -gene *.txt -pca * -transform *
+python  RGB_images_pipeline.py -matrix *.h5  -csv *.csv  -json *.json  -out * -method *  -gene *.txt -pca * -transform *
 ```
 
 ### Example 2. Segmentation to pseudo RGB images
@@ -181,6 +181,7 @@ python training_pipeline.py -data * -config * -model *.pth -gene * -method * -pc
  
 * [opencv](https://opencv.org/) - The image processing library used
 * [scikit-learn](https://scikit-learn.org/stable/) - The machine learning library used
+* [pytorch](https://pytorch.org/) - The deep learning backend used
 * [mmSegmentation](https://github.com/open-mmlab/mmsegmentation) - Used to train the deep learning based image segmentation model
  
 ## License
