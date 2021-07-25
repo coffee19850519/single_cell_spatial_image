@@ -3,7 +3,7 @@
 
 # RESEPT: a computational framework for REconstructing and Segmenting Expression RGB image based on sPatially resolved Transcriptomics
 [![Docs Status][docs-image]][docs-url]
-
+**[Documentation](https://resept-last.readthedocs.io/en/latest/Case%20study.html)** | **[Paper](https://www.biorxiv.org/content/10.1101/2021.07.08.451210v1)** 
  
 A novel method to reconstruct a RGB image of spots using the sequencing data from spatially resolved transcriptomics to identify spatial context and functional zonation.
 
@@ -185,6 +185,7 @@ python training_pipeline.py -data * -config * -model *.pth -gene * -method * -pc
 ## Built With
  
 * [opencv](https://opencv.org/) - The image processing library used
+* [pytorch](https://pytorch.org/) - The deep learning backend used
 * [scikit-learn](https://scikit-learn.org/stable/) - The machine learning library used
 * [mmSegmentation](https://github.com/open-mmlab/mmsegmentation) - Used to train the deep learning based image segmentation model
  
