@@ -46,9 +46,9 @@ pip install anndata
 ## Running the tests
  
 ### Example 1. Generate pseudo RGB images
-Program **RGB images_pipeline.py** is used to generate pseudo RGB images. It can also output the corresponding case study image according to the input panel gene txt file. Images generated in this step store in the pseudo_images folder under specified output folder.  Original 10X data files of 16 samples can be found on Baidu Cloud Disk[Link：https://pan.baidu.com/s/16P8JdpfqdbGigSQbNPUYSg Key：6666].
+Program **RGB_images_pipeline.py** is used to generate RGB images. It can also output the corresponding case study image according to the input panel gene txt file. Images generated in this step store in the images folder under specified output folder.  Original 10X data files of 16 samples can be found on Baidu Cloud Disk[Link：https://pan.baidu.com/s/16P8JdpfqdbGigSQbNPUYSg Key：6666].
 
-In **RGB images_pipeline.py** ,these parameters are used:
+In **RGB_images_pipeline.py** ,these parameters are used:
 
 **Required**
 * **-matrix** 10X data h5 file path.
