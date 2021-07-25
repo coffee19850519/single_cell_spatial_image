@@ -3,7 +3,7 @@
 A novel method to reconstruct a RGB image of spots using the sequencing data from spatially resolved transcriptomics to identify spatial context and functional zonation.
 
 <p align="center">
-  <img height="300" width="700" src="./image/figure1.png" />
+  <img height="300" width="700" src="https://github.com/yuyang-0825/image/blob/main/figure1.png" />
 </p>
 
 
