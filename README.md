@@ -1,4 +1,4 @@
-[docs-image]: https://resept-last.readthedocs.io/en/latest/index.html
+[docs-image]: https://readthedocs.org/projects/pytorch-geometric/badge/?version=latest
 [docs-url]: https://resept-last.readthedocs.io/en/latest/Case%20study.html
 
 # RESEPT: a computational framework for REconstructing and Segmenting Expression RGB image based on sPatially resolved Transcriptomics
