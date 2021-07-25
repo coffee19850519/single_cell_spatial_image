@@ -2,7 +2,6 @@
 [docs-url]: https://resept-last.readthedocs.io/en/latest/Case%20study.html
 
 # RESEPT: a computational framework for REconstructing and Segmenting Expression RGB image based on sPatially resolved Transcriptomics
- --------------------------------------------------------------------------------
 [![Docs Status][docs-image]][docs-url]
 
  
