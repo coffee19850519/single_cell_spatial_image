@@ -45,7 +45,7 @@ pip install anndata
  
 ## Running the tests
  
-### Example 1. Generate pseudo RGB images
+### Example 1. Generate RGB images
 Program **RGB_images_pipeline.py** is used to generate RGB images. It can also output the corresponding case study image according to the input panel gene txt file. Images generated in this step store in the images folder under specified output folder.  Original 10X data files of 16 samples can be found on Baidu Cloud Disk[Link：https://pan.baidu.com/s/16P8JdpfqdbGigSQbNPUYSg Key：6666].
 
 In **RGB_images_pipeline.py** ,these parameters are used:
@@ -66,7 +66,7 @@ In **RGB_images_pipeline.py** ,these parameters are used:
 python  RGB_images_pipeline.py -matrix *.h5  -csv *.csv  -json *.json  -out * -method *  -gene *.txt -pca * -transform *
 ```
 
-### Example 2. Segmentation to pseudo RGB images
+### Example 2. Segmentation to RGB images
 Program **test_pipeline.py** is used to use the existing checkpoint to segmentation the generated pseudo RGB images. The top5 results generated after MI ranking are presented to the user. The category maps, visualizations and MI values corresponding to top5 are stored in the segmentation_test folder under specified output folder. Original 10X data files of 16 samples and checkpoint file can be found on Baidu Cloud Disk[Link：https://pan.baidu.com/s/16P8JdpfqdbGigSQbNPUYSg Key：6666].
 
 In **test_pipeline.py** ,these parameters are used:
