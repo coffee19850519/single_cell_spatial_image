@@ -4,7 +4,6 @@ import numpy as np
 import pandas as pd
 import json
 from PIL import Image
-# img_path="/mnt/data/scdata/spa_logcpm_noise/" #要改变的图片的路径文件夹
 h = 600
 
 
@@ -64,7 +63,6 @@ def inpaint(img_path, anndata, metadata_all):
         ret, binary = cv2.threshold(gray,230,255,cv2.THRESH_BINARY_INV)
         contours, hierarchy = cv2.findContours(binary,cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_NONE)
         area = []
-        # 找到最大的轮廓
         for k in range(len(contours)):
             area.append(cv2.contourArea(contours[k]))
         max_idx = np.argmax(np.array(area))
