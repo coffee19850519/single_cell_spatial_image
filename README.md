@@ -13,173 +13,98 @@ A novel method to reconstruct a RGB image of spots using the sequencing data fro
 
 
  
-## Getting Started
+## System Requirements
+
+### Hardware Requirements
  
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
- 
-### Prerequisites
- 
-What things you need to install the software and how to install them
- 
+``` RESEPT ``` package requires a standard computer with enough RAM to support the in-memory operations. A GPU with enough VRAM or multi-core CPU is recommended for acceleration.
+
+### Software Requirements
+
+#### OS Requirements
+This package is supported for Linux. The package has been tested on the following systems:
+* Linux: Ubuntu 20.04
+
+#### Python Dependencies
+``` RESEPT ``` mainly depends on the Python scientific stack.
 ```
-pip install umap-learn
-pip install scikit-learn
+numpy 1.18.1
+torch 1.4.0
+networkx 2.4
+pandas 0.25.3
+matplotlib 3.1.2
+seaborn 0.9.0
+umap-learn 0.3.10
+munkres 1.1.2
+tqdm 4.48.0
+python-igraph 0.8.3
+scanpy 1.7.2
+scikit-image 0.18.1
+opencv-python 4.5.1.48
+louvain  0.7.0
+anndata 0.7.6
+mmcv-full  1.3.0
+mmsegmentation 0.12.0
+```
+
+## Installation Guide
+
+### Install from Github
+```
+git clone https://github.com/OSU-BMBL/RESEPT
+cd RESEPT
+```
+### Install dependency packages
+```
+pip install numpy 
+pip install networkx 
+pip install pandas 
+pip install matplotlib 
+pip install seaborn 
+pip install umap-learn 
+pip install munkres 
+pip install tqdm 
+pip install python-igraph 
+pip install scanpy 
 pip install scikit-image
-pip install mmcv-full
-pip install mmsegmentation
-pip install scanpy
-pip install opencv-python
+pip install opencv-python 
+pip install louvain  
 pip install anndata
+pip install mmcv-full  
 ```
- 
- - Use the following file structure
-      ```
-      root/
-      |__10X data/
-      |    |__ spatial/
-      |    |__ *.h5
-      |__SpaGCN2/
-      |__configs/
-      |__mmseg/
-      |__scGNNsp_space/
-      |__checkpoint/ (optional)
-            |__ *.pth
-       
-      ```
- Original 10X data files of 16 samples and checkpoint file can be found on Baidu Cloud Disk[Link：https://pan.baidu.com/s/16P8JdpfqdbGigSQbNPUYSg Key：6666].
- 
-## Running the tests
- 
-### Example 1. Generate RGB images
-Program **RGB_images_pipeline.py** is used to generate RGB images. It can also output the corresponding case study image according to the input panel gene txt file. Images generated in this step store in the images folder under specified output folder.  Original 10X data files of 16 samples can be found on Baidu Cloud Disk[Link：https://pan.baidu.com/s/16P8JdpfqdbGigSQbNPUYSg Key：6666].
+This takes 20-25 mins to install all dependencies.
 
-In **RGB_images_pipeline.py** ,these parameters are used:
-
-**Required**
-* **-matrix** 10X data h5 file path.
-* **-csv** tissue positions list file path.
-* **-json** scalefactors json file path.
-* **-out** output folder.
-* **-method** generate embedding method:scGNN or spaGCN  [default:scGNN]
-
-**Optional**
-* **-gene** gene txt file path,one line is a panel gene. Default involved all genes. When specify gene list, involved sprcific genes. [optional][default:None]
-* **-pca** pca option when generating  case study image. [optional][default:True]
-* **-transform** data preprocessing method: log or logcpm or None.[default:None]
-
+## Demo
+### Evaluation of segmentation results
+Run the following command line to generate RGB images form different embedding parameters, segmentation maps with top5 Moran's I and their evaluation metrics.
+Please download the corresponding pretrained model from [Link：] and put it in the checkpoint folder.
 ```
-python  RGB_images_pipeline.py -matrix *.h5  -csv *.csv  -json *.json  -out * -method *  -gene *.txt -pca * -transform *
+python evaluation_pipeline.py -matrix Demo/S13/S13_filtered_feature_bc_matrix.h5  -csv Demo/S13/spatial/tissue_positions_list.csv  -json Demo/S13/spatial/scalefactors_json.json -out Demo_result  -method scGNN  -transform logcpm -label Demo/S13.csv -checkpoint checkpoint/S13_scGNN.pth
 ```
 
-### Example 2. Segmentation to RGB images
-Program **test_pipeline.py** is used to use the existing checkpoint to segmentation the generated pseudo RGB images. The top5 results generated after MI ranking are presented to the user. The category maps, visualizations and MI values corresponding to top5 are stored in the segmentation_test folder under specified output folder. Original 10X data files of 16 samples and checkpoint file can be found on Baidu Cloud Disk[Link：https://pan.baidu.com/s/16P8JdpfqdbGigSQbNPUYSg Key：6666].
+### Command Line Arguments:
+*	-matrix specified path for raw gene expression data provided by 10X in h5 file.
+*	-csv specified path for meta file recording tissue positions provided by 10x in csv file.
+*	-json specified path for scale factors provided by 10x in json file.
+*	-label specified path for annotation file recording cell barcodes and their annotations.
+*	-checkpoint specified path for pretrained model file.
+*	-out specified output root folder.
+*	-method specified the embedding method in use: scGNN or spaGCN 
+*	-transform specified the data pre-transform: log, logcpm or None.
 
-In **test_pipeline.py** ,these parameters are used:
-
-**Required**
-* **-matrix** 10X data h5 file path.
-* **-csv** tissue positions list file path.
-* **-json** scalefactors json file path.
-* **-out** output folder.
-* **-method** generate embedding method:scGNN or spaGCN  [default:scGNN]
-* **-checkpoint** checkpoint path
-
-**Optional**
-* **-gene** gene txt file path,one line is a panel gene. Default involved all genes. When specify gene list, involved sprcific genes. [optional][default:None]
-* **-pca** pca option when generating  case study image. [optional][default:True]
-* **-transform** data preprocessing method: log or logcpm or None.[default:None]
-```
-python  test_pipeline.py -matrix *.h5  -csv *.csv  -json *.json  -out * -method *  -gene *.txt -pca * -transform * -checkpoint *.pth
-```
-
-### Example 3. Segmentation to optical images 
-Program **optical_segmentation_pipeline.py** is used to use the existing checkpoint to segmentation the optical images and generated pseudo RGB images. The category maps and visualizations are stored in the  optical_segmentation folder under specified output folder. The Original 10X data file and and checkpoint file in the manuscript can be found on Baidu Cloud Disk[Link：https://pan.baidu.com/s/16P8JdpfqdbGigSQbNPUYSg Key：6666].
-
-**Required**
-* **-matrix** 10X data h5 file path.
-* **-csv** tissue positions list file path.
-* **-json** scalefactors json file path.
-* **-optical** optical image path.
-* **-out** output folder.
-* **-method** generate embedding method:scGNN or spaGCN  [default:scGNN]
-* **-checkpoint** checkpoint path
-
-**Optional**
-* **-pca** pca option when generating  case study image. [optional][default:True]
-* **-transform** data preprocessing method: log or logcpm or None.[default:None]
-
-```
-python  optical_segmentation_pipeline.py -matrix *.h5  -csv *.csv  -json *.json  -optical *.png  -out * -method * -pca * -transform * -checkpoint *.pth
-```
-
-### Example 4. Evaluation of segmentation results 
-Program **evaluation_pipeline.py** is used to evaluate the segmentation results. User submits 10X and the corresponding label file to generate the pseudo RGB images, the visualizations of the top5 after MI ranking and the corresponding values of the evaluation index such as ARI. These output files are stored in the segmentation_evaluation folder under specified output folder. Original 10X data files and label files of 16 samples and checkpoint file can be found on Baidu Cloud Disk[Link：https://pan.baidu.com/s/16P8JdpfqdbGigSQbNPUYSg Key：6666].
-
-In **evaluation_pipeline.py** ,these parameters are used:
-
-**Required**
-* **-matrix** 10X data h5 file path.
-* **-csv** tissue positions list file path.
-* **-json** scalefactors json file path.
-* **-out** output folder.
-* **-method** generate embedding method:scGNN or spaGCN  [default:scGNN]
-* **-label** csv file path. One column is barcode and one column is corresponding label.
-* **-checkpoint** checkpoint path
-
-**Optional**
-* **-pca** pca option when generating  case study image. [optional][default:True]
-* **-transform** data preprocessing method: log or logcpm or None.[default:None]
-
-```
-python  evaluation_pipeline.py  -matrix *.h5  -csv *.csv  -json *.json  -out *  -method * -pca * -transform * -label *.csv -checkpoint *.pth
-```
-
-### Example 5. Case study
-Program **case_study_pipeline.py** is used to generate pseudo RGB images and use specific RGB parameters to obtain a filtered image of a specific area. The pseudo RGB images and filtered images are stored in the case_study folder under specified output folder. Original 10X data files of 16 samples can be found on Baidu Cloud Disk[Link：https://pan.baidu.com/s/16P8JdpfqdbGigSQbNPUYSg Key：6666].
-
-In **case_study_pipeline.py** ,these parameters are used:
-
-**Required**
-* **-matrix** 10X data h5 file path
-* **-csv** tissue positions list file path
-* **-json** scalefactors json file path
-* **-out** output folder name [optional][default:output]
-* **-gene** txt file path,one line is a panel gene. Default involved all genes. When specify gene list, involved sprcific genes. [optional][default:None]
-* **-method** generate embedding method:scGNN or spaGCN  [default:scGNN]
-* **-red_min** The lower limit of channel red [int]
-* **-red_max** The upper limit of channel red [int]
-* **-green_min** The lower limit of channel green [int]
-* **-green_max** The upper limit of channel green [int]
-* **-blue_min** The lower limit of channel blue [int]
-* **-blue_max** The upper limit of channel blue [int]
-
-**Optional**
-* **-pca** pca option when generating  case study image. [optional][default:True]
-* **-transform** data preprocessing method: log or logcpm or None.[default:None]
-
-```
-python case_study_pipeline.py -matrix *.h5 -csv *.csv -json *.json -out * -gene *.txt  -method * -pca * -transform * -red_min * -red_max * -green_min *  -green_max * -blue_min * -blue_max *
-```
-
-###  Example 6. Training pipeline
-Program **training_pipeline.py** is used to generate pseudo RGB images and fine-tune current model. You can prepare data according to the 10X data format in the training data folder. Config file can be customized according to your needs. Checkpoint files can be found on Baidu Cloud Disk[Link：https://pan.baidu.com/s/16P8JdpfqdbGigSQbNPUYSg Key：6666]. The new checkpoint is stored in the work_dir folder.
-
-In **training_pipeline.py** ,these parameters are used:
-
-**Required**
-* **-data** 10X data h5 file, tissue positions list file and scalefactors json file folder path.
-* **-config** training config file path.
-* **-model** resume model path.[default:None]
-* **-gene** txt file path,one line is a panel gene. Default involved all genes. When specify gene list, involved sprcific genes. [optional][default:None]
-* **-method** generate embedding method:scGNN or spaGCN  [default:scGNN]
-
-**Optional**
-* **-pca** pca option when generating  case study image. [optional][default:True]
-* **-transform** data preprocessing method: log or logcpm or None.[default:None]
-
-```
-python training_pipeline.py -data * -config * -model *.pth -gene * -method * -pca * -transform *
-```
+### Expected Results
+RESEPT stores the generative results in the following structure:
+   ```
+      Demo_result/
+      |__RGB_images/
+      |__segmentation_evaluation/
+            |__segmentation_map/
+            |__top5_evaluation.csv
+   ```
+*	-The folder 'RGB_images' stores generative RGB images form different embedding parameters. 
+*	-The folder 'segmentation_map' stores visuals of segmentation results with top5 Moran's I. 
+*	-The file 'top5_evaluation.csv' records various evaluation metrics corresponding to segmentation results with top5 Moran's I.
+*	-This Demo takes 30-35 mins to generate all results on a machine with multi-core CPU.
 
  
 ## Built With
