@@ -264,30 +264,30 @@ def single_gpu_test(adata,
             for n in name:
                 prefix = n.split('.png')[0]
                 show = cv2.imread(out_dir+n)
-                if not os.path.exists(output_folder+'show/'):
-                    os.makedirs(output_folder+'show/')
-                cv2.imwrite(output_folder+'show/'+n,show)
-                if not os.path.exists(output_folder+'result/'):
-                    os.makedirs(output_folder+'result/')
-                shutil.move(output_folder+'result_temp/'+prefix+'.csv', output_folder+'result/'+prefix+'.csv')
-            shutil.rmtree(out_dir)
-            shutil.rmtree(output_folder+'result_temp/')
+                if not os.path.exists(output_folder+'segmentation_map/'):
+                    os.makedirs(output_folder+'segmentation_map/')
+                cv2.imwrite(output_folder+'segmentation_map/'+n,show)
+#                 if not os.path.exists(output_folder+'result/'):
+#                     os.makedirs(output_folder+'result/')
+#                 shutil.move(output_folder+'result_temp/'+prefix+'.csv', output_folder+'result/'+prefix+'.csv')
+#             shutil.rmtree(out_dir)
+#             shutil.rmtree(output_folder+'result_temp/')
             # print(name)
-            MI_result_top5.to_csv(output_folder+'MI_rank_result.csv',index=False,header=True)
+            MI_result_top5.to_csv(output_folder+'top5_evaluation.csv',index=False,header=True)
         else:
             name = MI_result.iloc[:, 0].values
             for n in name:
                 prefix = n.split('.png')[0]
                 show = cv2.imread(out_dir + n)
-                if not os.path.exists(output_folder + 'show/'):
-                    os.makedirs(output_folder + 'show/')
-                cv2.imwrite(output_folder + 'show/' + n, show)
-                if not os.path.exists(output_folder + 'result/'):
-                    os.makedirs(output_folder + 'result/')
-                shutil.move(output_folder + 'result_temp/' + prefix + '.csv', output_folder + 'result/' + prefix + '.csv')
-            shutil.rmtree(out_dir)
-            shutil.rmtree(output_folder + 'result_temp/')
-            MI_result.to_csv(output_folder+'MI_rank_result.csv',index=False,header=True)
+                if not os.path.exists(output_folder + 'segmentation_map/'):
+                    os.makedirs(output_folder + 'segmentation_map/')
+                cv2.imwrite(output_folder + 'segmentation_map/' + n, show)
+#                 if not os.path.exists(output_folder + 'result/'):
+#                     os.makedirs(output_folder + 'result/')
+#                 shutil.move(output_folder + 'result_temp/' + prefix + '.csv', output_folder + 'result/' + prefix + '.csv')
+#             shutil.rmtree(out_dir)
+#             shutil.rmtree(output_folder + 'result_temp/')
+            MI_result.to_csv(output_folder+'top5_evaluation.csv.csv',index=False,header=True)
 
         top1_name = MI_result.iloc[:, 0].values[0]
         top1_csv_name = output_folder+'result/'+top1_name.split('.png')[0]+'.csv'
