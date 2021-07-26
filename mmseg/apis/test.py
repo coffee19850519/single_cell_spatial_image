@@ -196,9 +196,9 @@ def single_gpu_test(adata,
 
                 image_test = cv2.imread(img_name)
                 predict = result[0].astype(np.int32)
-                if not os.path.exists(output_folder+'result_temp/'):
-                    os.makedirs(output_folder+'result_temp/')
-                np.savetxt(output_folder+'result_temp/'+name.split('.png')[0]+'.csv', predict, delimiter=',')
+                # if not os.path.exists(output_folder+'result_temp/'):
+                #     os.makedirs(output_folder+'result_temp/')
+                # np.savetxt(output_folder+'result_temp/'+name.split('.png')[0]+'.csv', predict, delimiter=',')
                 MI = cluster_heterogeneity(image_test, predict, 0)
                 MI_list.append(MI)
                 print('\n',name)
@@ -270,7 +270,7 @@ def single_gpu_test(adata,
 #                 if not os.path.exists(output_folder+'result/'):
 #                     os.makedirs(output_folder+'result/')
 #                 shutil.move(output_folder+'result_temp/'+prefix+'.csv', output_folder+'result/'+prefix+'.csv')
-#             shutil.rmtree(out_dir)
+            shutil.rmtree(out_dir)
 #             shutil.rmtree(output_folder+'result_temp/')
             # print(name)
             MI_result_top5.to_csv(output_folder+'top5_evaluation.csv',index=False,header=True)
@@ -285,7 +285,7 @@ def single_gpu_test(adata,
 #                 if not os.path.exists(output_folder + 'result/'):
 #                     os.makedirs(output_folder + 'result/')
 #                 shutil.move(output_folder + 'result_temp/' + prefix + '.csv', output_folder + 'result/' + prefix + '.csv')
-#             shutil.rmtree(out_dir)
+            shutil.rmtree(out_dir)
 #             shutil.rmtree(output_folder + 'result_temp/')
             MI_result.to_csv(output_folder+'top5_evaluation.csv.csv',index=False,header=True)
 
@@ -674,3 +674,4 @@ def save_spot_RGB_to_image(label_path,adata):
     shape = adata.uns["img_shape"]
     label_img = cv2.resize(img, dsize= (shape,shape),  interpolation= cv2.INTER_NEAREST)
     return label_img
+
