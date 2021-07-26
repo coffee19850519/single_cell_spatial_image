@@ -89,8 +89,8 @@ python evaluation_pipeline.py -matrix Demo/S13/S13_filtered_feature_bc_matrix.h5
 *	-label specified path for annotation file recording cell barcodes and their annotations.
 *	-checkpoint specified path for pretrained model file.
 *	-out specified output root folder.
-*	-method specified the embedding method in use: scGNN or spaGCN 
-*	-transform specified the data pre-transform: log, logcpm or None.
+*	-method specified embedding method in use: scGNN or spaGCN 
+*	-transform specified data pre-transform: log, logcpm or None.
 
 ### Expected Results
 RESEPT stores the generative results in the following structure:
