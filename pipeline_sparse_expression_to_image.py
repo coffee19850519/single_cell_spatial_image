@@ -39,7 +39,7 @@ def save_transformed_RGB_to_image_and_csv(spot_row_in_fullres,
     low_img = cv2.resize(img, dsize=(600, 600), interpolation=cv2.INTER_CUBIC)
     # sample_num = sample_name.split('_')[0]
 
-    image_path = img_folder+'/pseudo_images/'
+    image_path = img_folder+'/RGB_images/'
     if not os.path.exists(image_path):
         os.makedirs(image_path)
     if img_type == 'lowres':
