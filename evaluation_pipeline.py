@@ -36,7 +36,7 @@ if __name__ == '__main__':
     scale_factor_path = args1.json[0]
     label_path = args1.label_path[0]
     output_path = args1.output_path[0]
-    panel_gene_path = args1.gene[0]
+    panel_gene_path = 'None'
     method = args1.method[0]
     pca_opt = args1.pca[0]
     transform_opt = args1.transform[0]
@@ -44,4 +44,4 @@ if __name__ == '__main__':
     if not os.path.exists(output_path):
         os.makedirs(output_path)
     # segmentation_category_map(h5_path[0], spatial_path[0], scale_factor_path[0], optical_path[0], output_path)
-    segmentation_evaluation(h5_path, spatial_path, scale_factor_path, output_path, method,label_path,pca_opt,transform_opt,checkpoint)
+    segmentation_evaluation(h5_path, spatial_path, scale_factor_path, output_path, method,label_path,panel_gene_path,pca_opt,transform_opt,checkpoint)
