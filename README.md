@@ -49,11 +49,6 @@ mmsegmentation 0.12.0
 
 ## Installation Guide
 
-### Install from Github
-```
-git clone https://github.com/OSU-BMBL/RESEPT
-cd RESEPT
-```
 ### Install dependency packages
 ```
 pip install numpy 
@@ -74,6 +69,11 @@ pip install mmcv-full
 ```
 This takes 20-25 mins to install all dependencies.
 
+### Install RESEPT from GitHub
+```
+git clone https://github.com/OSU-BMBL/RESEPT
+cd RESEPT
+```
 ## Demo
 ### Evaluation of segmentation results
 Run the following command line to generate RGB images from different embedding parameters, segmentation maps with top5 Moran's I and their evaluation metrics.
