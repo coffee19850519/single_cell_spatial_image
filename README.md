@@ -1,7 +1,7 @@
 [docs-image]: https://readthedocs.org/projects/pytorch-geometric/badge/?version=latest
 [docs-url]: https://resept-last.readthedocs.io/en/latest/Case%20study.html
 
-# RESEPT: a computational framework for REconstructing and Segmenting Expression RGB image based on sPatially resolved Transcriptomics
+# Define and visualize pathological architectures of human tissues from spatially resolved transcriptomics using deep learning
 [![Docs Status][docs-image]][docs-url]
 **[Documentation](https://resept-last.readthedocs.io/en/latest/Case%20study.html)** | **[Paper](https://www.biorxiv.org/content/10.1101/2021.07.08.451210v1)** 
  
