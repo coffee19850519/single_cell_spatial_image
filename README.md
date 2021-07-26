@@ -83,14 +83,14 @@ python evaluation_pipeline.py -matrix Demo/S13/S13_filtered_feature_bc_matrix.h5
 ```
 
 ### Command Line Arguments:
-*	-matrix specified path for raw gene expression data provided by 10X in h5 file.
-*	-csv specified path for meta file recording tissue positions provided by 10x in csv file.
-*	-json specified path for scale factors provided by 10x in json file.
-*	-label specified path for annotation file recording cell barcodes and their annotations.
-*	-checkpoint specified path for pretrained model file.
-*	-out specified output root folder.
-*	-method specified embedding method in use: scGNN or spaGCN 
-*	-transform specified data pre-transform: log, logcpm or None.
+*	-matrix specified path for raw gene expression data provided by 10X in h5 file.[type:str]
+*	-csv specified path for meta file recording tissue positions provided by 10x in csv file.[type:str]
+*	-json specified path for scale factors provided by 10x in json file.[type:str]
+*	-label specified path for annotation file recording cell barcodes and their annotations.[type:str]
+*	-checkpoint specified path for pretrained model file.[type:str]
+*	-out specified output root folder.[type:str]
+*	-method specified embedding method in use: scGNN or spaGCN. [type:str]
+*	-transform specified data pre-transform: log, logcpm or None. [type:str]
 
 ### Expected Results
 RESEPT stores the generative results in the following structure:
