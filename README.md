@@ -77,9 +77,11 @@ This takes 20-25 mins to install all dependencies.
 ## Demo
 ### Evaluation of segmentation results
 Run the following command line to generate RGB images from different embedding parameters, segmentation maps with top5 Moran's I and their evaluation metrics.
-Please download the corresponding pre-trained model from [Link：] and put it in the checkpoint folder.
+Please download the corresponding pre-trained model from [click here for downloading data and model](https://bmbl.bmi.osumc.edu/downloadFiles/RESEPT/RESEPT.zip) and put it in a folder.
 ```
-python evaluation_pipeline.py -matrix Demo/S13/S13_filtered_feature_bc_matrix.h5  -csv Demo/S13/spatial/tissue_positions_list.csv  -json Demo/S13/spatial/scalefactors_json.json -out Demo_result  -method scGNN  -transform logcpm -label Demo/S13.csv -checkpoint checkpoint/S13_scGNN.pth
+wget https://bmbl.bmi.osumc.edu/downloadFiles/RESEPT/RESEPT.zip 
+unzip RESEPT.zip
+python evaluation_pipeline.py -matrix Demo/S13/S13_filtered_feature_bc_matrix.h5  -csv Demo/S13/spatial/tissue_positions_list.csv  -json Demo/S13/spatial/scalefactors_json.json -out Demo_result  -method scGNN  -transform logcpm -label Demo/S13.csv -checkpoint Demo/checkpoint/S13_scGNN.pth
 ```
 
 ### Command Line Arguments:
