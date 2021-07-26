@@ -5,7 +5,7 @@
 [![Docs Status][docs-image]][docs-url]
 **[Documentation](https://resept-last.readthedocs.io/en/latest/Case%20study.html)** | **[Paper](https://www.biorxiv.org/content/10.1101/2021.07.08.451210v1)** 
  
-A novel method to reconstruct a RGB image of spots using the sequencing data from spatially resolved transcriptomics to identify spatial context and functional zonation.
+A novel method to reconstruct an RGB image of spots using the sequencing data from spatially resolved transcriptomics to identify spatial context and functional zonation.
 
 <p align="center">
   <img height="300" width="700" src="https://github.com/yuyang-0825/image/blob/main/figure1.png" />
@@ -76,21 +76,21 @@ This takes 20-25 mins to install all dependencies.
 
 ## Demo
 ### Evaluation of segmentation results
-Run the following command line to generate RGB images form different embedding parameters, segmentation maps with top5 Moran's I and their evaluation metrics.
-Please download the corresponding pretrained model from [Link：] and put it in the checkpoint folder.
+Run the following command line to generate RGB images from different embedding parameters, segmentation maps with top5 Moran's I and their evaluation metrics.
+Please download the corresponding pre-trained model from [Link：] and put it in the checkpoint folder.
 ```
 python evaluation_pipeline.py -matrix Demo/S13/S13_filtered_feature_bc_matrix.h5  -csv Demo/S13/spatial/tissue_positions_list.csv  -json Demo/S13/spatial/scalefactors_json.json -out Demo_result  -method scGNN  -transform logcpm -label Demo/S13.csv -checkpoint checkpoint/S13_scGNN.pth
 ```
 
 ### Command Line Arguments:
-*	-matrix specified path for raw gene expression data provided by 10X in h5 file.[type:str]
-*	-csv specified path for meta file recording tissue positions provided by 10x in csv file.[type:str]
-*	-json specified path for scale factors provided by 10x in json file.[type:str]
-*	-label specified path for annotation file recording cell barcodes and their annotations.[type:str]
-*	-checkpoint specified path for pretrained model file.[type:str]
-*	-out specified output root folder.[type:str]
-*	-method specified embedding method in use: scGNN or spaGCN. [type:str]
-*	-transform specified data pre-transform: log, logcpm or None. [type:str]
+*	-matrix specify path for raw gene expression data provided by 10X in h5 file.[type:str]
+*	-csv specify path for meta file recording tissue positions provided by 10x in csv file.[type:str]
+*	-json specify path for scale factors provided by 10x in json file.[type:str]
+*	-label specify path for annotation file recording cell barcodes and their annotations, which is used for calculating ARI.[type:str]
+*	-checkpoint specify path for pretrained model file.[type:str]
+*	-out specify output root folder.[type:str]
+*	-method specify embedding method in use: scGNN or spaGCN. [type:str]
+*	-transform specify data pre-transform: log, logcpm or None. [type:str]
 
 ### Expected Results
 RESEPT stores the generative results in the following structure:
@@ -104,7 +104,7 @@ RESEPT stores the generative results in the following structure:
 *	-The folder 'RGB_images' stores generative RGB images form different embedding parameters. 
 *	-The folder 'segmentation_map' stores visuals of segmentation results with top5 Moran's I. 
 *	-The file 'top5_evaluation.csv' records various evaluation metrics corresponding to segmentation results with top5 Moran's I.
-*	-This Demo takes 30-35 mins to generate all results on a machine with multi-core CPU.
+*	-This Demo takes 30-35 mins to generate all results on a machine with a multi-core CPU.
 
  
 ## Built With
