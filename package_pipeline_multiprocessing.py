@@ -50,9 +50,8 @@ def load_data(h5_path, spatial_path, scale_factor_path):
 def pseduo_images_scGNN(h5_path, spatial_path, scale_factor_path, output_folder,scgnnsp_zdim,scgnnsp_alpha,transform_opt):
     # --------------------------------------------------------------------------------------------------------#
     # -------------------------------load data--------------------------------------------------#
-
+    sample = h5_path.split('/')[-1].split('_')[0]
     adata,spatial_all = load_data(h5_path, spatial_path, scale_factor_path)
-
     # transform optional
     if transform_opt == 'log':
         sc.pp.log1p(adata)
@@ -65,12 +64,12 @@ def pseduo_images_scGNN(h5_path, spatial_path, scale_factor_path, output_folder,
         print('transform optional is log or logcpm or None')
 
     #  panel gene
-    if panel_gene_path != None:  # case study
-            gene_list = []
-            with open(panel_gene_path, 'r') as f:
-                for line in f:
-                   gene_list.append(line.strip())
-            filter_panelgenes(adata,gene_list)
+    # if panel_gene_path != None:  # case study
+    #         gene_list = []
+    #         with open(panel_gene_path, 'r') as f:
+    #             for line in f:
+    #                gene_list.append(line.strip())
+    #         filter_panelgenes(adata,gene_list)
 
     print('load data finish')
 
@@ -123,7 +122,7 @@ def pseduo_images_scGNN(h5_path, spatial_path, scale_factor_path, output_folder,
 def pseudo_images(h5_path, spatial_path, scale_factor_path, output_folder,method, panel_gene_path, pca_opt, transform_opt):
         # --------------------------------------------------------------------------------------------------------#
         # -------------------------------load data--------------------------------------------------#
-    sample = h5_path.split('/',10)[-1].split('_',3)[0]
+    sample = h5_path.split('/')[-1].split('_')[0]
     # print(sample)
     if method == 'spaGCN':
         adata,spatial_all = load_data(h5_path, spatial_path, scale_factor_path)
@@ -205,7 +204,8 @@ def pseudo_images(h5_path, spatial_path, scale_factor_path, output_folder,method
                     for scgnnsp_alpha in scgnnsp_PEalphaList:
                         # for scgnnsp_k in scgnnsp_kList:
                         pool.apply_async(pseduo_images_scGNN, (h5_path, spatial_path, scale_factor_path, output_folder,
-                                                               scgnnsp_zdim,scgnnsp_alpha,log_opt,normalization_opt,))
+                                                               scgnnsp_zdim,scgnnsp_alpha,transform_opt,))
+
         pool.close()
         pool.join()
 
@@ -227,7 +227,7 @@ def segmentation_category_map(h5_path, spatial_path, scale_factor_path, optical_
 
 
 def segmentation_evaluation(h5_path, spatial_path, scale_factor_path, output_path, method,label_path, panel_gene_path,pca_opt,transform_opt,checkpoint):
-    pseudo_images(h5_path, spatial_path, scale_factor_path, output_path, method, panel_gene_path,pca_opt,log_opt,transform_opt)
+    pseudo_images(h5_path, spatial_path, scale_factor_path, output_path, method, panel_gene_path,pca_opt,transform_opt)
     img_path =output_path + "/RGB_images/"
     adata,spatial_all = load_data(h5_path, spatial_path, scale_factor_path)
     adata.uns["img_shape"] = 600
