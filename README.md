@@ -2,8 +2,7 @@
 [docs-url]: https://resept-last.readthedocs.io/en/latest/Case%20study.html
 
 # Define and visualize pathological architectures of human tissues from spatially resolved transcriptomics using deep learning
-[![Docs Status][docs-image]][docs-url]
-**[Documentation](https://resept-last.readthedocs.io/en/latest/Case%20study.html)** | **[Paper](https://www.biorxiv.org/content/10.1101/2021.07.08.451210v1)** 
+**[Paper](https://www.biorxiv.org/content/10.1101/2021.07.08.451210v1)** 
  
 A novel method to reconstruct an RGB image of spots using the sequencing data from spatially resolved transcriptomics to identify spatial context and functional zonation.
 
