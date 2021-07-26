@@ -112,7 +112,7 @@ def pseduo_images_scGNN(h5_path, spatial_path, scale_factor_path, output_folder,
                     print('transform embedding to image finish')
     # --------------------------------------------------------------------------------------------------------#
     # --------------------------------inpaint image-------------------------------------------------#
-    img_path = output_folder+ "/pseudo_images/"
+    img_path = output_folder+ "/RGB_images/"
     inpaint_path = inpaint(img_path, adata, spatial_all)
     print('generate pseudo images finish')
     return inpaint_path
@@ -188,7 +188,7 @@ def pseudo_images(h5_path, spatial_path, scale_factor_path, output_folder,method
                 print('transform embedding to image finish')
         # # --------------------------------------------------------------------------------------------------------#
         # # --------------------------------inpaint image-------------------------------------------------#
-        img_path = output_folder + "/pseudo_images/"
+        img_path = output_folder + "/RGB_images/"
         inpaint_path = inpaint(img_path, adata, spatial_all)
         print('generate pseudo images finish')
         return inpaint_path
@@ -212,7 +212,7 @@ def pseudo_images(h5_path, spatial_path, scale_factor_path, output_folder,method
 
 def segmentation_test(h5_path, spatial_path, scale_factor_path, output_path, method,panel_gene_path,pca_opt,transform_opt,checkpoint):
     pseudo_images(h5_path, spatial_path, scale_factor_path, output_path, method,panel_gene_path,pca_opt,transform_opt)   # output_folder+ "/pseudo_images/"
-    img_path = output_path + "/pseudo_images/"
+    img_path = output_path + "/RGB_images/"
     label_path = None
     adata = None
     top1_csv_name= segmentation(adata,img_path,label_path,method,checkpoint)
@@ -228,7 +228,7 @@ def segmentation_category_map(h5_path, spatial_path, scale_factor_path, optical_
 
 def segmentation_evaluation(h5_path, spatial_path, scale_factor_path, output_path, method,label_path, panel_gene_path,pca_opt,transform_opt,checkpoint):
     pseudo_images(h5_path, spatial_path, scale_factor_path, output_path, method, panel_gene_path,pca_opt,log_opt,transform_opt)
-    img_path =output_path + "/pseudo_images/"
+    img_path =output_path + "/RGB_images/"
     adata,spatial_all = load_data(h5_path, spatial_path, scale_factor_path)
     adata.uns["img_shape"] = 600
     top1_csv_name= segmentation(adata,img_path,label_path,method,checkpoint)
