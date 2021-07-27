@@ -50,7 +50,8 @@ def load_data(h5_path, spatial_path, scale_factor_path):
 def pseduo_images_scGNN(h5_path, spatial_path, scale_factor_path, output_folder,scgnnsp_zdim,scgnnsp_alpha,transform_opt):
     # --------------------------------------------------------------------------------------------------------#
     # -------------------------------load data--------------------------------------------------#
-    sample = h5_path.split('/')[-1].split('_')[0]
+    # sample = h5_path.split('/')[-1].split('_')[0]
+    sample = h5_path.split('/')[-2]
     adata,spatial_all = load_data(h5_path, spatial_path, scale_factor_path)
     # transform optional
     if transform_opt == 'log':
@@ -122,7 +123,7 @@ def pseduo_images_scGNN(h5_path, spatial_path, scale_factor_path, output_folder,
 def pseudo_images(h5_path, spatial_path, scale_factor_path, output_folder,method, panel_gene_path, pca_opt, transform_opt):
         # --------------------------------------------------------------------------------------------------------#
         # -------------------------------load data--------------------------------------------------#
-    sample = h5_path.split('/')[-1].split('_')[0]
+    sample = h5_path.split('/')[-2]
     # print(sample)
     if method == 'spaGCN':
         adata,spatial_all = load_data(h5_path, spatial_path, scale_factor_path)

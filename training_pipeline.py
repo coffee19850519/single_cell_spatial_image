@@ -14,12 +14,12 @@ warnings.filterwarnings("ignore")
 
 def parse_args():
     parser = argparse.ArgumentParser(description='training')
-    parser.add_argument('-data', type=str, nargs='+', help='h5, csv and json file path')
-    parser.add_argument('-config', type=str, nargs='+', help='config path')
-    parser.add_argument('-checkpoint', type=str, nargs='+',default=[None], help='model path')
-    parser.add_argument('-out', '--output_path', type=str, nargs='*', default='output', help='generate output folder')
+    parser.add_argument('-data_folder', type=str, nargs='+', help='h5, csv and json file path')
+    # parser.add_argument('-config', type=str, nargs='+', help='config path')
+    parser.add_argument('-model', type=str, nargs='+',default=[None], help='model path')
+    parser.add_argument('-output', type=str, nargs='*', default='output', help='generate output folder')
     parser.add_argument('-gene', type=str, nargs='+', help='panel gene txt  path,one line is a panel gene',default=[None])
-    parser.add_argument('-method', type=str, nargs='+', default=['scGNN'], help='optional spaGCN or scGNN')
+    parser.add_argument('-embedding', type=str, nargs='+', default=['scGNN'], help='optional spaGCN or scGNN')
     parser.add_argument('-pca', type=str, nargs='+', default=[True], help='pca optional:True or False')
     parser.add_argument('-transform', type=str, nargs='+', default=['None'], help='data transform optional is log or logcpm or None')
 
@@ -107,7 +107,7 @@ def train_preprocessing(path, sample_name, adata):
         # print(sample_name,sample)
         if sample_name == sample:
 
-            data_file = path+'/'+sample+'.csv'
+            data_file = path+'/'+sample+'/'+sample+'_annotation.csv'
             # scale_factor_path = path +'/'+sample+'/spatial/scalefactors_json.json'
             label = save_spot_RGB_to_image(data_file, adata)
             savehi =  Image.fromarray(label)
@@ -143,12 +143,12 @@ def load_data(h5_path, spatial_path, scale_factor_path):
 if __name__ == '__main__':
 
     args = parse_args()
-    path = args.data[0]
-    config = args.config[0]
-    model = args.checkpoint[0]
-    output_folder = args.output_path[0]
+    path = args.data_folder[0]
+    # config = args.config[0]
+    model = args.model[0]
+    output_folder = args.output[0]
     panel_gene_path = args.gene[0]
-    method = args.method[0]
+    method = args.embedding[0]
     pca_opt = args.pca[0]
     transform_opt = args.transform[0]
     # if not os.path.exists('./pseudo_images/'):
@@ -158,7 +158,7 @@ if __name__ == '__main__':
         # print(name.split('.',2)[1])
         if name[0]!='c' and name[-1]!='v':
             # print(name)
-            h5_path = path+'/'+name+'/'+name+'_filtered_feature_bc_matrix.h5'
+            h5_path = path+'/'+name+'/filtered_feature_bc_matrix.h5'
             spatial_path = path +'/'+name+'/spatial/tissue_positions_list.csv'
             scale_factor_path = path +'/'+name+'/spatial/scalefactors_json.json'
             # print(h5_path)
@@ -172,6 +172,7 @@ if __name__ == '__main__':
     # path = './pseudo_images/pseudo_images/'
     
             train_preprocessing(path, name, adata)
+    config = './configs/config.py'
     train(config, model)
 
 
