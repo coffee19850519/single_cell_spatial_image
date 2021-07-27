@@ -91,7 +91,7 @@ def pseduo_images_scGNN(h5_path, spatial_path, scale_factor_path, output_folder,
                      # -------------------------------generate_embedding --------------------------------------------------#
                     # image_name = str(scgnnsp_k) + '_' + str(scgnnsp_dist) + '_' + str(
                     #     scgnnsp_alpha) + '_' + str(scgnnsp_zdim) + '_scGNN_LogCPM'
-                    image_name ='scGNN_'+ transform_opt +'_PEalpha' +str(scgnnsp_alpha) +'_zdim'+str(scgnnsp_zdim)
+                    image_name =sample+'_scGNN_'+ transform_opt +'_PEalpha' +str(scgnnsp_alpha) +'_zdim'+str(scgnnsp_zdim)
                     # embedding = generate_embedding(adata,pca=pca, res=res,img_path = optical_img_path,method='spaGCN')
                     embedding = generate_embedding_sc(adata, sample=sample, scgnnsp_dist=scgnnsp_dist,
                                                       scgnnsp_alpha=scgnnsp_alpha, scgnnsp_k=scgnnsp_k,
