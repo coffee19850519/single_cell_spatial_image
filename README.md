@@ -169,7 +169,7 @@ RESEPT stores the generative results in the following structure:
 *	-The folder 'RGB_images' stores generative RGB images from different embedding parameters. 
 *	-The folder 'RGB_images_label' stores generative RGB images label from label file. 
 *	-The file 'epoch_n.pth' is a final model after fine tune.
-*	-This Demo takes 1 hour to generate all results on a machine with a 2080Ti GPU.
+*	-This Demo takes 2 hours to generate all results on a machine with a 2080Ti GPU.
 
 ## Built With
  
