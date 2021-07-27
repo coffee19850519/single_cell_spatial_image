@@ -83,15 +83,15 @@ cd RESEPT
 
 ### Annotation file
 
-An annotation file recording cell barcodes and their corresponding annotations. It is required in the functions of evaluating predictive tissue architecture and retraining segmentation model. The first column of the file stores cell barcodes and the second column saves their corresponding annotations. The file should be named as: [sample_name]_annotation.csv. 
+An annotation file recording spot barcodes and their corresponding annotations. It is required in the functions of evaluating predictive tissue architecture and customizing segmentation model. The file should be named as: [sample_name]_annotation.csv. [example](https://bmbl.bmi.osumc.edu/downloadFiles/data_and_model/data_and_model.zip) 
 
-### Model file
+### Segmentation model file
 
-A pretrained model file in pth format.
+A trained segmentation model file in pth format. It is required to predict tissue architecture on generative RGB images.
 
 ### Data structure
 
-The data for each sample should follow this data schema:
+The data schema to run our code is as following:
 ```
     data_folder/
     |_[sample_name]/
@@ -106,9 +106,8 @@ The data for each sample should follow this data schema:
    ```
 
 ## Demo
-### Evaluate tissue architecture with annotations
-Run the following command line to generate RGB images from different embedding parameters, segmentation maps with top5 Moran's I and their evaluation metrics.
-Please download the example data and pre-trained model from [click here for downloading data and model](https://bmbl.bmi.osumc.edu/downloadFiles/data_and_model/data_and_model.zip) and put the unzip folder 'Demo' to source code folder.
+### Evaluate predictive tissue architecture with annotations
+Run the following command line to generate visuals of gene expression from different embedding parameters, segmentation maps with top5 Moran's I and their evaluation metrics. For demonstration, please download the example data and pre-trained model from [here](https://bmbl.bmi.osumc.edu/downloadFiles/data_and_model/data_and_model.zip) and put the unzip folder 'Demo' to source code folder.
 ```
 wget https://bmbl.bmi.osumc.edu/downloadFiles/RESEPT/RESEPT.zip 
 unzip RESEPT.zip
@@ -125,7 +124,7 @@ python evaluation_pipeline.py -expression Demo/S13/S13_filtered_feature_bc_matri
 *	-embedding specify embedding method in use: scGNN or spaGCN. [type:str]
 *	-transform specify data pre-transform: log, logcpm or None. [type:str]
 
-#### Expected Results
+#### Results
 RESEPT stores the generative results in the following structure:
    ```
       Demo_result/
@@ -134,14 +133,13 @@ RESEPT stores the generative results in the following structure:
             |__segmentation_map/
             |__top5_evaluation.csv
    ```
-*	-The folder 'RGB_images' stores generative RGB images from different embedding parameters. 
-*	-The folder 'segmentation_map' stores visuals of segmentation results with top5 Moran's I. 
-*	-The file 'top5_evaluation.csv' records various evaluation metrics corresponding to segmentation results with top5 Moran's I .
+*	-The folder 'RGB_images' stores generative visuals of gene expression from different embedding parameters. 
+*	-The folder 'segmentation_map' stores visuals of predictive tissue architectures with top5 Moran's I. 
+*	-The file 'top5_evaluation.csv' records various evaluation metrics corresponding to the predictions.
 *	-This Demo takes 30-35 mins to generate all results on a machine with a multi-core CPU.
 
 ### predict tissue architecture without annotation
-Run the following command line to generate RGB images from different embedding parameters, segmentation maps with top5 Moran's I.
-Please download the example data and pre-trained model from [click here for downloading data and model](https://bmbl.bmi.osumc.edu/downloadFiles/data_and_model/data_and_model.zip) and put the unzip folder 'Demo' to source code folder.
+Run the following command line to generate visuals of gene expression from different embedding parameters and predict tissue architectures with top5 Moran's I. For demonstration, please download the example data and pre-trained model from [here](https://bmbl.bmi.osumc.edu/downloadFiles/data_and_model/data_and_model.zip) and put the unzip folder 'Demo' to source code folder.
 ```
 wget https://bmbl.bmi.osumc.edu/downloadFiles/RESEPT/RESEPT.zip 
 unzip RESEPT.zip
@@ -157,7 +155,7 @@ python test_pipeline.py -expression Demo/S13/S13_filtered_feature_bc_matrix.h5  
 *	-embedding specify embedding method in use: scGNN or spaGCN. [type:str]
 *	-transform specify data pre-transform: log, logcpm or None. [type:str]
 
-#### Expected Results
+#### Results
 RESEPT stores the generative results in the following structure:
    ```
       Demo_result/
@@ -168,12 +166,12 @@ RESEPT stores the generative results in the following structure:
    ```
 *	-The folder 'RGB_images' stores generative RGB images from different embedding parameters. 
 *	-The folder 'segmentation_map' stores visuals of segmentation results with top5 Moran's I. 
-*	-The file 'top5_MI_value.csv' records Moran's I value corresponding to segmentation results with top5 Moran's I.
+*	-The file 'top5_MI_value.csv' records Moran's I value corresponding to the predictions.
 *	-This Demo takes 30-35 mins to generate all results on a machine with a multi-core CPU.
 
 
 ### Customize segmentation model 
-RESEPT supports fine-tuning our segmentation model by using your own 10x data. Organize all 10x data and their labels according to our predefined data schema and download our pre-trained model from [click here for downloading data and model](https://bmbl.bmi.osumc.edu/downloadFiles/data_and_model/data_and_model.zip). The 10x data of each sample should be located in a separate sub-folder under the 'data' folder. Specify the downloaded model file path and run the following command line to get the RGB images of your own data and the customized model.  
+RESEPT supports fine-tuning our segmentation model by using your own 10x data. Organize all 10x data and their labels according to our predefined data schema and download our pre-trained model from [here](https://bmbl.bmi.osumc.edu/downloadFiles/data_and_model/data_and_model.zip) as a training start point. The 10x data of each sample should be located in a separate sub-folder under the 'data' folder. For demonstration, download the example training data from [here](https://bmbl.bmi.osumc.edu/downloadFiles/data_and_model/data_and_model.zip), and then run the following command line to get the visuals of your own data and the customized model.  
 ```
 wget https://bmbl.bmi.osumc.edu/downloadFiles/RESEPT/RESEPT.zip 
 unzip RESEPT.zip
@@ -187,7 +185,7 @@ python training_pipeline.py -data_folder Demo -output Demo_result -embedding scG
 *	-embedding specify embedding method in use: scGNN or spaGCN. [type:str]
 *	-transform specify data pre-transform: log, logcpm or None. [type:str]
 
-#### Expected Results
+#### Results
 RESEPT stores the generative results in the following structure:
    ```
       Demo_result/
