@@ -149,8 +149,8 @@ python training_pipeline.py -data_folder Demo -output Demo_result -method scGNN 
 ```
 
 #### Command Line Arguments:
-*  -data_folder 10X data h5 file, tissue positions list file, scale factors json file and label file folder path. [type:str]
-*	-modelspecify path for pretrained model file. [type:str]
+* -data_folder 10X data h5 file, tissue positions list file, scale factors json file and label file folder path. [type:str]
+*	-model specify path for pretrained model file. [type:str]
 *	-output specify output root folder. [type:str]
 *	-method specify embedding method in use: scGNN or spaGCN. [type:str]
 *	-transform specify data pre-transform: log, logcpm or None. [type:str]
