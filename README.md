@@ -84,9 +84,9 @@ python evaluation_pipeline.py -matrix Demo/S13/S13_filtered_feature_bc_matrix.h5
 ```
 
 #### Command Line Arguments:
-*	-matrix specify path for raw gene expression data provided by 10X in h5 file. [type:str]
+*	-expression specify path for raw gene expression data provided by 10X in h5 file. [type:str]
 *	-meta specify path for meta file recording tissue positions provided by 10x in csv file. [type:str]
-*	-factors specify path for scale factors provided by 10x in json file. [type:str]
+*	-scaler specify path for scale factors provided by 10x in json file. [type:str]
 *	-label specify path for annotation file recording cell barcodes and their annotations, which is used for calculating ARI. [type:str]
 *	-model specify path for pretrained model file. [type:str]
 *	-output specify output root folder. [type:str]
@@ -117,9 +117,9 @@ python test_pipeline.py -matrix Demo/S13/S13_filtered_feature_bc_matrix.h5  -csv
 ```
 
 #### Command Line Arguments:
-*	-matrix specify path for raw gene expression data provided by 10X in h5 file. [type:str]
+*	-expression specify path for raw gene expression data provided by 10X in h5 file. [type:str]
 *	-meta specify path for meta file recording tissue positions provided by 10x in csv file. [type:str]
-*	-factors specify path for scale factors provided by 10x in json file. [type:str]
+*	-scaler specify path for scale factors provided by 10x in json file. [type:str]
 *	-model specify path for pretrained model file. [type:str]
 *	-output specify output root folder. [type:str]
 *	-method specify embedding method in use: scGNN or spaGCN. [type:str]
