@@ -74,31 +74,31 @@ git clone https://github.com/OSU-BMBL/RESEPT
 cd RESEPT
 ```
 
-## Data prepare
+## Data preparation
 
 ### 10x Visium data
- * HDF5 file: A file stores raw gene expression data.  
- * ‘tissue_positions_list’ file: A file stores tissue capturing information, row, and column coordinates information.
- * ‘scalefactors_json’ file: A file stores other information describing the spots’ characteristics.
+ * gene expression file: A HDF5 file stores raw gene expression data.  
+ * tissue_positions_list file: A csv file stores meta of spot including their connectivity and spatial coordinates.
+ * scalefactors_json file: A json file stores the scaling factors converting spots to different resolutions.
 
 ### Annotation file
 
-An annotation file recording cell barcodes and their annotations which is used in evaluating tissue architecture with annotations or customizing segmentation model. The first column of the file stores cell barcodes and the second column stores corresponding annotations. The file should be named as: [sample_name]_annotation.csv. 
+An annotation file recording cell barcodes and their corresponding annotations. It is required in the functions of evaluating predictive tissue architecture and retraining segmentation model. The first column of the file stores cell barcodes and the second column saves their corresponding annotations. The file should be named as: [sample_name]_annotation.csv. 
 
 ### Model file
 
-A pretrained model file.
+A pretrained model file in pth format.
 
 ### Data structure
 
-For per-sample, use the following data structure:
+The data for each sample should follow this data schema:
 ```
     data_folder/
     |_[sample_name]/
     |      |__spatial/
-    |      |    |__‘tissue_positions_list’ file
-    |      |    |__‘scalefactors_json’ file
-    |      |__HDF5 file
+    |      |    |__tissue_positions_list file
+    |      |    |__scalefactors_json file
+    |      |__expression file
     |      |__annotation file: [sample_name]_annotation.csv (optional)
     |
     |_model/
@@ -108,7 +108,7 @@ For per-sample, use the following data structure:
 ## Demo
 ### Evaluate tissue architecture with annotations
 Run the following command line to generate RGB images from different embedding parameters, segmentation maps with top5 Moran's I and their evaluation metrics.
-Please download the corresponding pre-trained model from [click here for downloading data and model](https://bmbl.bmi.osumc.edu/downloadFiles/data_and_model/data_and_model.zip) and put it under the root folder.
+Please download the example data and pre-trained model from [click here for downloading data and model](https://bmbl.bmi.osumc.edu/downloadFiles/data_and_model/data_and_model.zip) and put the unzip folder 'Demo' to source code folder.
 ```
 wget https://bmbl.bmi.osumc.edu/downloadFiles/RESEPT/RESEPT.zip 
 unzip RESEPT.zip
@@ -140,8 +140,8 @@ RESEPT stores the generative results in the following structure:
 *	-This Demo takes 30-35 mins to generate all results on a machine with a multi-core CPU.
 
 ### predict tissue architecture without annotation
-Run the following command line to generate RGB images from different embedding parameters, segmentation maps with top5 Moran's I and their Moran's I value.
-Please download the corresponding pre-trained model from [click here for downloading data and model](https://bmbl.bmi.osumc.edu/downloadFiles/data_and_model/data_and_model.zip) and put it under the root folder.
+Run the following command line to generate RGB images from different embedding parameters, segmentation maps with top5 Moran's I.
+Please download the example data and pre-trained model from [click here for downloading data and model](https://bmbl.bmi.osumc.edu/downloadFiles/data_and_model/data_and_model.zip) and put the unzip folder 'Demo' to source code folder.
 ```
 wget https://bmbl.bmi.osumc.edu/downloadFiles/RESEPT/RESEPT.zip 
 unzip RESEPT.zip
