@@ -158,7 +158,7 @@ def single_gpu_test(adata,
             shutil.rmtree(out_dir)
 #             shutil.rmtree(output_folder+'result_temp/')
             # print(name)
-            MI_result_top5.to_csv(output_folder+'top5_evaluation.csv',index=True,header=True)
+            MI_result_top5.to_csv(output_folder+'top5_MI_value.csv',index=True,header=True)
         else:
             name = MI_result.iloc[:, 0].values
             for n in name:
@@ -172,7 +172,7 @@ def single_gpu_test(adata,
 #                 shutil.move(output_folder + 'result_temp/' + prefix + '.csv', output_folder + 'result/' + prefix + '.csv')
             shutil.rmtree(out_dir)
 #             shutil.rmtree(output_folder + 'result_temp/')
-            MI_result.to_csv(output_folder+'top5_evaluation.csv',index=True,header=True)
+            MI_result.to_csv(output_folder+'top5_MI_value.csv',index=True,header=True)
 
         top1_name = MI_result.iloc[:, 0].values[0]
         top1_csv_name = output_folder+'result/'+top1_name.split('.png')[0]+'.csv'
