@@ -112,7 +112,7 @@ def pseduo_images_scGNN(h5_path, spatial_path, scale_factor_path, output_folder,
     # --------------------------------------------------------------------------------------------------------#
     # --------------------------------inpaint image-------------------------------------------------#
     img_path = output_folder+ "/RGB_images/"
-    inpaint_path = inpaint(img_path, adata, spatial_all)
+    inpaint_path = inpaint(img_path, sample, adata, spatial_all)
     print('generate pseudo images finish')
     return inpaint_path
 
@@ -139,7 +139,6 @@ def pseudo_images(h5_path, spatial_path, scale_factor_path, output_folder,method
             print('transform optional is log or logcpm or None')
 
         print('load data finish')
-
 
         pca_list = [32, 50, 64, 128, 256, 1024]
         res_list = np.arange(0.2, 0.7, 0.05)
@@ -188,7 +187,7 @@ def pseudo_images(h5_path, spatial_path, scale_factor_path, output_folder,method
         # # --------------------------------------------------------------------------------------------------------#
         # # --------------------------------inpaint image-------------------------------------------------#
         img_path = output_folder + "/RGB_images/"
-        inpaint_path = inpaint(img_path, adata, spatial_all)
+        inpaint_path = inpaint(img_path, sample, adata, spatial_all)
         print('generate pseudo images finish')
         return inpaint_path
 
@@ -227,7 +226,7 @@ def segmentation_category_map(h5_path, spatial_path, scale_factor_path, optical_
 
 
 def segmentation_evaluation(h5_path, spatial_path, scale_factor_path, output_path, method,label_path, panel_gene_path,pca_opt,transform_opt,checkpoint):
-    pseudo_images(h5_path, spatial_path, scale_factor_path, output_path, method, panel_gene_path,pca_opt,transform_opt)
+    # pseudo_images(h5_path, spatial_path, scale_factor_path, output_path, method, panel_gene_path,pca_opt,transform_opt)
     img_path =output_path + "/RGB_images/"
     adata,spatial_all = load_data(h5_path, spatial_path, scale_factor_path)
     adata.uns["img_shape"] = 600
