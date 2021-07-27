@@ -168,8 +168,8 @@ RESEPT stores the generative results in the following structure:
    ```
 *	-The folder 'RGB_images' stores generative RGB images from different embedding parameters. 
 *	-The folder 'RGB_images_label' stores generative RGB images label from label file. 
-*	-The file 'top5_MI_value.csv' records Moran's I value corresponding to segmentation results with top5 Moran's I.
-*	-This Demo takes 30-35 mins to generate all results on a machine with a multi-core CPU.
+*	-The file 'epoch_n.pth' is a final model after fine tune.
+*	-This Demo takes 1 hour to generate all results on a machine with a 2080Ti GPU.
 
 ## Built With
  
