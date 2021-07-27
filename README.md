@@ -97,7 +97,7 @@ For per-sample, use the following data structure:
     |_[sample_name]/
     |      |__spatial/
     |      |    |__‘tissue_positions_list’ file
-    |      |    |__‘scalefactors_json’
+    |      |    |__‘scalefactors_json’ file
     |      |__HDF5 file
     |      |__annotation file: [sample_name]_annotation.csv (optional)
     |
