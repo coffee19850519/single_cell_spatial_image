@@ -80,7 +80,7 @@ Please download the corresponding pre-trained model from [click here for downloa
 ```
 wget https://bmbl.bmi.osumc.edu/downloadFiles/RESEPT/RESEPT.zip 
 unzip RESEPT.zip
-python evaluation_pipeline.py -matrix Demo/S13/S13_filtered_feature_bc_matrix.h5  -csv Demo/S13/spatial/tissue_positions_list.csv  -json Demo/S13/spatial/scalefactors_json.json -out Demo_result  -method scGNN  -transform logcpm -label Demo/S13.csv -checkpoint Demo/checkpoint/S13_scGNN.pth
+python evaluation_pipeline.py -expression Demo/S13/S13_filtered_feature_bc_matrix.h5  -meta Demo/S13/spatial/tissue_positions_list.csv  -scaler Demo/S13/spatial/scalefactors_json.json -output Demo_result  -embedding scGNN  -transform logcpm -label Demo/S13.csv -checkpoint Demo/checkpoint/S13_scGNN.pth
 ```
 
 #### Command Line Arguments:
@@ -113,7 +113,7 @@ Please download the corresponding pre-trained model from [click here for downloa
 ```
 wget https://bmbl.bmi.osumc.edu/downloadFiles/RESEPT/RESEPT.zip 
 unzip RESEPT.zip
-python test_pipeline.py -matrix Demo/S13/S13_filtered_feature_bc_matrix.h5  -csv Demo/S13/spatial/tissue_positions_list.csv  -json Demo/S13/spatial/scalefactors_json.json -out Demo_result  -method scGNN  -transform logcpm -checkpoint Demo/checkpoint/S13_scGNN.pth
+python test_pipeline.py -expression Demo/S13/S13_filtered_feature_bc_matrix.h5  -meta Demo/S13/spatial/tissue_positions_list.csv  -scaler Demo/S13/spatial/scalefactors_json.json -output Demo_result  -embedding scGNN  -transform logcpm -model Demo/checkpoint/S13_scGNN.pth
 ```
 
 #### Command Line Arguments:
@@ -145,7 +145,7 @@ RESEPT supports fine-tuning our segmentation model by using your own 10x data. O
 ```
 wget https://bmbl.bmi.osumc.edu/downloadFiles/RESEPT/RESEPT.zip 
 unzip RESEPT.zip
-python training_pipeline.py -data_folder Demo -output Demo_result -method scGNN  -transform logcpm -checkpoint Demo/checkpoint/S13_scGNN.pth
+python training_pipeline.py -data_folder Demo -output Demo_result -embedding scGNN  -transform logcpm -model Demo/checkpoint/S13_scGNN.pth
 ```
 
 #### Command Line Arguments:
