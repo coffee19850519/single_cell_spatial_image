@@ -89,7 +89,7 @@ An annotation file recording cell barcodes and their annotations which is used i
 
 A pretrained model file.
 
-### Data strucure
+### Data structure
 
 For per-sample, use the following data structure:
 ```
