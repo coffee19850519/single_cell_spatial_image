@@ -145,7 +145,7 @@ Run the following command line to generate pseudo RGB images and fine-tune curre
 ```
 wget https://bmbl.bmi.osumc.edu/downloadFiles/RESEPT/RESEPT.zip 
 unzip RESEPT.zip
-python test_pipeline.py -matrix Demo/S13/S13_filtered_feature_bc_matrix.h5  -csv Demo/S13/spatial/tissue_positions_list.csv  -json Demo/S13/spatial/scalefactors_json.json -out Demo_result  -method scGNN  -transform logcpm -checkpoint Demo/checkpoint/S13_scGNN.pth
+python training_pipeline.py -data ./Demo -config ./configs/config.py -out Demo_result -method scGNN  -transform logcpm -checkpoint Demo/checkpoint/S13_scGNN.pth
 ```
 
 #### Command Line Arguments:
