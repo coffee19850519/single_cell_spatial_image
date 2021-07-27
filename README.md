@@ -90,7 +90,7 @@ python evaluation_pipeline.py -matrix Demo/S13/S13_filtered_feature_bc_matrix.h5
 *	-label specify path for annotation file recording cell barcodes and their annotations, which is used for calculating ARI. [type:str]
 *	-model specify path for pretrained model file. [type:str]
 *	-output specify output root folder. [type:str]
-*	-method specify embedding method in use: scGNN or spaGCN. [type:str]
+*	-embedding specify embedding method in use: scGNN or spaGCN. [type:str]
 *	-transform specify data pre-transform: log, logcpm or None. [type:str]
 
 #### Expected Results
@@ -122,7 +122,7 @@ python test_pipeline.py -matrix Demo/S13/S13_filtered_feature_bc_matrix.h5  -csv
 *	-scaler specify path for scale factors provided by 10x in json file. [type:str]
 *	-model specify path for pretrained model file. [type:str]
 *	-output specify output root folder. [type:str]
-*	-method specify embedding method in use: scGNN or spaGCN. [type:str]
+*	-embedding specify embedding method in use: scGNN or spaGCN. [type:str]
 *	-transform specify data pre-transform: log, logcpm or None. [type:str]
 
 #### Expected Results
@@ -152,7 +152,7 @@ python training_pipeline.py -data_folder Demo -output Demo_result -method scGNN 
 * -data_folder 10X data h5 file, tissue positions list file, scale factors json file and label file folder path. [type:str]
 *	-model specify path for pretrained model file. [type:str]
 *	-output specify output root folder. [type:str]
-*	-method specify embedding method in use: scGNN or spaGCN. [type:str]
+*	-embedding specify embedding method in use: scGNN or spaGCN. [type:str]
 *	-transform specify data pre-transform: log, logcpm or None. [type:str]
 
 #### Expected Results
