@@ -83,7 +83,7 @@ cd RESEPT
 
 ### Annotation file
 
-An annotation file recording spot barcodes and their corresponding annotations. It is required in the functions of evaluating predictive tissue architecture and customizing segmentation model. The file should be named as: [sample_name]_annotation.csv. [example](https://bmbl.bmi.osumc.edu/downloadFiles/data_and_model/data_and_model.zip) 
+An annotation file recording spot barcodes and their corresponding annotations. It is required in the functions of evaluating predictive tissue architectures and customizing segmentation model. The file should be named as: [sample_name]_annotation.csv. [example](https://bmbl.bmi.osumc.edu/downloadFiles/data_and_model/data_and_model.zip) 
 
 ### Segmentation model file
 
