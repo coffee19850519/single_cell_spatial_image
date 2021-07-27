@@ -173,7 +173,7 @@ RESEPT stores the generative results in the following structure:
 
 
 ### Customize segmentation model 
-RESEPT supports fine-tuning our segmentation model by using your own 10x data. Organize all 10x data and their labels according to our predefined data schema and download our pre-trained model from [here](a new link). The 10x data of each sample should be located in a separate sub-folder under the 'data' folder. Specify the downloaded model file path and run the following command line to get the RGB images of your own data and the customized model.  
+RESEPT supports fine-tuning our segmentation model by using your own 10x data. Organize all 10x data and their labels according to our predefined data schema and download our pre-trained model from [click here for downloading data and model](https://bmbl.bmi.osumc.edu/downloadFiles/data_and_model/data_and_model.zip). The 10x data of each sample should be located in a separate sub-folder under the 'data' folder. Specify the downloaded model file path and run the following command line to get the RGB images of your own data and the customized model.  
 ```
 wget https://bmbl.bmi.osumc.edu/downloadFiles/RESEPT/RESEPT.zip 
 unzip RESEPT.zip
