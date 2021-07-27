@@ -139,37 +139,6 @@ RESEPT stores the generative results in the following structure:
 *	-The file 'top5_MI_value.csv' records Moran's I value corresponding to segmentation results with top5 Moran's I.
 *	-This Demo takes 30-35 mins to generate all results on a machine with a multi-core CPU.
 
- 
-### Training pipeline
-Run the following command line to generate pseudo RGB images and fine-tune current model. You can prepare data according to the 10X and label data format in the Demo folder. Config file can be customized according to your needs. Please download the corresponding pre-trained model from [click here for downloading data and model](https://bmbl.bmi.osumc.edu/downloadFiles/data_and_model/data_and_model.zip) and put it in the specified folder.
-```
-wget https://bmbl.bmi.osumc.edu/downloadFiles/RESEPT/RESEPT.zip 
-unzip RESEPT.zip
-python training_pipeline.py -data ./Demo -config ./configs/config.py -out Demo_result -method scGNN  -transform logcpm -checkpoint Demo/checkpoint/S13_scGNN.pth
-```
-
-#### Command Line Arguments:
-* -data 10X data h5 file, tissue positions list file and scalefactors json file folder path. [type:str]
-* -config training config file path. [type:str]
-*	-checkpoint specify path for pretrained model file. [type:str]
-*	-out specify output root folder. [type:str]
-*	-method specify embedding method in use: scGNN or spaGCN. [type:str]
-*	-transform specify data pre-transform: log, logcpm or None. [type:str]
-
-#### Expected Results
-RESEPT stores the generative results in the following structure:
-   ```
-      Demo_result/
-      |__RGB_images/
-      |__RGB_images_label/
-      work_dirs/
-      |__Config/
-            |__epoch_n.pth
-   ```
-*	-The folder 'RGB_images' stores generative RGB images from different embedding parameters. 
-*	-The folder 'RGB_images_label' stores generative RGB images label from label file. 
-*	-The file 'epoch_n.pth' is a final model after fine tune.
-*	-This Demo takes 2 hours to generate all results on a machine with a 2080Ti GPU.
 
 ## Built With
  
