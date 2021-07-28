@@ -227,7 +227,7 @@ RESEPT stores the generative results in the following structure:
 *	-This Demo takes about 3 hours to generate the model on a machine with a 2080Ti GPU.
 
 ### Segment histological images
-Run the following command line to generate visuals of gene expression from different embedding parameters, predict tissue architectures with top5 Moran's I and segment histological images according to tissue architectures. For demonstration, please download the example data from here(/ocean/projects/ccr180012p/shared/Demo/cancer)and pre-trained model from here(/ocean/projects/ccr180012p/shared/Demo/model_cancer) and put the unzip folder 'cancer ' and ‘model_cancer’to source code folder.
+Run the following command line to generate visuals of gene expression from different embedding parameters, predict tissue architectures with top5 Moran's I and segment histological images according to tissue architectures. For demonstration, please download the example data from here (/ocean/projects/ccr180012p/shared/Demo/cancer)and pre-trained model from here (/ocean/projects/ccr180012p/shared/Demo/model_cancer) and put the unzip folder 'cancer ' and ‘model_cancer’to source code folder.
 ```
 wget https://bmbl.bmi.osumc.edu/downloadFiles/RESEPT/RESEPT.zip 
 unzip RESEPT.zip
