@@ -239,7 +239,7 @@ python histological_segmentation_pipeline.py -expression ./cancer/Parent_Visium_
 *	-meta file path for spatial meta file recording tissue positions. [type:str]
 *	-scaler file path for scale factors. [type:str]
 *	-model file path for pretrained model. [type:str]
-*   -optical file path for an optical image.
+*   - histological file path for an  histological image.
 *	-output output root folder. [type:str]
 *	-embedding embedding method in use: scGNN or spaGCN. [type:str]
 *  	-transform data pre-transform method: log, logcpm or None. [type:str]
@@ -252,7 +252,7 @@ RESEPT stores the generative results in the following structure:
       |__segmentation_test/
             |__segmentation_map/
             |__top5_MI_value.csv
-      |__optical_segmentation/
+      |__ histological_segmentation/
             |__category_n.png
    ```
 *	-The folder 'RGB_images' stores generative visuals of tissue architectures from different embedding parameters. 
