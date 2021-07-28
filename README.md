@@ -18,7 +18,7 @@ Given inputs as gene expression or RNA velocity, ```RESEPT``` learns a three-dim
 
 ### Hardware Requirements
  
-``` RESEPT ``` suggests a standard computer with 8G RAM, a GPU with 11G VRAM and 64-core CPU.
+``` RESEPT ``` suggests a standard computer with 64-core CPU, 8G RAM, and a GPU with 11G VRAM.
 
 ### Software Requirements
 
