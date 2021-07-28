@@ -231,7 +231,7 @@ Run the following command line to generate visuals of gene expression from diffe
 ```
 wget https://bmbl.bmi.osumc.edu/downloadFiles/RESEPT/RESEPT.zip 
 unzip RESEPT.zip
-python histological_segmentation_pipeline.py -expression ./cancer/Parent_Visium_Human_Glioblas_filtered_feature_bc_matrix.h5 -meta ./cancer/spatial/tissue_positions_list.csv -scaler ./cancer/spatial/scalefactors_json.json - histological ./cancer/Parent_Visium_Human_Glioblast.tif -output Demo_result -model ./model_cancer/cancer_model.pth -embedding spaGCN -transform logcpm
+python histological_segmentation_pipeline.py -expression ./cancer/Parent_Visium_Human_Glioblas_filtered_feature_bc_matrix.h5 -meta ./cancer/spatial/tissue_positions_list.csv -scaler ./cancer/spatial/scalefactors_json.json -histological ./cancer/Parent_Visium_Human_Glioblast.tif -output Demo_result -model ./model_cancer/cancer_model.pth -embedding spaGCN -transform logcpm
 ```
 
 #### Command Line Arguments:
@@ -252,7 +252,7 @@ RESEPT stores the generative results in the following structure:
       |__segmentation_test/
             |__segmentation_map/
             |__top5_MI_value.csv
-      |__ histological_segmentation/
+      |__histological_segmentation/
             |__category_n.png
    ```
 *	-The folder 'RGB_images' stores generative visuals of tissue architectures from different embedding parameters. 
