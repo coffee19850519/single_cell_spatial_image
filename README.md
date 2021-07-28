@@ -99,11 +99,11 @@ The data schema to run our code is as following:
  |__spatial/
  |    |__tissue_positions_list file
  |    |__scalefactors_json file
- |__expression file
+ |__gene expression file
  |__annotation file: [sample_name]_annotation.csv (optional)
 
-model/
- |__model file (optional)
+model/ (optional)
+ |__segmentation model file 
    ```
 
 ## Demo
