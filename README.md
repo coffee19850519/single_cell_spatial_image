@@ -130,8 +130,8 @@ RESEPT stores the generative results in the following structure:
       Demo_result/
       |__RGB_images/
    ```
-*	-The folder 'RGB_images' stores generative visuals of tissue architectures from different embedding parameters. 
-*	-This Demo takes 25-30 mins to generate all results on a machine with a multi-core CPU.
+*	The folder 'RGB_images' stores generative visuals of tissue architectures from different embedding parameters. 
+*	This Demo takes 25-30 mins to generate all results on a machine with a multi-core CPU.
 
 ### Evaluate predictive tissue architecture with annotations
 Run the following command line to generate visuals of gene expression from different embedding parameters, segmentation maps with top5 Moran's I and their evaluation metrics. For demonstration, please download the example data from [here](https://bmbl.bmi.osumc.edu/downloadFiles/data_and_model/data_and_model.zip)(/ocean/projects/ccr180012p/shared/Demo/S13), the pretrained model from [here](https://bmbl.bmi.osumc.edu/downloadFiles/data_and_model/data_and_model.zip)(/ocean/projects/ccr180012p/shared/Demo/model_S13) and put unzip folders 'S13' and 'model_S13' to source code folder.
@@ -160,10 +160,10 @@ RESEPT stores the generative results in the following structure:
             |__segmentation_map/
             |__top5_evaluation.csv
    ```
-*	-The folder 'RGB_images' stores generative visuals of tissue architectures from different embedding parameters. 
-*	-The folder 'segmentation_map' stores visuals of predictive tissue architectures with top5 Moran's I. 
-*	-The file 'top5_evaluation.csv' records various evaluation metrics corresponding to the predictions.
-*	-This Demo takes 30-35 mins to generate all results on a machine with a multi-core CPU.
+*	The folder 'RGB_images' stores generative visuals of tissue architectures from different embedding parameters. 
+*	The folder 'segmentation_map' stores visuals of predictive tissue architectures with top5 Moran's I. 
+*	The file 'top5_evaluation.csv' records various evaluation metrics corresponding to the predictions.
+*	This Demo takes 30-35 mins to generate all results on a machine with a multi-core CPU.
 
 ### Predict tissue architecture without annotation
 Run the following command line to generate visuals of gene expression from different embedding parameters and predict tissue architectures with top5 Moran's I. For demonstration, please download the example data from [here](https://bmbl.bmi.osumc.edu/downloadFiles/data_and_model/data_and_model.zip)(/ocean/projects/ccr180012p/shared/Demo/S13), the pretrained model from [here](https://bmbl.bmi.osumc.edu/downloadFiles/data_and_model/data_and_model.zip)(/ocean/projects/ccr180012p/shared/Demo/model_S13) and put unzip folders 'S13' and 'model_S13' to source code folder.
@@ -191,10 +191,10 @@ RESEPT stores the generative results in the following structure:
             |__segmentation_map/
             |__top5_MI_value.csv
    ```
-*	-The folder 'RGB_images' stores generative visuals of tissue architectures from different embedding parameters. 
-*	-The folder 'segmentation_map' stores visuals of predictive tissue architectures with top5 Moran's I. 
-*	-The file 'top5_MI_value.csv' records Moran's I value corresponding to the predictions.
-*	-This Demo takes 30-35 mins to generate all results on a machine with a multi-core CPU.
+*	The folder 'RGB_images' stores generative visuals of tissue architectures from different embedding parameters. 
+*	The folder 'segmentation_map' stores visuals of predictive tissue architectures with top5 Moran's I. 
+*	The file 'top5_MI_value.csv' records Moran's I value corresponding to the predictions.
+*	This Demo takes 30-35 mins to generate all results on a machine with a multi-core CPU.
 
 
 ### Customize segmentation model 
@@ -223,10 +223,10 @@ RESEPT stores the generative results in the following structure:
       |__config/
             |__epoch_n.pth
    ```
-*	-The folder 'RGB_images' stores generative visuals of tissue architectures of all input 10x data from different embedding parameters. 
-*	-The folder 'RGB_images_label' stores their labeled category maps according to input label files. 
-*	-The file 'epoch_n.pth' is the customized model.
-*	-This Demo takes about 3 hours to generate the model on a machine with a 2080Ti GPU.
+*	The folder 'RGB_images' stores generative visuals of tissue architectures of all input 10x data from different embedding parameters. 
+*	The folder 'RGB_images_label' stores their labeled category maps according to input label files. 
+*	The file 'epoch_n.pth' is the customized model.
+*	This Demo takes about 3 hours to generate the model on a machine with a 2080Ti GPU.
 
 ### Segment histological images
 Run the following command line to generate visuals of gene expression from different embedding parameters, predict tissue architectures with top5 Moran's I and segment histological images according to tissue architectures. For demonstration, please download the example data from [here]() (/ocean/projects/ccr180012p/shared/Demo/cancer), the pre-trained model from [here]() (/ocean/projects/ccr180012p/shared/Demo/model_cancer) and put unzip folders 'cancer' and 'model_cancer to source code folder.
@@ -257,11 +257,11 @@ RESEPT stores the generative results in the following structure:
       |__histological_segmentation/
             |__category_n.png
    ```
-*	-The folder 'RGB_images' stores generative visuals of tissue architectures from different embedding parameters. 
-*	-The folder 'segmentation_map' stores visuals of predictive tissue architectures with top5 Moran's I. 
-*	-The file 'top5_MI_value.csv' records Moran's I value corresponding to the predictions.
-*	-The file 'category_n.png ' refers to the histological image segmentation results.
-*	-This Demo takes 30-35 mins to generate all results on a machine with a multi-core CPU.
+*	The folder 'RGB_images' stores generative visuals of tissue architectures from different embedding parameters. 
+*	The folder 'segmentation_map' stores visuals of predictive tissue architectures with top5 Moran's I. 
+*	The file 'top5_MI_value.csv' records Moran's I value corresponding to the predictions.
+*	The file 'category_n.png ' refers to the histological image segmentation results.
+*	This Demo takes 30-35 mins to generate all results on a machine with a multi-core CPU.
 
 
 ## Built With
