@@ -197,7 +197,7 @@ RESEPT stores the generative results in the following structure:
 
 
 ### Customize segmentation model 
-RESEPT supports fine-tuning our segmentation model by using your own 10x data. Organize all 10x data and their labels according to our predefined data schema and download our pre-trained model from [here](https://bmbl.bmi.osumc.edu/downloadFiles/data_and_model/data_and_model.zip) as a training start point. The 10x data of each sample should be located in a separate sub-folder under the 'data folder'. For demonstration, download the example training data from [here](https://bmbl.bmi.osumc.edu/downloadFiles/data_and_model/data_and_model.zip), and then run the following command line to get the visuals of your own data and the customized model.  
+RESEPT supports fine-tuning our segmentation model by using your own 10x data. Organize all 10x data and their labels according to our predefined data schema and download our pre-trained model from [here](https://bmbl.bmi.osumc.edu/downloadFiles/data_and_model/data_and_model.zip)(/ocean/projects/ccr180012p/shared/Demo/model_S13) as a training start point. The 10x data of each sample should be located in a separate sub-folder under the 'data folder'. For demonstration, download the example training data from [here](https://bmbl.bmi.osumc.edu/downloadFiles/data_and_model/data_and_model.zip)(/ocean/projects/ccr180012p/shared/Demo/training_data_folder), and then run the following command line to get the visuals of your own data and the customized model.  
 ```
 wget https://bmbl.bmi.osumc.edu/downloadFiles/RESEPT/RESEPT.zip 
 unzip RESEPT.zip
@@ -227,7 +227,7 @@ RESEPT stores the generative results in the following structure:
 *	-This Demo takes about 3 hours to generate the model on a machine with a 2080Ti GPU.
 
 ### Segment histological images
-Run the following command line to generate visuals of gene expression from different embedding parameters, predict tissue architectures with top5 Moran's I and segment histological images according to tissue architectures. For demonstration, please download the example data (/ocean/projects/ccr180012p/shared/Demo/cancer)and pre-trained model(/ocean/projects/ccr180012p/shared/Demo/model_cancer) from [here](https://bmbl.bmi.osumc.edu/downloadFiles/data_and_model/data_and_model.zip) and put the unzip folder 'cancer ' and ‘model_cancer’to source code folder.
+Run the following command line to generate visuals of gene expression from different embedding parameters, predict tissue architectures with top5 Moran's I and segment histological images according to tissue architectures. For demonstration, please download the example data from here(/ocean/projects/ccr180012p/shared/Demo/cancer)and pre-trained model from here(/ocean/projects/ccr180012p/shared/Demo/model_cancer) and put the unzip folder 'cancer ' and ‘model_cancer’to source code folder.
 ```
 wget https://bmbl.bmi.osumc.edu/downloadFiles/RESEPT/RESEPT.zip 
 unzip RESEPT.zip
