@@ -205,7 +205,8 @@ def pseudo_images(h5_path, spatial_path, scale_factor_path, output_folder,method
                         # for scgnnsp_k in scgnnsp_kList:
                         pool.apply_async(pseduo_images_scGNN, (h5_path, spatial_path, scale_factor_path, output_folder,
                                                                scgnnsp_zdim,scgnnsp_alpha,transform_opt,))
-
+                        # pseduo_images_scGNN(h5_path, spatial_path, scale_factor_path, output_folder,
+                        #                                        scgnnsp_zdim,scgnnsp_alpha,transform_opt)
         pool.close()
         pool.join()
 
@@ -221,13 +222,13 @@ def segmentation_test(h5_path, spatial_path, scale_factor_path, output_path, met
 
 def segmentation_category_map(h5_path, spatial_path, scale_factor_path, optical_path, output_path, method, panel_gene_path, pca_opt, transform_opt, checkpoint):
     optical_img = cv2.imread(optical_path)
-    category_map = segmentation_test(h5_path, spatial_path, scale_factor_path, output_path, method, panel_gene_path, pca_opt, transform_opt, checkpoint)
-    # category_map = np.loadtxt(top1_csv_name,dtype=np.int32, delimiter=",")
+    top1_csv_name = segmentation_test(h5_path, spatial_path, scale_factor_path, output_path, method, panel_gene_path, pca_opt, transform_opt, checkpoint)
+    category_map = np.loadtxt(top1_csv_name,dtype=np.int32, delimiter=",")  
     seg_category_map(optical_img, category_map, output_path)
 
 
 def segmentation_evaluation(h5_path, spatial_path, scale_factor_path, output_path, method,label_path, panel_gene_path,pca_opt,transform_opt,checkpoint):
-    # pseudo_images(h5_path, spatial_path, scale_factor_path, output_path, method, panel_gene_path,pca_opt,transform_opt)
+    pseudo_images(h5_path, spatial_path, scale_factor_path, output_path, method, panel_gene_path,pca_opt,transform_opt)
     img_path =output_path + "/RGB_images/"
     adata,spatial_all = load_data(h5_path, spatial_path, scale_factor_path)
     adata.uns["img_shape"] = 600

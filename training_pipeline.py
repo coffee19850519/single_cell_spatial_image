@@ -156,22 +156,22 @@ if __name__ == '__main__':
     for name in os.listdir(path):
         # print(name)
         # print(name.split('.',2)[1])
-        if name[0]!='c' and name[-1]!='v':
-            # print(name)
-            h5_path = path+'/'+name+'/filtered_feature_bc_matrix.h5'
-            spatial_path = path +'/'+name+'/spatial/tissue_positions_list.csv'
-            scale_factor_path = path +'/'+name+'/spatial/scalefactors_json.json'
-            # print(h5_path)
-            # print(spatial_path)
-            # print(scale_factor_path)
-            adata,spatial_all = load_data(h5_path, spatial_path, scale_factor_path)
-            adata.uns["img_shape"] = 600
 
-            pseudo_images(h5_path, spatial_path, scale_factor_path, output_folder,method, panel_gene_path, pca_opt, transform_opt)
+        # print(name)
+        h5_path = path+'/'+name+'/filtered_feature_bc_matrix.h5'
+        spatial_path = path +'/'+name+'/spatial/tissue_positions_list.csv'
+        scale_factor_path = path +'/'+name+'/spatial/scalefactors_json.json'
+        # print(h5_path)
+        # print(spatial_path)
+        # print(scale_factor_path)
+        adata,spatial_all = load_data(h5_path, spatial_path, scale_factor_path)
+        adata.uns["img_shape"] = 600
 
-    # path = './pseudo_images/pseudo_images/'
-    
-            train_preprocessing(path, name, adata)
+        pseudo_images(h5_path, spatial_path, scale_factor_path, output_folder,method, panel_gene_path, pca_opt, transform_opt)
+
+# path = './pseudo_images/pseudo_images/'
+
+        train_preprocessing(path, name, adata)
     config = './configs/config.py'
     train(config, model)
 
