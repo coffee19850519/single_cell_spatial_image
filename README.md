@@ -95,15 +95,15 @@ A trained segmentation model file in pth format. It is required to predict tissu
 
 The data schema to run our code is as following:
 ```
-	[sample_name]/
-	 |__spatial/
-	 |    |__tissue_positions_list file
-	 |    |__scalefactors_json file
-	 |__gene expression file
-	 |__annotation file: [sample_name]_annotation.csv (optional)
+[sample_name]/
+ |__spatial/
+ |    |__tissue_positions_list file
+ |    |__scalefactors_json file
+ |__gene expression file
+ |__annotation file: [sample_name]_annotation.csv (optional)
 
-	model/ (optional)
-	 |__segmentation model file 
+model/ (optional)
+ |__segmentation model file 
    ```
 
 ## Demo
