@@ -85,7 +85,7 @@ cd RESEPT
 
 ### Annotation file
 
-An annotation file recording spot barcodes and their corresponding annotations. It is required in the functions of evaluating predictive tissue architectures and customizing segmentation model. The file should be named as: [sample_name]_annotation.csv. [example](https://bmbl.bmi.osumc.edu/downloadFiles/data_and_model/data_and_model.zip) 
+An annotation file recording spot barcodes and their corresponding annotations. It is required in the functions of evaluating predictive tissue architectures and customizing segmentation model. The file should be named as: [sample_name]_annotation.csv. [example](https://bmbl.bmi.osumc.edu/downloadFiles/data_and_model/data_and_model.zip) (/ocean/projects/ccr180012p/shared/Demo/S13/S13_annotation.csv)
 
 ### Segmentation model file
 
@@ -95,21 +95,43 @@ A trained segmentation model file in pth format. It is required to predict tissu
 
 The data schema to run our code is as following:
 ```
-    data_folder/
-    |_[sample_name]/
-    |      |__spatial/
-    |      |    |__tissue_positions_list file
-    |      |    |__scalefactors_json file
-    |      |__expression file
-    |      |__annotation file: [sample_name]_annotation.csv (optional)
-    |
-    |_model/
-    |      |__model file
+[sample_name]/
+ |__spatial/
+ |    |__tissue_positions_list file
+ |    |__scalefactors_json file
+ |__expression file
+ |__annotation file: [sample_name]_annotation.csv (optional)
+
+model/
+ |__model file (optional)
    ```
 
 ## Demo
 
-### Visualize tissue architecture (generate RGB images for visualizing tissue architecture )?
+### Visualize tissue architecture 
+Run the following command line to generate visuals of gene expression from different embedding parameters. For demonstration, please download the example data from [here](https://bmbl.bmi.osumc.edu/downloadFiles/data_and_model/data_and_model.zip)(/ocean/projects/ccr180012p/shared/Demo/S13) and put the unzip folder 'S13' to source code folder.
+```
+wget https://bmbl.bmi.osumc.edu/downloadFiles/RESEPT/RESEPT.zip 
+unzip RESEPT.zip
+python RGB_images_pipeline.py -expression S13/S13_filtered_feature_bc_matrix.h5  -meta S13/spatial/tissue_positions_list.csv  -scaler S13/spatial/scalefactors_json.json -output Demo_result  -embedding scGNN  -transform logcpm 
+```
+
+#### Command Line Arguments:
+*	-expression file path for raw gene expression data. [type:str]
+*	-meta file path for spatial meta recording tissue positions. [type:str]
+*	-scaler file path for scale factors. [type:str]
+*	-output output root folder. [type:str]
+*	-embedding embedding method in use: scGNN or spaGCN. [type:str]
+*	-transform data pre-transform method: log, logcpm or None. [type:str]
+
+#### Results
+RESEPT stores the generative results in the following structure:
+   ```
+      Demo_result/
+      |__RGB_images/
+      
+   ```
+*	-The folder 'RGB_images' stores generative visuals of tissue architectures from different embedding parameters. 
 
 ### Evaluate predictive tissue architecture with annotations
 Run the following command line to generate visuals of gene expression from different embedding parameters, segmentation maps with top5 Moran's I and their evaluation metrics. For demonstration, please download the example data and pre-trained model from [here](https://bmbl.bmi.osumc.edu/downloadFiles/data_and_model/data_and_model.zip) and put the unzip folder 'Demo' to source code folder.
@@ -143,7 +165,7 @@ RESEPT stores the generative results in the following structure:
 *	-The file 'top5_evaluation.csv' records various evaluation metrics corresponding to the predictions.
 *	-This Demo takes 30-35 mins to generate all results on a machine with a multi-core CPU.
 
-### predict tissue architecture without annotation
+### Predict tissue architecture without annotation
 Run the following command line to generate visuals of gene expression from different embedding parameters and predict tissue architectures with top5 Moran's I. For demonstration, please download the example data and pre-trained model from [here](https://bmbl.bmi.osumc.edu/downloadFiles/data_and_model/data_and_model.zip) and put the unzip folder 'Demo' to source code folder.
 ```
 wget https://bmbl.bmi.osumc.edu/downloadFiles/RESEPT/RESEPT.zip 
