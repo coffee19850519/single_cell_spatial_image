@@ -231,7 +231,7 @@ Run the following command line to generate visuals of gene expression from diffe
 ```
 wget https://bmbl.bmi.osumc.edu/downloadFiles/RESEPT/RESEPT.zip 
 unzip RESEPT.zip
-python histological_segmentation_pipeline.py -expression ./cancer/Parent_Visium_Human_Glioblas_filtered_feature_bc_matrix.h5 -meta ./cancer/spatial/tissue_positions_list.csv -scaler ./cancer/spatial/scalefactors_json.json -optical ./cancer/Parent_Visium_Human_Glioblast.tif -output Demo_result -model ./model_cancer/cancer_model.pth -embedding spaGCN -transform logcpm
+python histological_segmentation_pipeline.py -expression ./cancer/Parent_Visium_Human_Glioblas_filtered_feature_bc_matrix.h5 -meta ./cancer/spatial/tissue_positions_list.csv -scaler ./cancer/spatial/scalefactors_json.json - histological ./cancer/Parent_Visium_Human_Glioblast.tif -output Demo_result -model ./model_cancer/cancer_model.pth -embedding spaGCN -transform logcpm
 ```
 
 #### Command Line Arguments:
