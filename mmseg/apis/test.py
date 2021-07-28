@@ -15,17 +15,18 @@ import cv2
 from PIL import Image
 from sklearn.metrics.cluster import adjusted_rand_score
 import shutil
-from sklearn.metrics.cluster import adjusted_rand_score,adjusted_mutual_info_score,fowlkes_mallows_score, rand_score,silhouette_score, calinski_harabasz_score,davies_bouldin_score
+from sklearn.metrics.cluster import adjusted_rand_score, adjusted_mutual_info_score, fowlkes_mallows_score, rand_score, \
+    silhouette_score, calinski_harabasz_score, davies_bouldin_score
 import math
+
+
 def np2tmp(array, temp_file_name=None):
     """Save ndarray to local numpy file.
-
     Args:
         array (ndarray): Ndarray to save.
         temp_file_name (str): Numpy file name. If 'temp_file_name=None', this
             function will generate a file name with tempfile.NamedTemporaryFile
             to save ndarray. Default: None.
-
     Returns:
         str: The numpy file name.
     """
@@ -46,7 +47,6 @@ def single_gpu_test(adata,
                     out_dir=None,
                     efficient_test=False):
     """Test with single GPU.
-
     Args:
         model (nn.Module): Model to be tested.
         data_loader (utils.data.Dataloader): Pytorch data loader.
@@ -55,7 +55,6 @@ def single_gpu_test(adata,
             the directory to save output results.
         efficient_test (bool): Whether save the results as local numpy files to
             save CPU memory during evaluation. Default: False.
-
     Returns:
         list: The prediction results.
     """
@@ -73,25 +72,25 @@ def single_gpu_test(adata,
     # DBI_list = []
     dataset = data_loader.dataset
     prog_bar = mmcv.ProgressBar(len(dataset))
-    if label_path == None:  #  test
+    if label_path == None:  # test
         for i, data in enumerate(data_loader):
             with torch.no_grad():
                 result = model(return_loss=False, **data)
 
-                #calculate MI
+                # calculate MI
 
                 img_name = data['img_metas'][0].data[0][0]['filename']
-                name = img_name.split('/' )[-1]
+                name = img_name.split('/')[-1]
                 name_list.append(name)
                 image_test = cv2.imread(img_name)
                 predict = result[0].astype(np.int32)
-#                 if not os.path.exists(output_folder+'result_temp/'):
-#                     os.makedirs(output_folder+'result_temp/')
-#                 np.savetxt(output_folder+'result_temp/'+name.split('.png')[0]+'.csv', predict, delimiter=',')
+
+                if not os.path.exists(output_folder+'result_temp/'):
+                    os.makedirs(output_folder+'result_temp/')
+                np.savetxt(output_folder+'result_temp/'+name.split('.png')[0]+'.csv', predict, delimiter=',')
+
                 MI = cluster_heterogeneity(image_test, predict, 0)
                 MI_list.append(MI)
-                print('\n',name)
-                print(MI)
             if show or out_dir:
                 # print(out_dir)
                 img_tensor = data['img'][0]
@@ -133,32 +132,34 @@ def single_gpu_test(adata,
                 prog_bar.update()
 
         MI_result = {
-                      'name':name_list,
-                      # "ARI":ARI_list,
-                      'MI':MI_list,
-                      }
+            'name': name_list,
+            # "ARI":ARI_list,
+            'MI': MI_list,
+        }
         MI_result = pd.DataFrame(MI_result)
-        MI_result = MI_result.sort_values(by=['MI'],ascending=False)
+        MI_result = MI_result.sort_values(by=['MI'], ascending=False)
         # if not os.path.exists('segmentation/QA_result/'):
         #     os.makedirs('segmentation/QA_result/')
 
-        if len(name_list)>5:
+        if len(name_list) > 5:
             MI_result_top5 = MI_result[0:5]
             # print(MI_result_top5)
             name = MI_result_top5.iloc[:, 0].values
             for n in name:
                 prefix = n.split('.png')[0]
-                show = cv2.imread(out_dir+n)
-                if not os.path.exists(output_folder+'segmentation_map/'):
-                    os.makedirs(output_folder+'segmentation_map/')
-                cv2.imwrite(output_folder+'segmentation_map/'+n,show)
-#                 if not os.path.exists(output_folder+'result/'):
-#                     os.makedirs(output_folder+'result/')
-#                 shutil.move(output_folder+'result_temp/'+prefix+'.csv', output_folder+'result/'+prefix+'.csv')
+                show = cv2.imread(out_dir + n)
+                if not os.path.exists(output_folder + 'segmentation_map/'):
+                    os.makedirs(output_folder + 'segmentation_map/')
+                cv2.imwrite(output_folder + 'segmentation_map/' + n, show)
+
+                if not os.path.exists(output_folder+'result/'):
+                    os.makedirs(output_folder+'result/')
+                shutil.move(output_folder+'result_temp/'+prefix+'.csv', output_folder+'result/'+prefix+'.csv')
+
             shutil.rmtree(out_dir)
-#             shutil.rmtree(output_folder+'result_temp/')
+            shutil.rmtree(output_folder+'result_temp/')
             # print(name)
-            MI_result_top5.to_csv(output_folder+'top5_MI_value.csv',index=True,header=True)
+            MI_result_top5.to_csv(output_folder + 'top5_MI_value.csv', index=True, header=True)
         else:
             name = MI_result.iloc[:, 0].values
             for n in name:
@@ -167,23 +168,28 @@ def single_gpu_test(adata,
                 if not os.path.exists(output_folder + 'segmentation_map/'):
                     os.makedirs(output_folder + 'segmentation_map/')
                 cv2.imwrite(output_folder + 'segmentation_map/' + n, show)
-#                 if not os.path.exists(output_folder + 'result/'):
-#                     os.makedirs(output_folder + 'result/')
-#                 shutil.move(output_folder + 'result_temp/' + prefix + '.csv', output_folder + 'result/' + prefix + '.csv')
+
+                if not os.path.exists(output_folder + 'result/'):
+                    os.makedirs(output_folder + 'result/')
+                shutil.move(output_folder + 'result_temp/' + prefix + '.csv', output_folder + 'result/' + prefix + '.csv')
+
             shutil.rmtree(out_dir)
-#             shutil.rmtree(output_folder + 'result_temp/')
-            MI_result.to_csv(output_folder+'top5_MI_value.csv',index=True,header=True)
+
+            shutil.rmtree(output_folder + 'result_temp/')
+
+            MI_result.to_csv(output_folder + 'top5_MI_value.csv', index=True, header=True)
 
         top1_name = MI_result.iloc[:, 0].values[0]
-        top1_csv_name = output_folder+'result/'+top1_name.split('.png')[0]+'.csv'
-        print(top1_csv_name)
-        return results, top1_csv_name
-    else:   # evaluation
+        top1_csv_name = output_folder + 'result/' + top1_name.split('.png')[0] + '.csv'
+        top1_category_map = np.loadtxt(top1_csv_name,dtype=np.int32, delimiter=",")
+        shutil.rmtree(output_folder + 'result/')
+        return results, top1_category_map
+    else:  # evaluation
         for i, data in enumerate(data_loader):
             with torch.no_grad():
                 result = model(return_loss=False, **data)
 
-                #calculate MI
+                # calculate MI
 
                 img_name = data['img_metas'][0].data[0][0]['filename']
                 name, ARI, AMI, FMI, RI = calculate(adata, result, img_name, label_path)
@@ -201,8 +207,6 @@ def single_gpu_test(adata,
                 # np.savetxt(output_folder+'result_temp/'+name.split('.png')[0]+'.csv', predict, delimiter=',')
                 MI = cluster_heterogeneity(image_test, predict, 0)
                 MI_list.append(MI)
-                print('\n',name)
-                print(MI)
             if show or out_dir:
                 # print(out_dir)
                 img_tensor = data['img'][0]
@@ -244,36 +248,36 @@ def single_gpu_test(adata,
                 prog_bar.update()
 
         MI_result = {
-                      'name':name_list,
-                      "ARI":ARI_list,
-                      "AMI": AMI_list,
-                      "FMI": FMI_list,
-                      "RI": RI_list,
-                      'MI':MI_list,
+            'name': name_list,
+            "ARI": ARI_list,
+            "AMI": AMI_list,
+            "FMI": FMI_list,
+            "RI": RI_list,
+            'MI': MI_list,
 
-                      }
+        }
         MI_result = pd.DataFrame(MI_result)
-        MI_result = MI_result.sort_values(by=['MI'],ascending=False)
+        MI_result = MI_result.sort_values(by=['MI'], ascending=False)
         # if not os.path.exists('segmentation/QA_result/'):
         #     os.makedirs('segmentation/QA_result/')
 
-        if len(name_list)>5:
+        if len(name_list) > 5:
             MI_result_top5 = MI_result[0:5]
             # print(MI_result_top5)
             name = MI_result_top5.iloc[:, 0].values
             for n in name:
                 prefix = n.split('.png')[0]
-                show = cv2.imread(out_dir+n)
-                if not os.path.exists(output_folder+'segmentation_map/'):
-                    os.makedirs(output_folder+'segmentation_map/')
-                cv2.imwrite(output_folder+'segmentation_map/'+n,show)
-#                 if not os.path.exists(output_folder+'result/'):
-#                     os.makedirs(output_folder+'result/')
-#                 shutil.move(output_folder+'result_temp/'+prefix+'.csv', output_folder+'result/'+prefix+'.csv')
+                show = cv2.imread(out_dir + n)
+                if not os.path.exists(output_folder + 'segmentation_map/'):
+                    os.makedirs(output_folder + 'segmentation_map/')
+                cv2.imwrite(output_folder + 'segmentation_map/' + n, show)
+            #                 if not os.path.exists(output_folder+'result/'):
+            #                     os.makedirs(output_folder+'result/')
+            #                 shutil.move(output_folder+'result_temp/'+prefix+'.csv', output_folder+'result/'+prefix+'.csv')
             shutil.rmtree(out_dir)
-#             shutil.rmtree(output_folder+'result_temp/')
+            #             shutil.rmtree(output_folder+'result_temp/')
             # print(name)
-            MI_result_top5.to_csv(output_folder+'top5_evaluation.csv',index=False,header=True)
+            MI_result_top5.to_csv(output_folder + 'top5_evaluation.csv', index=False, header=True)
         else:
             name = MI_result.iloc[:, 0].values
             for n in name:
@@ -282,18 +286,17 @@ def single_gpu_test(adata,
                 if not os.path.exists(output_folder + 'segmentation_map/'):
                     os.makedirs(output_folder + 'segmentation_map/')
                 cv2.imwrite(output_folder + 'segmentation_map/' + n, show)
-#                 if not os.path.exists(output_folder + 'result/'):
-#                     os.makedirs(output_folder + 'result/')
-#                 shutil.move(output_folder + 'result_temp/' + prefix + '.csv', output_folder + 'result/' + prefix + '.csv')
+            #                 if not os.path.exists(output_folder + 'result/'):
+            #                     os.makedirs(output_folder + 'result/')
+            #                 shutil.move(output_folder + 'result_temp/' + prefix + '.csv', output_folder + 'result/' + prefix + '.csv')
             shutil.rmtree(out_dir)
-#             shutil.rmtree(output_folder + 'result_temp/')
-            MI_result.to_csv(output_folder+'top5_evaluation.csv',index=False,header=True)
+            #             shutil.rmtree(output_folder + 'result_temp/')
+            MI_result.to_csv(output_folder + 'top5_evaluation.csv', index=False, header=True)
 
         top1_name = MI_result.iloc[:, 0].values[0]
-        top1_csv_name = output_folder+'result/'+top1_name.split('.png')[0]+'.csv'
-        print(top1_csv_name)
-        return results, top1_csv_name
+        top1_csv_name = output_folder + 'result/' + top1_name.split('.png')[0] + '.csv'
 
+        return results, top1_csv_name
 
 
 # def cluster_heterogeneity(image_test, category_map, background_category):
@@ -373,7 +376,6 @@ def cluster_heterogeneity(image_test, category_map, background_category):
     #     # image_test = cv2.cvtColor(image_test, cv2.COLOR_BGR2GRAY)
     #      image_test = cv2.imread(image_test)
 
-
     W = np.zeros((len(category_list), len(category_list)))
     for i in range(category_map.shape[0]):
         flag1 = category_map[i][0]
@@ -405,7 +407,7 @@ def cluster_heterogeneity(image_test, category_map, background_category):
     image_test_ori = image_test
     # 计算每个cluster 每个通道 平均颜色值和全图平均颜色值
     for channel in range(3):
-        image_test = image_test_ori[:,:,channel]
+        image_test = image_test_ori[:, :, channel]
         # print(image_test)
         num = 0
         gray_list = []
@@ -423,7 +425,6 @@ def cluster_heterogeneity(image_test, category_map, background_category):
             gray_mean += gray_value * len(pixel_x)
         gray_mean = gray_mean / (image_test.shape[0] ** 2 - num)
 
-
         n = W.shape[0]
         a = 0
         b = 0
@@ -435,9 +436,10 @@ def cluster_heterogeneity(image_test, category_map, background_category):
         MI = n * a / (b * np.sum(W))
         MI_list.append(MI)
     # print(MI_list)
-    MI = math.sqrt((MI_list[0]**2+MI_list[1]**2+MI_list[2]**2)/3)
+    MI = math.sqrt((MI_list[0] ** 2 + MI_list[1] ** 2 + MI_list[2] ** 2) / 3)
     # print(MI)
     return MI
+
 
 def multi_gpu_test(model,
                    data_loader,
@@ -445,13 +447,11 @@ def multi_gpu_test(model,
                    gpu_collect=False,
                    efficient_test=False):
     """Test model with multiple gpus.
-
     This method tests model with multiple gpus and collects the results
     under two different modes: gpu and cpu modes. By setting 'gpu_collect=True'
     it encodes results to gpu tensors and use gpu communication for results
     collection. On cpu mode it saves the results on different gpus to 'tmpdir'
     and collects them by the rank 0 worker.
-
     Args:
         model (nn.Module): Model to be tested.
         data_loader (utils.data.Dataloader): Pytorch data loader.
@@ -460,7 +460,6 @@ def multi_gpu_test(model,
         gpu_collect (bool): Option to use either gpu or cpu to collect results.
         efficient_test (bool): Whether save the results as local numpy files to
             save CPU memory during evaluation. Default: False.
-
     Returns:
         list: The prediction results.
     """
@@ -504,7 +503,7 @@ def collect_results_cpu(result_part, size, tmpdir=None):
     if tmpdir is None:
         MAX_LEN = 512
         # 32 is whitespace
-        dir_tensor = torch.full((MAX_LEN, ),
+        dir_tensor = torch.full((MAX_LEN,),
                                 32,
                                 dtype=torch.uint8,
                                 device='cuda')
@@ -573,20 +572,18 @@ def collect_results_gpu(result_part, size):
         ordered_results = ordered_results[:size]
         return ordered_results
 
-def calculate(adata,output,img_path,label_path):
 
+def calculate(adata, output, img_path, label_path):
     img_name = img_path.split('/')[-1]  # eg:151507_50_32_....png
 
-    samples_num = img_name.split('_' )[0]  # eg:151507
+    samples_num = img_name.split('_')[0]  # eg:151507
 
-
-    labels = save_spot_RGB_to_image(label_path,adata)  # label
+    labels = save_spot_RGB_to_image(label_path, adata)  # label
     # print(labels[300])
     # print(output[0])
     # predict = output[0].astype(np.uint8)
     # cv2.imwrite('/home/fei/Desktop/scdata/predict/predict_'+img_name,predict)
     # cv2.imwrite('vis_'+img_name,labels*36)
-
 
     label = labels.flatten().tolist()
     output = np.array(output).flatten().tolist()
@@ -595,32 +592,32 @@ def calculate(adata,output,img_path,label_path):
     label_final = []
     output_final = []
     shape = adata.uns["img_shape"]
-    for i in range(shape**2):
-        if label[i]!= 0:
+    for i in range(shape ** 2):
+        if label[i] != 0:
             label_final.append(label[i])
             output_final.append(output[i])
-
 
     # WV = cluster_deviation(test,np.array(outputs[k]),0)
     # MI = cluster_heterogeneity(test,np.array(outputs[k]),0)
 
-    ARI = adjusted_rand_score(label_final,output_final)
-    AMI = adjusted_mutual_info_score(label_final,output_final)
-    FMI = fowlkes_mallows_score(label_final,output_final)
-    RI = rand_score(label_final,output_final)
-    print('name',img_name)
+    ARI = adjusted_rand_score(label_final, output_final)
+    AMI = adjusted_mutual_info_score(label_final, output_final)
+    FMI = fowlkes_mallows_score(label_final, output_final)
+    RI = rand_score(label_final, output_final)
+    print('name', img_name)
 
-    print('ARI:',ARI)
+    print('ARI:', ARI)
 
     return img_name, ARI, AMI, FMI, RI
 
-def save_spot_RGB_to_image(label_path,adata):
+
+def save_spot_RGB_to_image(label_path, adata):
     # data_file = os.path.join(data_folder, expression_file)
     X = pd.read_csv(label_path)
     X = X.sort_values(by=['barcode'])
     # print(X)
     # print(adata.obs)
-    assert all(adata.obs.index == X.iloc[:,0].values)
+    assert all(adata.obs.index == X.iloc[:, 0].values)
     layers = X.iloc[:, 1].values
     # print(layers)
     spot_row = adata.obs["pxl_col_in_fullres"]
@@ -634,44 +631,49 @@ def save_spot_RGB_to_image(label_path,adata):
     # max_row = np.max(spot_row)
     # max_col = np.max(spot_col)
 
-    img = np.zeros(shape=(max_row+1, max_col+1), dtype= np.int)
+    img = np.zeros(shape=(max_row + 1, max_col + 1), dtype=np.int)
 
-    img=img.astype(np.uint8)
+    img = img.astype(np.uint8)
     for index in range(len(layers)):
         if layers[index] == 'Layer1':
             # print('layer1')
             # img[spot_row[index], spot_col[index]] = [0,0,255]
-            img[(spot_row[index] - radius):(spot_row[index] + radius),(spot_col[index] - radius):(spot_col[index] + radius)] = 1
+            img[(spot_row[index] - radius):(spot_row[index] + radius),
+            (spot_col[index] - radius):(spot_col[index] + radius)] = 1
             # print(img[spot_row[index],spot_col[index]])
             # cv2.circle(img,(spot_row[index], spot_col[index]),radius,(0,0,255),thickness=-1)
-        elif layers[index] =='Layer2':
-            img[(spot_row[index] - radius):(spot_row[index] + radius),(spot_col[index] - radius):(spot_col[index] + radius)] = 2
+        elif layers[index] == 'Layer2':
+            img[(spot_row[index] - radius):(spot_row[index] + radius),
+            (spot_col[index] - radius):(spot_col[index] + radius)] = 2
             # img[spot_row[index], spot_col[index]] = [0,255,0]
             # cv2.circle(img,(spot_row[index], spot_col[index]),radius,(0,255,0),thickness=-1)
             # print(img[spot_row[index],spot_col[index]])
-        elif layers[index] =='Layer3':
-            img[(spot_row[index] - radius):(spot_row[index] + radius),(spot_col[index] - radius):(spot_col[index] + radius)] = 3
+        elif layers[index] == 'Layer3':
+            img[(spot_row[index] - radius):(spot_row[index] + radius),
+            (spot_col[index] - radius):(spot_col[index] + radius)] = 3
             # img[spot_row[index], spot_col[index]] = [255,0,0]
             # cv2.circle(img,(spot_row[index], spot_col[index]),radius,(255,0,0),thickness=-1)
-        elif layers[index] =='Layer4':
-            img[(spot_row[index] - radius):(spot_row[index] + radius),(spot_col[index] - radius):(spot_col[index] + radius)] = 4
+        elif layers[index] == 'Layer4':
+            img[(spot_row[index] - radius):(spot_row[index] + radius),
+            (spot_col[index] - radius):(spot_col[index] + radius)] = 4
             # img[spot_row[index], spot_col[index]] = [255,0,255]
             # cv2.circle(img,(spot_row[index], spot_col[index]),radius,(255,0,255),thickness=-1)
-        elif layers[index] =='Layer5':
-            img[(spot_row[index] - radius):(spot_row[index] + radius),(spot_col[index] - radius):(spot_col[index] + radius)] = 5
+        elif layers[index] == 'Layer5':
+            img[(spot_row[index] - radius):(spot_row[index] + radius),
+            (spot_col[index] - radius):(spot_col[index] + radius)] = 5
             # img[spot_row[index], spot_col[index]] = [0,255,255]
             # cv2.circle(img,(spot_row[index], spot_col[index]),radius,(0,255,255),thickness=-1)
-        elif layers[index] =='Layer6':
-            img[(spot_row[index] - radius):(spot_row[index] + radius),(spot_col[index] - radius):(spot_col[index] + radius)] = 6
+        elif layers[index] == 'Layer6':
+            img[(spot_row[index] - radius):(spot_row[index] + radius),
+            (spot_col[index] - radius):(spot_col[index] + radius)] = 6
             # img[spot_row[index], spot_col[index]] = [255,255,0]
             # cv2.circle(img,(spot_row[index], spot_col[index]),radius,(255,255,0),thickness=-1)
-        elif layers[index] =='WM':
-            img[(spot_row[index] - radius):(spot_row[index] + radius),(spot_col[index] - radius):(spot_col[index] + radius)] = 7
+        elif layers[index] == 'WM':
+            img[(spot_row[index] - radius):(spot_row[index] + radius),
+            (spot_col[index] - radius):(spot_col[index] + radius)] = 7
             # img[spot_row[index], spot_col[index]] = [0,0,0]
             # cv2.circle(img,(spot_row[index], spot_col[index]),radius,(0,0,0),thickness=-1)
 
-
     shape = adata.uns["img_shape"]
-    label_img = cv2.resize(img, dsize= (shape,shape),  interpolation= cv2.INTER_NEAREST)
+    label_img = cv2.resize(img, dsize=(shape, shape), interpolation=cv2.INTER_NEAREST)
     return label_img
-
