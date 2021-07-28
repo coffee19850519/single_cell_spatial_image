@@ -85,7 +85,7 @@ cd RESEPT
 
 ### Annotation file
 
-An annotation file recording spot barcodes and their corresponding annotations. It is required in the functions of evaluating predictive tissue architectures and customizing segmentation model. The file should be named as: [sample_name]_annotation.csv. [example](https://bmbl.bmi.osumc.edu/downloadFiles/data_and_model/data_and_model.zip) (/ocean/projects/ccr180012p/shared/Demo/S13/S13_annotation.csv)
+An annotation file recording spot barcodes and their corresponding annotations. It is required in the functions of evaluating predictive tissue architectures and customizing segmentation model. The file should be named as: [sample_name]_annotation.csv. [[example]](https://bmbl.bmi.osumc.edu/downloadFiles/data_and_model/data_and_model.zip) (/ocean/projects/ccr180012p/shared/Demo/S13/S13_annotation.csv)
 
 ### Segmentation model file
 
@@ -229,7 +229,7 @@ python training_pipeline.py -data_folder training_data_folder -output Demo_resul
 *	This Demo takes about 3 hours to generate the model on a machine with 11G VRAM GPU.
 
 ### Segment histological images
-Run the following command line to generate visuals of gene expression from different embedding parameters, predict tissue architectures with top5 Moran's I and segment histological images according to tissue architectures. For demonstration, please download the example data from [here]() (/ocean/projects/ccr180012p/shared/Demo/cancer), the pre-trained model from [here]() (/ocean/projects/ccr180012p/shared/Demo/model_cancer) and put unzip folders 'cancer' and 'model_cancer' to source code folder.
+```RESEPT``` enables to segment histological images according to predictive tissue architectures. It may help pathologists to focus on some certain functional zonations. Run the following command line to predict tissue architectures with top5 Moran's I and segment histological images accordingly. For demonstration, please download the example data from [here]() (/ocean/projects/ccr180012p/shared/Demo/cancer), the pre-trained model from [here]() (/ocean/projects/ccr180012p/shared/Demo/model_cancer) and put unzip folders 'cancer' and 'model_cancer' to source code folder.
 ```
 wget https://bmbl.bmi.osumc.edu/downloadFiles/RESEPT/RESEPT.zip 
 unzip RESEPT.zip
