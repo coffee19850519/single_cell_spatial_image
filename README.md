@@ -133,7 +133,7 @@ RESEPT stores the generative results in the following structure:
 *	-The folder 'RGB_images' stores generative visuals of tissue architectures from different embedding parameters. 
 
 ### Evaluate predictive tissue architecture with annotations
-Run the following command line to generate visuals of gene expression from different embedding parameters, segmentation maps with top5 Moran's I and their evaluation metrics. For demonstration, please download the example data and pre-trained model from [here](https://bmbl.bmi.osumc.edu/downloadFiles/data_and_model/data_and_model.zip) and put the unzip folder 'Demo' to source code folder.
+Run the following command line to generate visuals of gene expression from different embedding parameters, segmentation maps with top5 Moran's I and their evaluation metrics. For demonstration, please download the example data from [here](https://bmbl.bmi.osumc.edu/downloadFiles/data_and_model/data_and_model.zip)(/ocean/projects/ccr180012p/shared/Demo/S13), the pretrained model from [here](https://bmbl.bmi.osumc.edu/downloadFiles/data_and_model/data_and_model.zip)(/ocean/projects/ccr180012p/shared/Demo/model_S13) and put unzip folders 'S13' and 'model_S13' to source code folder.
 ```
 wget https://bmbl.bmi.osumc.edu/downloadFiles/RESEPT/RESEPT.zip 
 unzip RESEPT.zip
@@ -165,7 +165,7 @@ RESEPT stores the generative results in the following structure:
 *	-This Demo takes 30-35 mins to generate all results on a machine with a multi-core CPU.
 
 ### Predict tissue architecture without annotation
-Run the following command line to generate visuals of gene expression from different embedding parameters and predict tissue architectures with top5 Moran's I. For demonstration, please download the example data and pre-trained model from [here](https://bmbl.bmi.osumc.edu/downloadFiles/data_and_model/data_and_model.zip) and put the unzip folder 'Demo' to source code folder.
+Run the following command line to generate visuals of gene expression from different embedding parameters and predict tissue architectures with top5 Moran's I. For demonstration, please download the example data from [here](https://bmbl.bmi.osumc.edu/downloadFiles/data_and_model/data_and_model.zip)(/ocean/projects/ccr180012p/shared/Demo/S13), the pretrained model from [here](https://bmbl.bmi.osumc.edu/downloadFiles/data_and_model/data_and_model.zip)(/ocean/projects/ccr180012p/shared/Demo/model_S13) and put unzip folders 'S13' and 'model_S13' to source code folder.
 ```
 wget https://bmbl.bmi.osumc.edu/downloadFiles/RESEPT/RESEPT.zip 
 unzip RESEPT.zip
@@ -227,7 +227,7 @@ RESEPT stores the generative results in the following structure:
 *	-This Demo takes about 3 hours to generate the model on a machine with a 2080Ti GPU.
 
 ### Segment histological images
-Run the following command line to generate visuals of gene expression from different embedding parameters, predict tissue architectures with top5 Moran's I and segment histological images according to tissue architectures. For demonstration, please download the example data from here (/ocean/projects/ccr180012p/shared/Demo/cancer)and pre-trained model from here (/ocean/projects/ccr180012p/shared/Demo/model_cancer) and put the unzip folder 'cancer ' and ‘model_cancer’to source code folder.
+Run the following command line to generate visuals of gene expression from different embedding parameters, predict tissue architectures with top5 Moran's I and segment histological images according to tissue architectures. For demonstration, please download the example data from here (/ocean/projects/ccr180012p/shared/Demo/cancer)and pre-trained model from here (/ocean/projects/ccr180012p/shared/Demo/model_cancer) and put unzip folders 'cancer' and 'model_cancer to source code folder.
 ```
 wget https://bmbl.bmi.osumc.edu/downloadFiles/RESEPT/RESEPT.zip 
 unzip RESEPT.zip
@@ -239,7 +239,7 @@ python histological_segmentation_pipeline.py -expression ./cancer/Parent_Visium_
 *	-meta file path for spatial meta file recording tissue positions. [type:str]
 *	-scaler file path for scale factors. [type:str]
 *	-model file path for pretrained model. [type:str]
-*   - histological file path for an  histological image.
+*	-histological file path for an  histological image.
 *	-output output root folder. [type:str]
 *	-embedding embedding method in use: scGNN or spaGCN. [type:str]
 *  	-transform data pre-transform method: log, logcpm or None. [type:str]
@@ -258,7 +258,7 @@ RESEPT stores the generative results in the following structure:
 *	-The folder 'RGB_images' stores generative visuals of tissue architectures from different embedding parameters. 
 *	-The folder 'segmentation_map' stores visuals of predictive tissue architectures with top5 Moran's I. 
 *	-The file 'top5_MI_value.csv' records Moran's I value corresponding to the predictions.
-*	--The file 'category_n.png ' refers to the histological image segmentation results.
+*	-The file 'category_n.png ' refers to the histological image segmentation results.
 *	-This Demo takes 30-35 mins to generate all results on a machine with a multi-core CPU.
 
 
