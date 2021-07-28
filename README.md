@@ -129,7 +129,6 @@ RESEPT stores the generative results in the following structure:
    ```
       Demo_result/
       |__RGB_images/
-      
    ```
 *	-The folder 'RGB_images' stores generative visuals of tissue architectures from different embedding parameters. 
 
