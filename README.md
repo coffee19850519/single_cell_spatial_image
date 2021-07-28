@@ -219,7 +219,7 @@ RESEPT stores the generative results in the following structure:
 This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
  
 ## Citation
-if you use RESEPT software, please cite [our paper](https://www.biorxiv.org/content/10.1101/2021.07.08.451210v1):
+if you use ```RESEPT```, please cite [our paper](https://www.biorxiv.org/content/10.1101/2021.07.08.451210v1):
 ```
 @article {Chang2021.07.08.451210,
 	author = {Chang, Yuzhou and He, Fei and Wang, Juexin and Chen, Shuo and Li, Jingyi and Liu, Jixin and Yu, Yang and Su, Li and Ma, Anjun and Allen, Carter and Lin, Yu and Sun, Shaoli and Liu, Bingqiang and Otero, Jose and Chung, Dongjun and Fu, Hongjun and Li, Zihai and Xu, Dong and Ma, Qin},
