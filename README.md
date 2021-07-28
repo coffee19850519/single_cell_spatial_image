@@ -18,7 +18,7 @@ Given inputs as gene expression or RNA velocity, ```RESEPT``` learns a three-dim
 
 ### Hardware Requirements
  
-``` RESEPT ``` requires a standard computer with enough RAM to support the in-memory operations. A GPU with enough VRAM or multi-core CPU is recommended for acceleration.
+``` RESEPT ``` requires a standard computer with enough RAM to support the in-memory operations. A GPU with enough VRAM or multi-core CPU is recommended for acceleration. ``` RESEPT ``` has been tested on a standard computer which has 8G RAM, 11G VRAM and 64 cores CPU.
 
 ### Software Requirements
 
