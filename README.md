@@ -131,6 +131,7 @@ RESEPT stores the generative results in the following structure:
       |__RGB_images/
    ```
 *	-The folder 'RGB_images' stores generative visuals of tissue architectures from different embedding parameters. 
+*	-This Demo takes 25-30 mins to generate all results on a machine with a multi-core CPU.
 
 ### Evaluate predictive tissue architecture with annotations
 Run the following command line to generate visuals of gene expression from different embedding parameters, segmentation maps with top5 Moran's I and their evaluation metrics. For demonstration, please download the example data from [here](https://bmbl.bmi.osumc.edu/downloadFiles/data_and_model/data_and_model.zip)(/ocean/projects/ccr180012p/shared/Demo/S13), the pretrained model from [here](https://bmbl.bmi.osumc.edu/downloadFiles/data_and_model/data_and_model.zip)(/ocean/projects/ccr180012p/shared/Demo/model_S13) and put unzip folders 'S13' and 'model_S13' to source code folder.
