@@ -3,20 +3,22 @@
 
 # Define and visualize pathological architectures of human tissues from spatially resolved transcriptomics using deep learning
 **[Paper](https://www.biorxiv.org/content/10.1101/2021.07.08.451210v1)** 
- 
-A novel method to reconstruct an RGB image of spots using the sequencing data from spatially resolved transcriptomics to identify spatial context and functional zonation.
+  
+```RESEPT``` is a deep-learning framework for characterizing and visualizing tissue architecture from spatially resolved transcriptomics. 
+
+Given inputs as gene expression or RNA velocity, ```RESEPT``` learns a three-dimensional embedding with a spatial retained graph neural network from the spatial transcriptomics. The embedding is then visualized by mapping as color channels in an RGB image and segmented with a supervised convolutional neural network model to infer the tissue architecture accurately. 
+
 
 <p align="center">
   <img height="300" width="700" src="https://github.com/yuyang-0825/image/blob/main/figure1.png" />
 </p>
-
 
  
 ## System Requirements
 
 ### Hardware Requirements
  
-``` RESEPT ``` package requires a standard computer with enough RAM to support the in-memory operations. A GPU with enough VRAM or multi-core CPU is recommended for acceleration.
+``` RESEPT ``` requires a standard computer with enough RAM to support the in-memory operations. A GPU with enough VRAM or multi-core CPU is recommended for acceleration.
 
 ### Software Requirements
 
@@ -217,6 +219,17 @@ RESEPT stores the generative results in the following structure:
 This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
  
 ## Citation
-if you use RESEPT software, please cite the following article:
-
-https://www.biorxiv.org/content/10.1101/2021.07.08.451210v2
+if you use RESEPT software, please cite [our paper](https://www.biorxiv.org/content/10.1101/2021.07.08.451210v1):
+```
+@article {Chang2021.07.08.451210,
+	author = {Chang, Yuzhou and He, Fei and Wang, Juexin and Chen, Shuo and Li, Jingyi and Liu, Jixin and Yu, Yang and Su, Li and Ma, Anjun and Allen, Carter and Lin, Yu and Sun, Shaoli and Liu, Bingqiang and Otero, Jose and Chung, Dongjun and Fu, Hongjun and Li, Zihai and Xu, Dong and Ma, Qin},
+	title = {Define and visualize pathological architectures of human tissues from spatially resolved transcriptomics using deep learning},
+	elocation-id = {2021.07.08.451210},
+	year = {2021},
+	doi = {10.1101/2021.07.08.451210},
+	publisher = {Cold Spring Harbor Laboratory},
+	URL = {https://www.biorxiv.org/content/early/2021/07/16/2021.07.08.451210},
+	eprint = {https://www.biorxiv.org/content/early/2021/07/16/2021.07.08.451210.full.pdf},
+	journal = {bioRxiv}
+}
+```
