@@ -18,7 +18,7 @@ Given inputs as gene expression or RNA velocity, ```RESEPT``` learns a three-dim
 
 ### Hardware Requirements
  
-``` RESEPT ``` requires a standard computer with enough RAM to support the in-memory operations. A GPU with enough VRAM or multi-core CPU is recommended for acceleration. It has been tested on a standard computer which has 8G RAM, 11G VRAM and 64-core CPU.
+``` RESEPT ``` suggests a standard computer with 8G RAM, a GPU with 11G VRAM and 64-core CPU.
 
 ### Software Requirements
 
@@ -125,7 +125,7 @@ python RGB_images_pipeline.py -expression S13/S13_filtered_feature_bc_matrix.h5 
 *	-transform data pre-transform method: log, logcpm or None. [type:str]
 
 #### Results
-RESEPT stores the generative results in the following structure:
+ ```RESEPT``` stores the generative results in the following structure:
    ```
       Demo_result/
       |__RGB_images/
@@ -152,7 +152,7 @@ python evaluation_pipeline.py -expression S13/S13_filtered_feature_bc_matrix.h5 
 *	-transform data pre-transform method: log, logcpm or None. [type:str]
 
 #### Results
-RESEPT stores the generative results in the following structure:
+ ```RESEPT``` stores the generative results in the following structure:
    ```
       Demo_result/
       |__RGB_images/
@@ -183,7 +183,7 @@ python test_pipeline.py -expression S13/S13_filtered_feature_bc_matrix.h5  -meta
 *	-transform data pre-transform method: log, logcpm or None. [type:str]
 
 #### Results
-RESEPT stores the generative results in the following structure:
+ ```RESEPT``` stores the generative results in the following structure:
    ```
       Demo_result/
       |__RGB_images/
@@ -198,7 +198,7 @@ RESEPT stores the generative results in the following structure:
 
 
 ### Customize segmentation model 
-RESEPT supports fine-tuning our segmentation model by using your own 10x data. Organize all 10x data and their labels according to our predefined data schema and download our pre-trained model from [here](https://bmbl.bmi.osumc.edu/downloadFiles/data_and_model/data_and_model.zip)(/ocean/projects/ccr180012p/shared/Demo/model_S13) as a training start point. The 10x data of each sample should be located in a separate sub-folder under the 'data folder'. For demonstration, download the example training data from [here](https://bmbl.bmi.osumc.edu/downloadFiles/data_and_model/data_and_model.zip)(/ocean/projects/ccr180012p/shared/Demo/training_data_folder), and then run the following command line to get the visuals of your own data and the customized model.  
+ ```RESEPT``` supports fine-tuning our segmentation model by using your own 10x data. Organize all 10x data and their labels according to our predefined data schema and download our pre-trained model from [here](https://bmbl.bmi.osumc.edu/downloadFiles/data_and_model/data_and_model.zip)(/ocean/projects/ccr180012p/shared/Demo/model_S13) as a training start point. The 10x data of each sample should be located in a separate sub-folder under the 'data folder'. For demonstration, download the example training data from [here](https://bmbl.bmi.osumc.edu/downloadFiles/data_and_model/data_and_model.zip)(/ocean/projects/ccr180012p/shared/Demo/training_data_folder), and then run the following command line to get the visuals of your own data and the customized model.  
 ```
 wget https://bmbl.bmi.osumc.edu/downloadFiles/RESEPT/RESEPT.zip 
 unzip RESEPT.zip
@@ -213,7 +213,7 @@ python training_pipeline.py -data_folder training_data_folder -output Demo_resul
 *	-transform data pre-transform method: log, logcpm or None. [type:str]
 
 #### Results
-RESEPT stores the generative results in the following structure:
+ ```RESEPT``` stores the generative results in the following structure:
    ```
       Demo_result/
       |__RGB_images/
@@ -247,7 +247,7 @@ python histological_segmentation_pipeline.py -expression ./cancer/Parent_Visium_
 *  	-transform data pre-transform method: log, logcpm or None. [type:str]
 
 #### Results
-RESEPT stores the generative results in the following structure:
+ ```RESEPT``` stores the generative results in the following structure:
    ```
       Demo_result/
       |__RGB_images/
