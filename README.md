@@ -89,7 +89,7 @@ An annotation file recording spot barcodes and their corresponding annotations. 
 
 ### Segmentation model file
 
-A trained segmentation model file in pth format. It is required to predict tissue architecture on generative visuals.
+A trained segmentation model file in pth format. It is required to predict tissue architecture on the generative visuals.
 
 ### Data structure
 
