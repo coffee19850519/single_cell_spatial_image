@@ -201,7 +201,7 @@ RESEPT supports fine-tuning our segmentation model by using your own 10x data. O
 ```
 wget https://bmbl.bmi.osumc.edu/downloadFiles/RESEPT/RESEPT.zip 
 unzip RESEPT.zip
-python training_pipeline.py -data_folder Demo -output Demo_result -embedding scGNN  -transform logcpm -model Demo/model/S13_scGNN.pth
+python training_pipeline.py -data_folder training_data_folder -output Demo_result -embedding scGNN  -transform logcpm -model model_S13/S13_scGNN.pth
 ```
 
 #### Command Line Arguments:
