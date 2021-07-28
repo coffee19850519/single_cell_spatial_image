@@ -226,7 +226,41 @@ RESEPT stores the generative results in the following structure:
 *	-The file 'epoch_n.pth' is the customized model.
 *	-This Demo takes about 3 hours to generate the model on a machine with a 2080Ti GPU.
 
-### Segment histological images?
+### Segment histological images
+Run the following command line to generate visuals of gene expression from different embedding parameters, predict tissue architectures with top5 Moran's I and segment histological images according to tissue architectures. For demonstration, please download the example data (/ocean/projects/ccr180012p/shared/Demo/cancer)and pre-trained model(/ocean/projects/ccr180012p/shared/Demo/model_cancer) from [here](https://bmbl.bmi.osumc.edu/downloadFiles/data_and_model/data_and_model.zip) and put the unzip folder 'cancer ' and ‘model_cancer’to source code folder.
+```
+wget https://bmbl.bmi.osumc.edu/downloadFiles/RESEPT/RESEPT.zip 
+unzip RESEPT.zip
+python histological_segmentation_pipeline.py -expression ./cancer/Parent_Visium_Human_Glioblas_filtered_feature_bc_matrix.h5 -meta ./cancer/spatial/tissue_positions_list.csv -scaler ./cancer/spatial/scalefactors_json.json -optical ./cancer/Parent_Visium_Human_Glioblast.tif -output Demo_result -model ./model_cancer/cancer_model.pth -embedding spaGCN -transform logcpm
+```
+
+#### Command Line Arguments:
+*	-expression file path for raw gene expression data. [type:str]
+*	-meta file path for spatial meta file recording tissue positions. [type:str]
+*	-scaler file path for scale factors. [type:str]
+*	-model file path for pretrained model. [type:str]
+*   -optical file path for an optical image.
+*	-output output root folder. [type:str]
+*	-embedding embedding method in use: scGNN or spaGCN. [type:str]
+*  	-transform data pre-transform method: log, logcpm or None. [type:str]
+
+#### Results
+RESEPT stores the generative results in the following structure:
+   ```
+      Demo_result/
+      |__RGB_images/
+      |__segmentation_test/
+            |__segmentation_map/
+            |__top5_MI_value.csv
+      |__optical_segmentation/
+            |__category_n.png
+   ```
+*	-The folder 'RGB_images' stores generative visuals of tissue architectures from different embedding parameters. 
+*	-The folder 'segmentation_map' stores visuals of predictive tissue architectures with top5 Moran's I. 
+*	-The file 'top5_MI_value.csv' records Moran's I value corresponding to the predictions.
+*	--The file 'category_n.png ' refers to the histological image segmentation results.
+*	-This Demo takes 30-35 mins to generate all results on a machine with a multi-core CPU.
+
 
 ## Built With
  
