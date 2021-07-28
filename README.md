@@ -137,7 +137,7 @@ Run the following command line to generate visuals of gene expression from diffe
 ```
 wget https://bmbl.bmi.osumc.edu/downloadFiles/RESEPT/RESEPT.zip 
 unzip RESEPT.zip
-python evaluation_pipeline.py -expression Demo/S13/S13_filtered_feature_bc_matrix.h5  -meta Demo/S13/spatial/tissue_positions_list.csv  -scaler Demo/S13/spatial/scalefactors_json.json -output Demo_result  -embedding scGNN  -transform logcpm -label Demo/S13/S13_annotation.csv -model Demo/model/S13_scGNN.pth
+python evaluation_pipeline.py -expression S13/S13_filtered_feature_bc_matrix.h5  -meta S13/spatial/tissue_positions_list.csv  -scaler S13/spatial/scalefactors_json.json -output Demo_result  -embedding scGNN  -transform logcpm -label S13/S13_annotation.csv -model model_S13/S13_scGNN.pth
 ```
 
 #### Command Line Arguments:
@@ -169,7 +169,7 @@ Run the following command line to generate visuals of gene expression from diffe
 ```
 wget https://bmbl.bmi.osumc.edu/downloadFiles/RESEPT/RESEPT.zip 
 unzip RESEPT.zip
-python test_pipeline.py -expression Demo/S13/S13_filtered_feature_bc_matrix.h5  -meta Demo/S13/spatial/tissue_positions_list.csv  -scaler Demo/S13/spatial/scalefactors_json.json -output Demo_result  -embedding scGNN  -transform logcpm -model Demo/model/S13_scGNN.pth
+python test_pipeline.py -expression S13/S13_filtered_feature_bc_matrix.h5  -meta S13/spatial/tissue_positions_list.csv  -scaler S13/spatial/scalefactors_json.json -output Demo_result  -embedding scGNN  -transform logcpm -model model_S13/S13_scGNN.pth
 ```
 
 #### Command Line Arguments:
