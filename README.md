@@ -168,7 +168,7 @@ python evaluation_pipeline.py -expression S13/S13_filtered_feature_bc_matrix.h5 
 *	This Demo takes 30-35 mins to generate all results on a machine with a 64-core CPU.
 
 ### Predict tissue architecture without annotation
-Run the following command line to generate visuals of gene expression from different embedding parameters and predict tissue architectures with top5 Moran's I. For demonstration, please download the example data from [here](https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/S13.zip), the pre-trained model from [here](https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/model_S13.zip)(/ocean/projects/ccr180012p/shared/Demo/model_S13) and put unzip folders 'S13' and 'model_S13' in the source code folder.
+Run the following command line to generate visuals of gene expression from different embedding parameters and predict tissue architectures with top5 Moran's I. For demonstration, please download the example data from [here](https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/S13.zip), the pre-trained model from [here](https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/model_S13.zip) and put unzip folders 'S13' and 'model_S13' in the source code folder.
 ```
 wget https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/S13.zip 
 wget https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/model_S13.zip 
