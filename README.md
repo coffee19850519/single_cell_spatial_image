@@ -140,7 +140,7 @@ wget https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/S13.zip
 wget https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/model_S13.zip
 unzip S13.zip
 unzip model_S13.zip
-python evaluation_pipeline.py -expression S13/S13_filtered_feature_bc_matrix.h5  -meta S13/spatial/tissue_positions_list.csv  -scaler S13/spatial/scalefactors_json.json -output Demo_result  -embedding scGNN  -transform logcpm -label S13/S13_annotation.csv -model model_S13/S13_scGNN.pth
+python evaluation_pipeline.py -expression S13/S13_filtered_feature_bc_matrix.h5  -meta S13/spatial/tissue_positions_list.csv  -scaler S13/spatial/scalefactors_json.json -output Demo_result_evaluation  -embedding scGNN  -transform logcpm -label S13/S13_annotation.csv -model model_S13/S13_scGNN.pth
 ```
 
 #### Command Line Arguments:
@@ -174,7 +174,7 @@ wget https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/S13.zip
 wget https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/model_S13.zip 
 unzip model_S13.zip
 unzip S13.zip
-python test_pipeline.py -expression S13/S13_filtered_feature_bc_matrix.h5  -meta S13/spatial/tissue_positions_list.csv  -scaler S13/spatial/scalefactors_json.json -output Demo_result  -embedding scGNN  -transform logcpm -model model_S13/S13_scGNN.pth
+python test_pipeline.py -expression S13/S13_filtered_feature_bc_matrix.h5  -meta S13/spatial/tissue_positions_list.csv  -scaler S13/spatial/scalefactors_json.json -output Demo_result_tissue_architecture  -embedding scGNN  -transform logcpm -model model_S13/S13_scGNN.pth
 ```
 
 #### Command Line Arguments:
@@ -208,7 +208,7 @@ wget https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/model_S13.zip
 wget https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/training_data_folder.zip
 unzip model_S13.zip
 unzip training_data_folder.zip
-python training_pipeline.py -data_folder training_data_folder -output Demo_result -embedding scGNN  -transform logcpm -model model_S13/S13_scGNN.pth
+python training_pipeline.py -data_folder training_data_folder -output Demo_result_model -embedding scGNN  -transform logcpm -model model_S13/S13_scGNN.pth
 ```
 
 #### Command Line Arguments:
@@ -235,13 +235,13 @@ python training_pipeline.py -data_folder training_data_folder -output Demo_resul
 *	This Demo takes about 3 hours to generate the model on a machine with 11G VRAM GPU.
 
 ### Segment histological images
-```RESEPT``` enables to segment histological images according to predictive tissue architectures. It may help pathologists to focus on some certain functional zonations. Run the following command line to predict tissue architectures with top5 Moran's I and segment histological images accordingly. For demonstration, please download the example data from [here](https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/cancer.zip), the pre-trained model from [here](https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/model_cancer.zip) and put unzip folders 'cancer' and 'model_cancer' to source code folder.
+```RESEPT``` enables to segment histological images according to predictive tissue architectures. It may help pathologists to focus on some certain functional zonations. Run the following command line to predict tissue architectures with top5 Moran's I and segment histological images accordingly. For demonstration, please download the example data from [here](https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/cancer.zip), the pre-trained model from [here](https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/model_cancer.zip) and put unzip folders 'cancer' and 'model_cancer' in the source code folder.
 ```
 wget https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/cancer.zip
 wget https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/model_cancer.zip
 unzip cancer.zip
 unzip model_cancer.zip
-python histological_segmentation_pipeline.py -expression ./cancer/Parent_Visium_Human_Glioblas_filtered_feature_bc_matrix.h5 -meta ./cancer/spatial/tissue_positions_list.csv -scaler ./cancer/spatial/scalefactors_json.json -histological ./cancer/Parent_Visium_Human_Glioblast.tif -output Demo_result -model ./model_cancer/cancer_model.pth -embedding spaGCN -transform logcpm
+python histological_segmentation_pipeline.py -expression ./cancer/Parent_Visium_Human_Glioblas_filtered_feature_bc_matrix.h5 -meta ./cancer/spatial/tissue_positions_list.csv -scaler ./cancer/spatial/scalefactors_json.json -histological ./cancer/Parent_Visium_Human_Glioblast.tif -output Demo_result_HistoImage -model ./model_cancer/cancer_model.pth -embedding spaGCN -transform logcpm
 ```
 
 #### Command Line Arguments:
