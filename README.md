@@ -202,7 +202,7 @@ python test_pipeline.py -expression S13/S13_filtered_feature_bc_matrix.h5  -meta
 
 
 ### Customize segmentation model 
- ```RESEPT``` supports fine-tuning our segmentation model by using users' 10x data. Organize all 10x data and their labels according to our predefined data schema and download our pre-trained model from [here](https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/model_S13.zip) as a training start point. The 10x data of each sample should be located in a separate sub-folder under the 'training_data_folder'. For demonstration, download the example training data from [here](https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/training_data_folder.zip), and then run the following command line to get the visuals of your own data and the customized model.  
+ ```RESEPT``` supports fine-tuning our segmentation model by using users' 10x data. Organize all 10x data and their labels according to our predefined data schema and download our pre-trained model from [here](https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/model_S13.zip) as a training start point. The 10x data of each sample should be located in a separate sub-folder under the 'training_data_folder' folder. For demonstration, download the example training data from [here](https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/training_data_folder.zip), and then run the following command line to get the visuals of your own data and the customized model.  
 ```
 wget https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/model_S13.zip
 wget https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/training_data_folder.zip
