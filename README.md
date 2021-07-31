@@ -249,7 +249,7 @@ python histological_segmentation_pipeline.py -expression ./cancer/Parent_Visium_
 *	-meta file path for spatial meta file recording tissue positions. [type:str]
 *	-scaler file path for scale factors. [type:str]
 *	-model file path for pretrained model. [type:str]
-*	-histological file path for an  histological image.
+*	-histological file path for the corresponding histological image.[type:str]
 *	-output output root folder. [type:str]
 *	-embedding embedding method in use: scGNN or spaGCN. [type:str]
 *  	-transform data pre-transform method: log, logcpm or None. [type:str]
