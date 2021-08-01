@@ -116,11 +116,11 @@ python RGB_images_pipeline.py -matrix S13/S13_filtered_feature_bc_matrix.h5  -cs
 ```
 
 #### Command Line Arguments:
-*	-expression file path for raw gene expression data. [type:str]
-*	-meta file path for spatial meta information recording tissue positions. [type:str]
-*	-scaler file path for scale factors. [type:str]
-*	-output output root folder. [type:str]
-*	-embedding embedding method in use: scGNN or spaGCN. [type:str]
+*	-matrix file path for raw gene expression data. [type:str]
+*	-csv file path for spatial meta information recording tissue positions. [type:str]
+*	-json file path for scale factors. [type:str]
+*	-out output root folder. [type:str]
+*	-method embedding method in use: scGNN or spaGCN. [type:str]
 *	-transform data pre-transform method: log, logcpm or None. [type:str]
 
 #### Results
@@ -143,13 +143,13 @@ python evaluation_pipeline.py -matrix S13/S13_filtered_feature_bc_matrix.h5  -cs
 ```
 
 #### Command Line Arguments:
-*	-expression file path for raw gene expression data. [type:str]
-*	-meta file path for spatial meta information recording tissue positions. [type:str]
-*	-scaler file path for scale factors. [type:str]
+*	-matrix file path for raw gene expression data. [type:str]
+*	-csv file path for spatial meta information recording tissue positions. [type:str]
+*	-json file path for scale factors. [type:str]
 *	-label file path for labels recording cell barcodes and their annotations for calculating evaluation metrics. [type:str]
-*	-model file path for pre-trained model. [type:str]
-*	-output output root folder. [type:str]
-*	-embedding embedding method in use: scGNN or spaGCN. [type:str]
+*	-checkpoint file path for pre-trained model. [type:str]
+*	-out output root folder. [type:str]
+*	-method embedding method in use: scGNN or spaGCN. [type:str]
 *	-transform data pre-transform method: log, logcpm or None. [type:str]
 
 #### Results
@@ -177,12 +177,12 @@ python test_pipeline.py -matrix S13/S13_filtered_feature_bc_matrix.h5  -csv S13/
 ```
 
 #### Command Line Arguments:
-*	-expression file path for raw gene expression data. [type:str]
-*	-meta file path for spatial meta file recording tissue positions. [type:str]
-*	-scaler file path for scale factors. [type:str]
-*	-model file path for pre-trained model. [type:str]
-*	-output output root folder. [type:str]
-*	-embedding embedding method in use: scGNN or spaGCN. [type:str]
+*	-matrix file path for raw gene expression data. [type:str]
+*	-csv file path for spatial meta file recording tissue positions. [type:str]
+*	-json file path for scale factors. [type:str]
+*	-checkpoint file path for pre-trained model. [type:str]
+*	-out output root folder. [type:str]
+*	-method embedding method in use: scGNN or spaGCN. [type:str]
 *	-transform data pre-transform method: log, logcpm or None. [type:str]
 
 #### Results
@@ -212,7 +212,7 @@ python training_pipeline.py -data training_data_folder -out Demo_result_model -m
 ```
 
 #### Command Line Arguments:
-* -data a folder provides all training samples. The data including label file of each sample should follow our predefined schema in a sub-folder under this folder. [type:str]
+* 	-data a folder provides all training samples. The data including label file of each sample should follow our predefined schema in a sub-folder under this folder. [type:str]
 *	-model file path for pre-trained model file. [type:str]
 *	-out output root folder. [type:str]
 *	-method embedding method in use: scGNN or spaGCN. [type:str]
