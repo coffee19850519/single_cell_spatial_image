@@ -21,9 +21,9 @@ def seg_category_map(optical_img,category_map, output_path):
             pixel_x, pixel_y = np.where(category_map == category)
             for i in range(len(pixel_x)):
                 img[pixel_x[i]][pixel_y[i]] = optical_img[pixel_x[i]][pixel_y[i]]
-            if not os.path.exists(output_path+'/optical_segmentation/'):
-                os.makedirs(output_path+'/optical_segmentation/')
-            cv2.imwrite(output_path+'/optical_segmentation/category_'+str(category)+'.png', img)
+            if not os.path.exists(output_path+'/histological_segmentation/'):
+                os.makedirs(output_path+'/histological_segmentation/')
+            cv2.imwrite(output_path+'/histological_segmentation/category_'+str(category)+'.png', img)
 
 # optical_img = cv2.imread('./optical_images/151507.png')
 # category_map = cv2.imread('./label/151507.png')

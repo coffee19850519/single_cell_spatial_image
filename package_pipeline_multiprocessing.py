@@ -50,7 +50,8 @@ def load_data(h5_path, spatial_path, scale_factor_path):
 def pseduo_images_scGNN(h5_path, spatial_path, scale_factor_path, output_folder,scgnnsp_zdim,scgnnsp_alpha,transform_opt):
     # --------------------------------------------------------------------------------------------------------#
     # -------------------------------load data--------------------------------------------------#
-    sample = h5_path.split('/')[-1].split('_')[0]
+    # sample = h5_path.split('/')[-1].split('_')[0]
+    sample = h5_path.split('/')[-2]
     adata,spatial_all = load_data(h5_path, spatial_path, scale_factor_path)
     # transform optional
     if transform_opt == 'log':
@@ -91,7 +92,7 @@ def pseduo_images_scGNN(h5_path, spatial_path, scale_factor_path, output_folder,
                      # -------------------------------generate_embedding --------------------------------------------------#
                     # image_name = str(scgnnsp_k) + '_' + str(scgnnsp_dist) + '_' + str(
                     #     scgnnsp_alpha) + '_' + str(scgnnsp_zdim) + '_scGNN_LogCPM'
-                    image_name ='scGNN_'+ transform_opt +'_PEalpha' +str(scgnnsp_alpha) +'_zdim'+str(scgnnsp_zdim)
+                    image_name =sample+'_scGNN_'+ transform_opt +'_PEalpha' +str(scgnnsp_alpha) +'_zdim'+str(scgnnsp_zdim)
                     # embedding = generate_embedding(adata,pca=pca, res=res,img_path = optical_img_path,method='spaGCN')
                     embedding = generate_embedding_sc(adata, sample=sample, scgnnsp_dist=scgnnsp_dist,
                                                       scgnnsp_alpha=scgnnsp_alpha, scgnnsp_k=scgnnsp_k,
@@ -112,7 +113,7 @@ def pseduo_images_scGNN(h5_path, spatial_path, scale_factor_path, output_folder,
     # --------------------------------------------------------------------------------------------------------#
     # --------------------------------inpaint image-------------------------------------------------#
     img_path = output_folder+ "/RGB_images/"
-    inpaint_path = inpaint(img_path, adata, spatial_all)
+    inpaint_path = inpaint(img_path, sample, adata, spatial_all)
     print('generate pseudo images finish')
     return inpaint_path
 
@@ -122,7 +123,7 @@ def pseduo_images_scGNN(h5_path, spatial_path, scale_factor_path, output_folder,
 def pseudo_images(h5_path, spatial_path, scale_factor_path, output_folder,method, panel_gene_path, pca_opt, transform_opt):
         # --------------------------------------------------------------------------------------------------------#
         # -------------------------------load data--------------------------------------------------#
-    sample = h5_path.split('/')[-1].split('_')[0]
+    sample = h5_path.split('/')[-2]
     # print(sample)
     if method == 'spaGCN':
         adata,spatial_all = load_data(h5_path, spatial_path, scale_factor_path)
@@ -139,7 +140,6 @@ def pseudo_images(h5_path, spatial_path, scale_factor_path, output_folder,method
             print('transform optional is log or logcpm or None')
 
         print('load data finish')
-
 
         pca_list = [32, 50, 64, 128, 256, 1024]
         res_list = np.arange(0.2, 0.7, 0.05)
@@ -188,7 +188,7 @@ def pseudo_images(h5_path, spatial_path, scale_factor_path, output_folder,method
         # # --------------------------------------------------------------------------------------------------------#
         # # --------------------------------inpaint image-------------------------------------------------#
         img_path = output_folder + "/RGB_images/"
-        inpaint_path = inpaint(img_path, adata, spatial_all)
+        inpaint_path = inpaint(img_path, sample, adata, spatial_all)
         print('generate pseudo images finish')
         return inpaint_path
 
@@ -205,7 +205,8 @@ def pseudo_images(h5_path, spatial_path, scale_factor_path, output_folder,method
                         # for scgnnsp_k in scgnnsp_kList:
                         pool.apply_async(pseduo_images_scGNN, (h5_path, spatial_path, scale_factor_path, output_folder,
                                                                scgnnsp_zdim,scgnnsp_alpha,transform_opt,))
-
+                        # pseduo_images_scGNN(h5_path, spatial_path, scale_factor_path, output_folder,
+                        #                                        scgnnsp_zdim,scgnnsp_alpha,transform_opt)
         pool.close()
         pool.join()
 
@@ -219,9 +220,9 @@ def segmentation_test(h5_path, spatial_path, scale_factor_path, output_path, met
     return top1_csv_name
 
 
-def segmentation_category_map(h5_path, spatial_path, scale_factor_path, optical_path, output_path, method,pca_opt,transform_opt,checkpoint):
+def segmentation_category_map(h5_path, spatial_path, scale_factor_path, optical_path, output_path, method, panel_gene_path, pca_opt, transform_opt, checkpoint):
     optical_img = cv2.imread(optical_path)
-    top1_csv_name = segmentation_test(h5_path, spatial_path, scale_factor_path, output_path, method,pca_opt,transform_opt,checkpoint)
+    top1_csv_name = segmentation_test(h5_path, spatial_path, scale_factor_path, output_path, method, panel_gene_path, pca_opt, transform_opt, checkpoint)
     category_map = np.loadtxt(top1_csv_name,dtype=np.int32, delimiter=",")  
     seg_category_map(optical_img, category_map, output_path)
 
