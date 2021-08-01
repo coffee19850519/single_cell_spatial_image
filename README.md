@@ -112,15 +112,15 @@ Run the following command line to generate visuals of gene expression from diffe
 ```
 wget https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/S13.zip 
 unzip S13.zip
-python RGB_images_pipeline.py -expression S13/S13_filtered_feature_bc_matrix.h5  -meta S13/spatial/tissue_positions_list.csv  -scaler S13/spatial/scalefactors_json.json -output Demo_result  -embedding scGNN  -transform logcpm 
+python RGB_images_pipeline.py -matrix S13/S13_filtered_feature_bc_matrix.h5  -csv S13/spatial/tissue_positions_list.csv  -json S13/spatial/scalefactors_json.json -out Demo_result  -method scGNN  -transform logcpm 
 ```
 
 #### Command Line Arguments:
-*	-expression file path for raw gene expression data. [type:str]
-*	-meta file path for spatial meta information recording tissue positions. [type:str]
-*	-scaler file path for scale factors. [type:str]
-*	-output output root folder. [type:str]
-*	-embedding embedding method in use: scGNN or spaGCN. [type:str]
+*	-matrix file path for raw gene expression data. [type:str]
+*	-csv file path for spatial meta information recording tissue positions. [type:str]
+*	-json file path for scale factors. [type:str]
+*	-out output root folder. [type:str]
+*	-method embedding method in use: scGNN or spaGCN. [type:str]
 *	-transform data pre-transform method: log, logcpm or None. [type:str]
 
 #### Results
@@ -139,17 +139,17 @@ wget https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/S13.zip
 wget https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/model_S13.zip
 unzip S13.zip
 unzip model_S13.zip
-python evaluation_pipeline.py -expression S13/S13_filtered_feature_bc_matrix.h5  -meta S13/spatial/tissue_positions_list.csv  -scaler S13/spatial/scalefactors_json.json -output Demo_result_evaluation  -embedding scGNN  -transform logcpm -label S13/S13_annotation.csv -model model_S13/S13_scGNN.pth
+python evaluation_pipeline.py -matrix S13/S13_filtered_feature_bc_matrix.h5  -csv S13/spatial/tissue_positions_list.csv  -json S13/spatial/scalefactors_json.json -out Demo_result_evaluation  -method scGNN  -transform logcpm -label S13/S13_annotation.csv -checkpoint model_S13/S13_scGNN.pth
 ```
 
 #### Command Line Arguments:
-*	-expression file path for raw gene expression data. [type:str]
-*	-meta file path for spatial meta information recording tissue positions. [type:str]
-*	-scaler file path for scale factors. [type:str]
+*	-matrix file path for raw gene expression data. [type:str]
+*	-csv file path for spatial meta information recording tissue positions. [type:str]
+*	-json file path for scale factors. [type:str]
 *	-label file path for labels recording cell barcodes and their annotations for calculating evaluation metrics. [type:str]
-*	-model file path for pre-trained model. [type:str]
-*	-output output root folder. [type:str]
-*	-embedding embedding method in use: scGNN or spaGCN. [type:str]
+*	-checkpoint file path for pre-trained model. [type:str]
+*	-out output root folder. [type:str]
+*	-method embedding method in use: scGNN or spaGCN. [type:str]
 *	-transform data pre-transform method: log, logcpm or None. [type:str]
 
 #### Results
@@ -173,16 +173,16 @@ wget https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/S13.zip
 wget https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/model_S13.zip 
 unzip model_S13.zip
 unzip S13.zip
-python test_pipeline.py -expression S13/S13_filtered_feature_bc_matrix.h5  -meta S13/spatial/tissue_positions_list.csv  -scaler S13/spatial/scalefactors_json.json -output Demo_result_tissue_architecture  -embedding scGNN  -transform logcpm -model model_S13/S13_scGNN.pth
+python test_pipeline.py -matrix S13/S13_filtered_feature_bc_matrix.h5  -csv S13/spatial/tissue_positions_list.csv  -json S13/spatial/scalefactors_json.json -out Demo_result_tissue_architecture  -method scGNN  -transform logcpm -checkpoint model_S13/S13_scGNN.pth
 ```
 
 #### Command Line Arguments:
-*	-expression file path for raw gene expression data. [type:str]
-*	-meta file path for spatial meta file recording tissue positions. [type:str]
-*	-scaler file path for scale factors. [type:str]
-*	-model file path for pre-trained model. [type:str]
-*	-output output root folder. [type:str]
-*	-embedding embedding method in use: scGNN or spaGCN. [type:str]
+*	-matrix file path for raw gene expression data. [type:str]
+*	-csv file path for spatial meta file recording tissue positions. [type:str]
+*	-json file path for scale factors. [type:str]
+*	-checkpoint file path for pre-trained model. [type:str]
+*	-out output root folder. [type:str]
+*	-method embedding method in use: scGNN or spaGCN. [type:str]
 *	-transform data pre-transform method: log, logcpm or None. [type:str]
 
 #### Results
@@ -191,8 +191,9 @@ python test_pipeline.py -expression S13/S13_filtered_feature_bc_matrix.h5  -meta
       Demo_result/
       |__RGB_images/
       |__segmentation_test/
-            |__segmentation_map/
-            |__top5_MI_value.csv
+            |__result/
+            |__MI_ranks_result.csv
+	    |__show
    ```
 *	The folder 'RGB_images' contains the generated images of tissue architectures from different embedding parameters. 
 *	The folder 'segmentation_map' stores visualizations of the predicted tissue architectures with top5 Moran's I. 
@@ -207,14 +208,14 @@ wget https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/model_S13.zip
 wget https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/training_data_folder.zip
 unzip model_S13.zip
 unzip training_data_folder.zip
-python training_pipeline.py -data_folder training_data_folder -output Demo_result_model -embedding scGNN  -transform logcpm -model model_S13/S13_scGNN.pth
+python training_pipeline.py -data training_data_folder -out Demo_result_model -method scGNN  -transform logcpm -model model_S13/S13_scGNN.pth
 ```
 
 #### Command Line Arguments:
-* -data_folder a folder provides all training samples. The data including label file of each sample should follow our predefined schema in a sub-folder under this folder. [type:str]
+* 	-data a folder provides all training samples. The data including label file of each sample should follow our predefined schema in a sub-folder under this folder. [type:str]
 *	-model file path for pre-trained model file. [type:str]
-*	-output output root folder. [type:str]
-*	-embedding embedding method in use: scGNN or spaGCN. [type:str]
+*	-out output root folder. [type:str]
+*	-method embedding method in use: scGNN or spaGCN. [type:str]
 *	-transform data pre-transform method: log, logcpm or None. [type:str]
 
 #### Results
