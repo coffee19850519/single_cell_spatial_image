@@ -2,7 +2,6 @@
 [docs-url]: https://resept-last.readthedocs.io/en/latest/Case%20study.html
 
 # Define and visualize pathological architectures of human tissues from spatially resolved transcriptomics using deep learning
-**[Paper](https://www.biorxiv.org/content/10.1101/2021.07.08.451210v1)** 
   
 ```RESEPT``` is a deep-learning framework for characterizing and visualizing tissue architecture from spatially resolved transcriptomics. 
 
@@ -68,7 +67,7 @@ pip install louvain
 pip install anndata
 pip install mmcv-full  
 ```
-This takes 20-25 mins to install all dependencies.
+The above steps take 20-25 mins to install all dependencies.
 
 ### Install RESEPT from GitHub
 ```
@@ -80,8 +79,8 @@ cd RESEPT
 
 ### 10x Visium data
  * gene expression file: A HDF5 file stores raw gene expression data.  
- * tissue_positions_list file: A csv file stores meta of spot including their connectivity and spatial coordinates.
- * scalefactors_json file: A json file stores the scaling factors converting spots to different resolutions.
+ * tissue_positions_list file: A csv file contains meta information of spots including their connectivity and spatial coordinates.
+ * scalefactors_json file: A json file collects the scaling factors converting spots to different resolutions.
 
 ### Annotation file
 
@@ -118,7 +117,7 @@ python RGB_images_pipeline.py -expression S13/S13_filtered_feature_bc_matrix.h5 
 
 #### Command Line Arguments:
 *	-expression file path for raw gene expression data. [type:str]
-*	-meta file path for spatial meta recording tissue positions. [type:str]
+*	-meta file path for spatial meta information recording tissue positions. [type:str]
 *	-scaler file path for scale factors. [type:str]
 *	-output output root folder. [type:str]
 *	-embedding embedding method in use: scGNN or spaGCN. [type:str]
@@ -148,13 +147,13 @@ python evaluation_pipeline.py -expression S13/S13_filtered_feature_bc_matrix.h5 
 *	-meta file path for spatial meta recording tissue positions. [type:str]
 *	-scaler file path for scale factors. [type:str]
 *	-label file path for labels recording cell barcodes and their annotations for calculating evaluation metrics. [type:str]
-*	-model file path for pretrained model. [type:str]
+*	-model file path for pre-trained model. [type:str]
 *	-output output root folder. [type:str]
 *	-embedding embedding method in use: scGNN or spaGCN. [type:str]
 *	-transform data pre-transform method: log, logcpm or None. [type:str]
 
 #### Results
- ```RESEPT``` stores the generative results in the following structure:
+ ```RESEPT``` stores the generated results in the following structure:
    ```
       Demo_result/
       |__RGB_images/
@@ -181,7 +180,7 @@ python test_pipeline.py -expression S13/S13_filtered_feature_bc_matrix.h5  -meta
 *	-expression file path for raw gene expression data. [type:str]
 *	-meta file path for spatial meta file recording tissue positions. [type:str]
 *	-scaler file path for scale factors. [type:str]
-*	-model file path for pretrained model. [type:str]
+*	-model file path for pre-trained model. [type:str]
 *	-output output root folder. [type:str]
 *	-embedding embedding method in use: scGNN or spaGCN. [type:str]
 *	-transform data pre-transform method: log, logcpm or None. [type:str]
@@ -195,10 +194,10 @@ python test_pipeline.py -expression S13/S13_filtered_feature_bc_matrix.h5  -meta
             |__segmentation_map/
             |__top5_MI_value.csv
    ```
-*	The folder 'RGB_images' stores generative visuals of tissue architectures from different embedding parameters. 
-*	The folder 'segmentation_map' stores visuals of predictive tissue architectures with top5 Moran's I. 
+*	The folder 'RGB_images' contains the generated images of tissue architectures from different embedding parameters. 
+*	The folder 'segmentation_map' stores visualizations of the predicted tissue architectures with top5 Moran's I. 
 *	The file 'top5_MI_value.csv' records Moran's I value corresponding to the predictions.
-*	This Demo takes 30-35 mins to generate all results on a machine with a 64-core CPU.
+*	This Demo takes 30-35 mins to generate all the results on a machine with a 64-core CPU.
 
 
 ### Customize segmentation model 
@@ -213,7 +212,7 @@ python training_pipeline.py -data_folder training_data_folder -output Demo_resul
 
 #### Command Line Arguments:
 * -data_folder a folder provides all training samples. The data including label file of each sample should follow our predefined schema in a sub-folder under this folder. [type:str]
-*	-model file path for pretrained model file. [type:str]
+*	-model file path for pre-trained model file. [type:str]
 *	-output output root folder. [type:str]
 *	-embedding embedding method in use: scGNN or spaGCN. [type:str]
 *	-transform data pre-transform method: log, logcpm or None. [type:str]
@@ -229,13 +228,13 @@ python training_pipeline.py -data_folder training_data_folder -output Demo_resul
       |__config/
             |__epoch_n.pth
    ```
-*	The folder 'RGB_images' stores generative visuals of tissue architectures of all input 10x data from different embedding parameters. 
-*	The folder 'RGB_images_label' stores their labeled category maps according to input label files. 
+*	The folder 'RGB_images' contains generated images of tissue architectures of all input 10x data from different embedding parameters. 
+*	The folder 'RGB_images_label' saves their labeled category maps according to input label files. 
 *	The file 'epoch_n.pth' is the customized model.
 *	This Demo takes about 3 hours to generate the model on a machine with 11G VRAM GPU.
 
 ### Segment histological images
-```RESEPT``` enables to segment histological images according to predictive tissue architectures. It may help pathologists to focus on some certain functional zonations. Run the following command line to predict tissue architectures with top5 Moran's I and segment histological images accordingly. For demonstration, please download the example data from [here](https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/cancer.zip), the pre-trained model from [here](https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/model_cancer.zip) and put unzip folders 'cancer' and 'model_cancer' in the source code folder.
+```RESEPT``` is capable of segmenting histological images according to predictive tissue architectures. It may help pathologists to focus on some certain functional zonations. Run the following command line to predict tissue architectures with top5 Moran's I and segment histological images accordingly. For demonstration, please download the example data from [here](https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/cancer.zip), the pre-trained model from [here](https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/model_cancer.zip) and put unzip folders 'cancer' and 'model_cancer' in the source code folder.
 ```
 wget https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/cancer.zip
 wget https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/model_cancer.zip
