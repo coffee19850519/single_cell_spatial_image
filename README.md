@@ -144,7 +144,7 @@ python evaluation_pipeline.py -expression S13/S13_filtered_feature_bc_matrix.h5 
 
 #### Command Line Arguments:
 *	-expression file path for raw gene expression data. [type:str]
-*	-meta file path for spatial meta recording tissue positions. [type:str]
+*	-meta file path for spatial meta information recording tissue positions. [type:str]
 *	-scaler file path for scale factors. [type:str]
 *	-label file path for labels recording cell barcodes and their annotations for calculating evaluation metrics. [type:str]
 *	-model file path for pre-trained model. [type:str]
@@ -162,7 +162,7 @@ python evaluation_pipeline.py -expression S13/S13_filtered_feature_bc_matrix.h5 
             |__top5_evaluation.csv
    ```
 *	The folder 'RGB_images' stores generative visuals of tissue architectures from different embedding parameters. 
-*	The folder 'segmentation_map' stores visuals of predictive tissue architectures with top5 Moran's I. 
+*	The folder 'segmentation_map' provides visuals of predictive tissue architectures with top5 Moran's I. 
 *	The file 'top5_evaluation.csv' records various evaluation metrics corresponding to the predictions.
 *	This Demo takes 30-35 mins to generate all results on a machine with a 64-core CPU.
 
