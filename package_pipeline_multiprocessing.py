@@ -142,7 +142,7 @@ def pseudo_images(h5_path, spatial_path, scale_factor_path, output_folder,method
         print('load data finish')
 
         pca_list = [32, 50, 64, 128, 256, 1024]
-        res_list = np.arange(0.2, 0.7, 0.5)
+        res_list = np.arange(0.2, 0.7, 0.05)
 
         # panel gene
         # pca_opt = True
