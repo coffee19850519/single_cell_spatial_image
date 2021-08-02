@@ -134,20 +134,21 @@ The data schema to customize our segmentation model is as follows:
 ## Demo
 
 ### Visualize tissue architecture 
-Run the following command line to generate visuals of gene expression from different embedding parameters. For demonstration, please download the example data from [here](https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/S13.zip) and put the unzip folder 'S13' in the source code folder.
+Run the following command line to construct RGB images based on gene expression from different embedding parameters. For demonstration, please download the example data from [here](https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/S13.zip) and put the unzip folder 'S13' in the source code folder.
 ```
 wget https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/S13.zip 
 unzip S13.zip
-python RGB_images_pipeline.py -matrix S13/S13_filtered_feature_bc_matrix.h5  -csv S13/spatial/tissue_positions_list.csv  -json S13/spatial/scalefactors_json.json -out Demo_result  -method scGNN  -transform logcpm 
+python RGB_images_pipeline.py -expression S13/S13_filtered_feature_bc_matrix.h5  -meta S13/spatial/tissue_positions_list.csv  -scaler S13/spatial/scalefactors_json.json -output Demo_result  -embedding scGNN  -transform logcpm 
 ```
 
 #### Command Line Arguments:
-*	-matrix file path for raw gene expression data. [type:str]
-*	-csv file path for spatial meta information recording tissue positions. [type:str]
-*	-json file path for scale factors. [type:str]
-*	-out output root folder. [type:str]
-*	-method embedding method in use: scGNN or spaGCN. [type:str]
-*	-transform data pre-transform method: log, logcpm or None. [type:str]
+*	-expression file path for raw gene expression data. [type: str]
+*	-meta file path for spatial meta data recording tissue positions. [type: str]
+*	-scaler file path for scale factors. [type: str]
+*	-output output root folder. [type: str]
+*	-embedding embedding method in use: scGNN or spaGCN. [type: str] [default: scGNN]
+*	-transform data pre-transform method: log, logcpm or None. [type: str] [default: logcpm]
+
 
 #### Results
  ```RESEPT``` stores the generative results in the following structure:
@@ -155,8 +156,8 @@ python RGB_images_pipeline.py -matrix S13/S13_filtered_feature_bc_matrix.h5  -cs
       Demo_result/
       |__RGB_images/
    ```
-*	The folder 'RGB_images' stores generative visuals of tissue architectures from different embedding parameters. 
-*	This Demo takes 25-30 mins to generate all results on a machine with 64-core CPU.
+*	The folder 'RGB_images' stores generated RGB images of tissue architectures from different embedding parameters.  
+This demo takes 25-30 mins to generate all results on the machine with a 64-core CPU.
 
 ### Evaluate predictive tissue architecture with annotations
 Run the following command line to generate visuals of gene expression from different embedding parameters, segmentation maps with top5 Moran's I and their evaluation metrics. For demonstration, please download the example data from [here](https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/S13.zip), the pretrained model from [here](https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/model_S13.zip) and put unzip folders 'S13' and 'model_S13' in the source code folder.
