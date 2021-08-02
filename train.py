@@ -16,67 +16,16 @@ from mmseg.models import build_segmentor
 from mmseg.utils import collect_env, get_root_logger
 import ssl
 ssl._create_default_https_context = ssl._create_unverified_context
-# import torch.distributed as dist
-#
-# dist.init_process_group('gloo', init_method='file:///temp/somefile', rank=0, world_size=1)
+
 import urllib.request
-# context = ssl._create_unverified_context()
-# data = urllib.request.urlopen( url_new, context=context ).read().decode(“utf-8”)
+
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 torch.cuda.set_device(0)
-# def parse_args():
-#     parser = argparse.ArgumentParser(description='Train a segmentor')
-#     parser.add_argument('config', help='train config file path')
-#     parser.add_argument('--work-dir', help='the dir to save logs and models')
-#     parser.add_argument(
-#         '--load-from', help='the checkpoint file to load weights from')
-#     parser.add_argument(
-#         '--resume-from', help='the checkpoint file to resume from')
-#     parser.add_argument(
-#         '--no-validate',
-#         action='store_true',
-#         help='whether not to evaluate the checkpoint during training')
-#     group_gpus = parser.add_mutually_exclusive_group()
-#     group_gpus.add_argument(
-#         '--gpus',
-#         type=int,
-#         help='number of gpus to use '
-#         '(only applicable to non-distributed training)')
-#     group_gpus.add_argument(
-#         '--gpu-ids',
-#         type=int,
-#         nargs='+',
-#         help='ids of gpus to use '
-#         '(only applicable to non-distributed training)')
-#     parser.add_argument('--seed', type=int, default=None, help='random seed')
-#     parser.add_argument(
-#         '--deterministic',
-#         action='store_true',
-#         help='whether to set deterministic options for CUDNN backend.')
-#     parser.add_argument(
-#         '--options', nargs='+', action=DictAction, help='custom options')
-#     parser.add_argument(
-#         '--launcher',
-#         choices=['none', 'pytorch', 'slurm', 'mpi'],
-#         default='none',
-#         help='job launcher')
-#     parser.add_argument('--local_rank', type=int, default=0)
-#     args = parser.parse_args()
-#     if 'LOCAL_RANK' not in os.environ:
-#         os.environ['LOCAL_RANK'] = str(args.local_rank)
-
-#     return args
 
 
-def train(config, model):
-    # args = parse_args()
-    # args.config = config
-    # print(cfg)
+def train(config, model, output_folder):
+
     cfg = Config.fromfile(config)
-    # print(cfg)
-    # if args.options is not None:
-    #     cfg.merge_from_dict(args.options)
-    # set cudnn_benchmark
     if cfg.get('cudnn_benchmark', False):
         torch.backends.cudnn.benchmark = True
 
@@ -148,7 +97,9 @@ def train(config, model):
         test_cfg=cfg.get('test_cfg'))
 
     logger.info(model)
-
+    cfg.data.train['data_root'] = output_folder
+    cfg.data.test['data_root'] = output_folder
+    cfg.data.val['data_root'] = output_folder
     datasets = [build_dataset(cfg.data.train)]
     if len(cfg.workflow) == 2:
         val_dataset = copy.deepcopy(cfg.data.val)
@@ -164,6 +115,8 @@ def train(config, model):
             PALETTE=datasets[0].PALETTE)
     # add an attribute for visualization convenience
     model.CLASSES = datasets[0].CLASSES
+
+    # cfg.data.test['img_dir'] = img_path
     train_segmentor(
         model,
         datasets,

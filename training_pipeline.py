@@ -13,10 +13,10 @@ import cv2
 warnings.filterwarnings("ignore")
 
 def parse_args():
-    parser = argparse.ArgumentParser(description='Customize segmentation model')
-    parser.add_argument('-data_folder', type=str, nargs='+', help='h5, csv and json file path')
-    parser.add_argument('-model', type=str, nargs='+',default=[None], help='model path')
-    parser.add_argument('-output', type=str, nargs='*', default='output', help='generate output folder')
+    parser = argparse.ArgumentParser(description='training')
+    parser.add_argument('-data_folder', type=str, nargs='+', help='a folder provides all training samples.The data including label file of each sample should follow our predefined schema in a sub-folder under this folder.')
+    parser.add_argument('-model', type=str, nargs='+',default=[None], help='file path for pre-trained model file')
+    parser.add_argument('-output', type=str, nargs='*', default='output', help='output root folder')
     parser.add_argument('-embedding', type=str, nargs='+', default=['scGNN'], help='optional spaGCN or scGNN')
     parser.add_argument('-transform', type=str, nargs='+', default=['None'], help='data transform optional is log or logcpm or None')
 
@@ -25,25 +25,14 @@ def parse_args():
     return args
 
 def save_spot_RGB_to_image(label_path, adata):
-    # data_file = os.path.join(data_folder, expression_file)
     X = pd.read_csv(label_path)
     X = X.sort_values(by=['barcode'])
-    # print(X)
-    # print(adata.obs)
     assert all(adata.obs.index == X.iloc[:, 0].values)
     layers = X.iloc[:, 1].values
-    # print(layers)
     spot_row = adata.obs["pxl_col_in_fullres"]
     spot_col = adata.obs["pxl_row_in_fullres"]
-
     radius = int(0.5 * adata.uns['fiducial_diameter_fullres'] + 1)
-    # radius = int(scaler['spot_diameter_fullres'] + 1)
     max_row = max_col = int((2000 / adata.uns['tissue_hires_scalef']) + 1)
-    # radius = round(radius * (600 / 2000))
-
-    # max_row = np.max(spot_row)
-    # max_col = np.max(spot_col)
-
     img = np.zeros(shape=(max_row + 1, max_col + 1), dtype=np.int)
 
     img = img.astype(np.uint8)
@@ -70,10 +59,10 @@ def save_spot_RGB_to_image(label_path, adata):
             img[(spot_row[index] - radius):(spot_row[index] + radius),
             (spot_col[index] - radius):(spot_col[index] + radius)] = 7
 
-
     shape = adata.uns["img_shape"]
     label_img = cv2.resize(img, dsize=(shape, shape), interpolation=cv2.INTER_NEAREST)
     return label_img
+
 
 
 def train_preprocessing(path, sample_name, adata, output_folder):
@@ -136,4 +125,6 @@ if __name__ == '__main__':
         pseudo_images(h5_path, spatial_path, scale_factor_path, output_folder,method, None, False, transform_opt)
         train_preprocessing(path, name, adata, output_folder)
     config = './configs/config.py'
-    train(config, model)
+    train(config, model, output_folder)
+
+
