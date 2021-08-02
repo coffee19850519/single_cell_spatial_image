@@ -14,11 +14,9 @@ def parse_args1():
     parser.add_argument('-meta', type=str, nargs='+', help='metadata csv file path')
     parser.add_argument('-scaler', type=str, nargs='+', help='json file path')
     parser.add_argument('-histological', type=str, nargs='+', help=' histological image path')  
-    parser.add_argument('-gene', type=str, nargs='+', help='panel gene txt  path,one line is a panel gene',default=[None])
-    parser.add_argument('-output',  type=str, nargs='*', default='output', help='generate output folder')
+    parser.add_argument('-output',  type=str, nargs='*', default=['output_histological'], help='generate output folder')
     parser.add_argument('-model', type=str, nargs='+',default=[None], help='model path')
-    parser.add_argument('-embedding', type=str, nargs='+', default=['scGNN'], help='optional spaGCN or scGNN')
-    parser.add_argument('-pca', type=str, nargs='+', default=[True], help='pca optional:True or False')
+    parser.add_argument('-embedding', type=str, nargs='+', default=['spaGCN'], help='optional spaGCN or scGNN')
     parser.add_argument('-transform', type=str, nargs='+', default=['None'], help='data transform optional is log or logcpm or None')
 
 
@@ -35,13 +33,11 @@ if __name__ == '__main__':
     scale_factor_path = args1.scaler[0]
     optical_path = args1.histological[0]
     output_path = args1.output[0]
-    panel_gene_path = args1.gene[0]
     model = args1.model[0]
     method = args1.embedding[0]
-    pca_opt = args1.pca[0]
     transform_opt = args1.transform[0]
 
     if not os.path.exists(output_path):
         os.makedirs(output_path)
-    segmentation_category_map(h5_path, spatial_path, scale_factor_path, optical_path, output_path, method, panel_gene_path, pca_opt, transform_opt, model)
+    segmentation_category_map(h5_path, spatial_path, scale_factor_path, optical_path, output_path, method, None, False, transform_opt, model)
 
