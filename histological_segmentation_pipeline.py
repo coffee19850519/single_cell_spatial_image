@@ -13,9 +13,9 @@ def parse_args1():
     parser.add_argument('-expression', type=str, nargs='+', help='h5 file path')
     parser.add_argument('-meta', type=str, nargs='+', help='metadata csv file path')
     parser.add_argument('-scaler', type=str, nargs='+', help='json file path')
+    parser.add_argument('-model', type=str, nargs='+',default=[None], help='model path')
     parser.add_argument('-histological', type=str, nargs='+', help=' histological image path')  
     parser.add_argument('-output',  type=str, nargs='*', default=['output_histological'], help='generate output folder')
-    parser.add_argument('-model', type=str, nargs='+',default=[None], help='model path')
     parser.add_argument('-embedding', type=str, nargs='+', default=['spaGCN'], help='optional spaGCN or scGNN')
     parser.add_argument('-transform', type=str, nargs='+', default=['None'], help='data transform optional is log or logcpm or None')
 
