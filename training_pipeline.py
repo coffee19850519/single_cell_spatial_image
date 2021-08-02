@@ -124,9 +124,7 @@ if __name__ == '__main__':
     path = args.data_folder[0]
     model = args.model[0]
     output_folder = args.output[0]
-    panel_gene_path = args.gene[0]
     method = args.embedding[0]
-    pca_opt = args.pca[0]
     transform_opt = args.transform[0]
     for name in os.listdir(path):
         h5_path = path+'/'+name+'/filtered_feature_bc_matrix.h5'
@@ -135,7 +133,7 @@ if __name__ == '__main__':
         adata,spatial_all = load_data(h5_path, spatial_path, scale_factor_path)
         adata.uns["img_shape"] = 600
 
-        pseudo_images(h5_path, spatial_path, scale_factor_path, output_folder,method, panel_gene_path, pca_opt, transform_opt)
+        pseudo_images(h5_path, spatial_path, scale_factor_path, output_folder,method, None, False, transform_opt)
         train_preprocessing(path, name, adata, output_folder)
     config = './configs/config.py'
     train(config, model)
