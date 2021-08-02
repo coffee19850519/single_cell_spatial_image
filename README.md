@@ -81,7 +81,7 @@ cd RESEPT
  * gene expression file: A HDF5 file stores raw gene expression data.  
  * tissue_positions_list file: A csv file contains meta information of spots including their connectivity and spatial coordinates.
  * scalefactors_json file: A json file collects the scaling factors converting spots to different resolutions.
-More details can be found [here] (https://support.10xgenomics.com/spatial-gene-expression/software/pipelines/latest/using/count)
+More details can be found [example](https://support.10xgenomics.com/spatial-gene-expression/software/pipelines/latest/using/count)
 
 ### Annotation file
 
