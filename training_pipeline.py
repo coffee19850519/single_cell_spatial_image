@@ -16,7 +16,7 @@ def parse_args():
     parser = argparse.ArgumentParser(description='training')
     parser.add_argument('-data_folder', type=str, nargs='+', help='a folder provides all training samples.The data including label file of each sample should follow our predefined schema in a sub-folder under this folder.')
     parser.add_argument('-model', type=str, nargs='+',default=[None], help='file path for pre-trained model file')
-    parser.add_argument('-output', type=str, nargs='*', default=['output'], help='output root folder')
+    parser.add_argument('-output', type=str, nargs='*', default=['output_training'], help='output root folder')
     parser.add_argument('-embedding', type=str, nargs='+', default=['scGNN'], help='optional spaGCN or scGNN')
     parser.add_argument('-transform', type=str, nargs='+', default=['None'], help='data transform optional is log or logcpm or None')
 
