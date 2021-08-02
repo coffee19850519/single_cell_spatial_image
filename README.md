@@ -17,16 +17,16 @@ Given inputs as gene expression or RNA velocity, ```RESEPT``` learns a three-dim
 
 ### Hardware Requirements
  
-``` RESEPT ``` suggests a standard computer with a 64-core CPU, 8G RAM, and a GPU with 11G VRAM.
+``` RESEPT ``` was trained on a workstation with a 64-core CPU, 20G RAM, and a GPU with 11G VRAM. The function of customizing the segmentation model only can run on GPU device now. Other functions for RESEPT need the minimum requirements of a CPU with 8 cores and 8G RAM. 
 
 ### Software Requirements
 
 #### OS Requirements
-This package is supported for Linux. The package has been tested on the following systems:
+``` RESEPT ``` can run on Linux. The package has been tested on the following systems:
 * Linux: Ubuntu 20.04
 
 #### Python Dependencies
-``` RESEPT ``` mainly depends on the Python scientific stack.
+``` RESEPT ``` mainly depends on the Python (3.6+) scientific stack.
 ```
 numpy 1.18.1
 torch 1.4.0
@@ -80,15 +80,17 @@ cd RESEPT
 ### 10x Visium data
  * gene expression file: A HDF5 file stores raw gene expression data.  
  * tissue_positions_list file: A csv file contains meta information of spots including their connectivity and spatial coordinates.
- * scalefactors_json file: A json file collects the scaling factors converting spots to different resolutions.
+ * scalefactors_json file: A json file collects the scaling factors converting spots to different resolutions.  
+ 
+ More details can be found [here](https://support.10xgenomics.com/spatial-gene-expression/software/pipelines/latest/using/count).
 
-### Annotation file
+### Annotation file (optional)
 
-An annotation file should include spot barcodes and their corresponding annotations. It is used for evaluating predictive tissue architectures (ARI) and training user's segmentation models. The file should be named as: [sample_name]_annotation.csv. [[example]](https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/S13_annotation.csv)
+An annotation file should include spot barcodes and their corresponding annotations. It is used for evaluating predictive tissue architectures (e.g., ARI) and training user's segmentation models. The file should be named as:[sample_name]_annotation.csv. [[example]](https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/S13_annotation.csv)
 
-### Segmentation model file
+### Segmentation model file (optinal)
 
-It is a pre-trained segmentation model file in the [pth](https://filext.com/file-extension/PTH) format. It is required to predict tissue architecture on the generative visuals.
+It is a pre-trained segmentation model file in the [pth](https://filext.com/file-extension/PTH) format, which should be provided in predicting the tissue architecture on the generative images.
 
 ### Data structure
 
@@ -104,24 +106,49 @@ The data schema to run our code is as follows:
 model/ (optional)
  |__segmentation model file 
    ```
+The data schema to customize our segmentation model is as follows:
+```
+[training_data_folder]
+|__[sample_name_1]/
+|    |__spatial/
+|    |    |__tissue_positions_list file
+|    |    |__scalefactors_json file|
+|    |__gene expression file
+|    |__annotation file: [sample_name_1]_annotation.csv
+|__[sample_name_2]/
+|    |__spatial/
+|    |    |__tissue_positions_list file
+|    |    |__scalefactors_json file|
+|    |__gene expression file
+|    |__annotation file: [sample_name_2]_annotation.csv
+|    ...
+|__[sample_name_n]/
+|    |__spatial/
+|    |    |__tissue_positions_list file
+|    |    |__scalefactors_json file|
+|    |__gene expression file
+|    |__annotation file: [sample_name_n]_annotation.csv 
+```
+
 
 ## Demo
 
 ### Visualize tissue architecture 
-Run the following command line to generate visuals of gene expression from different embedding parameters. For demonstration, please download the example data from [here](https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/S13.zip) and put the unzip folder 'S13' in the source code folder.
+Run the following command line to construct RGB images based on gene expression from different embedding parameters. For demonstration, please download the example data from [here](https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/S13.zip) and put the unzip folder 'S13' in the source code folder.
 ```
 wget https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/S13.zip 
 unzip S13.zip
-python RGB_images_pipeline.py -matrix S13/S13_filtered_feature_bc_matrix.h5  -csv S13/spatial/tissue_positions_list.csv  -json S13/spatial/scalefactors_json.json -out Demo_result  -method scGNN  -transform logcpm 
+python RGB_images_pipeline.py -expression S13/S13_filtered_feature_bc_matrix.h5  -meta S13/spatial/tissue_positions_list.csv  -scaler S13/spatial/scalefactors_json.json -output Demo_result  -embedding scGNN  -transform logcpm 
 ```
 
 #### Command Line Arguments:
-*	-matrix file path for raw gene expression data. [type:str]
-*	-csv file path for spatial meta information recording tissue positions. [type:str]
-*	-json file path for scale factors. [type:str]
-*	-out output root folder. [type:str]
-*	-method embedding method in use: scGNN or spaGCN. [type:str]
-*	-transform data pre-transform method: log, logcpm or None. [type:str]
+*	-expression file path for raw gene expression data. [type: str]
+*	-meta file path for spatial meta data recording tissue positions. [type: str]
+*	-scaler file path for scale factors. [type: str]
+*	-output output root folder. [type: str]
+*	-embedding embedding method in use: scGNN or spaGCN. [type: str] [default: scGNN]
+*	-transform data pre-transform method: log, logcpm or None. [type: str] [default: logcpm]
+
 
 #### Results
  ```RESEPT``` stores the generative results in the following structure:
@@ -129,28 +156,31 @@ python RGB_images_pipeline.py -matrix S13/S13_filtered_feature_bc_matrix.h5  -cs
       Demo_result/
       |__RGB_images/
    ```
-*	The folder 'RGB_images' stores generative visuals of tissue architectures from different embedding parameters. 
-*	This Demo takes 25-30 mins to generate all results on a machine with 64-core CPU.
+*	The folder 'RGB_images' stores generated RGB images of tissue architectures from different embedding parameters.  
 
-### Evaluate predictive tissue architecture with annotations
-Run the following command line to generate visuals of gene expression from different embedding parameters, segmentation maps with top5 Moran's I and their evaluation metrics. For demonstration, please download the example data from [here](https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/S13.zip), the pretrained model from [here](https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/model_S13.zip) and put unzip folders 'S13' and 'model_S13' in the source code folder.
+This demo takes 25-30 mins to generate all results on the machine with a 64-core CPU.
+
+### Evaluate predictive tissue architectures with annotation
+Run the following command line to construct RGB images based on gene expression from different embedding parameters, segment the constructed RGB images to tissue architectures with top-5 Moran's I, and evaluate the tissue architectures (e.g., ARI). For demonstration, please download the example data from [here](https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/S13.zip) and the pretrained model from [here](https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/model_S13.zip). Then put unzip folders 'S13' and 'model_S13' in the source code folder.
 ```
 wget https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/S13.zip 
 wget https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/model_S13.zip
 unzip S13.zip
 unzip model_S13.zip
-python evaluation_pipeline.py -matrix S13/S13_filtered_feature_bc_matrix.h5  -csv S13/spatial/tissue_positions_list.csv  -json S13/spatial/scalefactors_json.json -out Demo_result_evaluation  -method scGNN  -transform logcpm -label S13/S13_annotation.csv -checkpoint model_S13/S13_scGNN.pth
+python evaluation_pipeline.py -expression S13/S13_filtered_feature_bc_matrix.h5  -meta S13/spatial/tissue_positions_list.csv  -scaler S13/spatial/scalefactors_json.json -output Demo_result_evaluation  -embedding scGNN  -transform logcpm -label S13/S13_annotation.csv -model model_S13/S13_scGNN.pth -device gpu
 ```
 
 #### Command Line Arguments:
-*	-matrix file path for raw gene expression data. [type:str]
-*	-csv file path for spatial meta information recording tissue positions. [type:str]
-*	-json file path for scale factors. [type:str]
-*	-label file path for labels recording cell barcodes and their annotations for calculating evaluation metrics. [type:str]
-*	-checkpoint file path for pre-trained model. [type:str]
-*	-out output root folder. [type:str]
-*	-method embedding method in use: scGNN or spaGCN. [type:str]
-*	-transform data pre-transform method: log, logcpm or None. [type:str]
+*	-expression file path for raw gene expression data. [type: str]
+*	-meta file path for spatial meta data recording tissue positions. [type: str]
+*	-scaler file path for scale factors. [type: str]
+*	-label file path for labels recording spot barcodes and their annotations for calculating evaluation metrics. [type: str]
+*	-model file path for pre-trained model. [type: str]
+*	-output output root folder. [type: str]
+*	-embedding embedding method in use: scGNN or spaGCN. [type: str] [default: scGNN]
+*	-transform data pre-transform method: log, logcpm or None. [type: str] [default: logcpm]
+*	-device cpu/gpu device option: cpu or gpu. [type: str] [default: cpu] (CPU-based inference will come soon)
+
 
 #### Results
  ```RESEPT``` stores the generated results in the following structure:
@@ -161,115 +191,121 @@ python evaluation_pipeline.py -matrix S13/S13_filtered_feature_bc_matrix.h5  -cs
             |__segmentation_map/
             |__top5_evaluation.csv
    ```
-*	The folder 'RGB_images' stores generative visuals of tissue architectures from different embedding parameters. 
-*	The folder 'segmentation_map' provides visuals of predictive tissue architectures with top5 Moran's I. 
-*	The file 'top5_evaluation.csv' records various evaluation metrics corresponding to the predictions.
-*	This Demo takes 30-35 mins to generate all results on a machine with a 64-core CPU.
+*	The folder 'RGB_images' contains the generated RGB images of tissue architectures from different embedding parameters.
+*	The folder 'segmentation_map' stores the predicted tissue architectures with top-5 Moran's I.
+*	The file 'top5_evaluation.csv' records various evaluation metrics corresponding to the tissue architectures.  
+
+This Demo takes 30-35 mins to generate all results on a machine with a 64-core CPU.
 
 ### Predict tissue architecture without annotation
-Run the following command line to generate visuals of gene expression from different embedding parameters and predict tissue architectures with top5 Moran's I. For demonstration, please download the example data from [here](https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/S13.zip), the pre-trained model from [here](https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/model_S13.zip) and put unzip folders 'S13' and 'model_S13' in the source code folder.
+Run the following command line to generate RGB images based on gene expression from different embedding parameters and predict tissue architectures with top-5 Moran's I. For demonstration, please download the example data from here and the pre-trained model from [here](https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/S13.zip) and the pre-trained model from [here](https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/model_S13.zip). Then put unzip folders 'S13' and 'model_S13' in the source code folder.
 ```
 wget https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/S13.zip 
 wget https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/model_S13.zip 
 unzip model_S13.zip
 unzip S13.zip
-python test_pipeline.py -matrix S13/S13_filtered_feature_bc_matrix.h5  -csv S13/spatial/tissue_positions_list.csv  -json S13/spatial/scalefactors_json.json -out Demo_result_tissue_architecture  -method scGNN  -transform logcpm -checkpoint model_S13/S13_scGNN.pth
+python test_pipeline.py -expression S13/S13_filtered_feature_bc_matrix.h5  -meta S13/spatial/tissue_positions_list.csv  -scaler S13/spatial/scalefactors_json.json -output Demo_result_tissue_architecture  -embedding scGNN  -transform logcpm -model model_S13/S13_scGNN.pth -device gpu
 ```
 
 #### Command Line Arguments:
-*	-matrix file path for raw gene expression data. [type:str]
-*	-csv file path for spatial meta file recording tissue positions. [type:str]
-*	-json file path for scale factors. [type:str]
-*	-checkpoint file path for pre-trained model. [type:str]
-*	-out output root folder. [type:str]
-*	-method embedding method in use: scGNN or spaGCN. [type:str]
-*	-transform data pre-transform method: log, logcpm or None. [type:str]
+*	-expression file path for raw gene expression data. [type: str]
+*	-meta file path for spatial meta data recording tissue positions. [type: str]
+*	-scaler file path for scale factors. [type: str]
+*	-model file path for pre-trained model. [type: str]
+*	-output output root folder. [type: str]
+*	-embedding embedding method in use: scGNN or spaGCN. [type: str] [default: scGNN]
+*	-transform data pre-transform method: log, logcpm or None. [type: str] [default: logcpm]
+*	-device cpu/gpu device option: cpu or gpu. [type: str] [default: cpu] (CPU-based inference will come soon)
 
 #### Results
  ```RESEPT``` stores the generative results in the following structure:
    ```
-      Demo_result/
-      |__RGB_images/
-      |__segmentation_test/
-            |__result/
-            |__MI_ranks_result.csv
-	    |__show
+   Demo_result_tissue_architecture/
+   |__RGB_images/
+   |__segmentation_test/
+         |__segmentation_map/
+         |__top5_MI_value.csv
    ```
-*	The folder 'RGB_images' contains the generated images of tissue architectures from different embedding parameters. 
-*	The folder 'segmentation_map' stores visualizations of the predicted tissue architectures with top5 Moran's I. 
-*	The file 'top5_MI_value.csv' records Moran's I value corresponding to the predictions.
-*	This Demo takes 30-35 mins to generate all the results on a machine with a 64-core CPU.
+*	The folder 'RGB_images' contains the generated RGB images of tissue architectures from different embedding parameters.
+*	The folder 'segmentation_map' stores the predicted tissue architectures with top-5 Moran's I.
+*	The file 'top5_MI_value.csv' records Moran's I value corresponding to the tissue architectures.  
 
+This demo takes 30-35 mins to generate all the results on the machine with a 64-core CPU.
 
 ### Customize segmentation model 
- ```RESEPT``` supports fine-tuning our segmentation model by using users' 10x data. Organize all 10x data and their labels according to our predefined data schema and download our pre-trained model from [here](https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/model_S13.zip) as a training start point. The 10x data of each sample should be located in a separate sub-folder under the 'training_data_folder' folder. For demonstration, download the example training data from [here](https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/training_data_folder.zip), and then run the following command line to get the visuals of your own data and the customized model.  
+ ```RESEPT``` supports fine-tuning our segmentation model by using users' 10x Visium data. Organize all samples and their annotations according to our pre-defined data schema and download our pre-trained model from [here](https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/model_S13.zip) as a training start point. Each sample for the training model should be placed in an individual folder with a specific format (the folder structure can be found [here](https://github.com/coffee19850519/single_cell_spatial_image#data-structure)). Then gather all the individual folders into one main folder (e.g., named “training_data_folder”).  For demonstration, download the example training data from [here](https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/training_data_folder.zip), and then run the following command line to generate the RGB images of your own data and customized model.
 ```
 wget https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/model_S13.zip
 wget https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/training_data_folder.zip
 unzip model_S13.zip
 unzip training_data_folder.zip
-python training_pipeline.py -data training_data_folder -out Demo_result_model -method scGNN  -transform logcpm -model model_S13/S13_scGNN.pth
+python training_pipeline.py -data_folder training_data_folder -output Demo_result_model -embedding scGNN  -transform logcpm -model model_S13/S13_scGNN.pth
 ```
 
 #### Command Line Arguments:
-* 	-data a folder provides all training samples. The data including label file of each sample should follow our predefined schema in a sub-folder under this folder. [type:str]
-*	-model file path for pre-trained model file. [type:str]
-*	-out output root folder. [type:str]
-*	-method embedding method in use: scGNN or spaGCN. [type:str]
-*	-transform data pre-transform method: log, logcpm or None. [type:str]
+* 	-data_folder a folder provides all training samples. The data including label file of each sample should follow our pre-defined schema in a sub-folder under this folder. [type: str]
+* 	-model file path for pre-trained model file. [type: str]
+* 	-output output root folder. [type: str]
+* 	-embedding embedding method in use: scGNN or spaGCN. [type: str] [default: scGNN]
+* 	-transform data pre-transform method: log, logcpm or None. [type: str] [default: logcpm]
 
 #### Results
  ```RESEPT``` stores the generative results in the following structure:
    ```
-      Demo_result/
-      |__RGB_images/
-      |__RGB_images_label/
-      
-      work_dirs/
-      |__config/
-            |__epoch_n.pth
+   Demo_result_model/
+   |__RGB_images/
+   
+   work_dirs/
+   |__config/
+         |__epoch_50.pth
    ```
-*	The folder 'RGB_images' contains generated images of tissue architectures of all input 10x data from different embedding parameters. 
-*	The folder 'RGB_images_label' saves their labeled category maps according to input label files. 
-*	The file 'epoch_n.pth' is the customized model.
-*	This Demo takes about 3 hours to generate the model on a machine with 11G VRAM GPU.
+*	The folder 'RGB_images' contains generated RGB images of tissue architectures of all input 10x data from different embedding parameters.
+*	The file 'epoch_50.pth' is the customized model.  
+
+This Demo takes about 3 hours to generate the model on the machine with 11G VRAM GPU.
 
 ### Segment histological images
-```RESEPT``` is capable of segmenting histological images according to predictive tissue architectures. It may help pathologists to focus on some certain functional zonations. Run the following command line to predict tissue architectures with top5 Moran's I and segment histological images accordingly. For demonstration, please download the example data from [here](https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/cancer.zip), the pre-trained model from [here](https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/model_cancer.zip) and put unzip folders 'cancer' and 'model_cancer' in the source code folder.
+```RESEPT``` allows to segment a histological image according to predicted tissue architectures. It may help pathologists to focus on specific functional zonation. Run the following command line to predict tissue architectures with top-5 Moran's I and segment the histological image accordingly. For demonstration, please download the example data from [here](https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/cancer.zip) and the pre-trained model from [here](https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/model_cancer.zip). Then put unzip folders 'cancer' and 'model_cancer' in the source code folder.
 ```
 wget https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/cancer.zip
 wget https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/model_cancer.zip
 unzip cancer.zip
 unzip model_cancer.zip
-python histological_segmentation_pipeline.py -expression ./cancer/Parent_Visium_Human_Glioblas_filtered_feature_bc_matrix.h5 -meta ./cancer/spatial/tissue_positions_list.csv -scaler ./cancer/spatial/scalefactors_json.json -histological ./cancer/Parent_Visium_Human_Glioblast.tif -output Demo_result_HistoImage -model ./model_cancer/cancer_model.pth -embedding spaGCN -transform logcpm
+python histological_segmentation_pipeline.py -expression ./cancer/Parent_Visium_Human_Glioblas_filtered_feature_bc_matrix.h5 -meta ./cancer/spatial/tissue_positions_list.csv -scaler ./cancer/spatial/scalefactors_json.json -histological ./cancer/Parent_Visium_Human_Glioblast.tif -output Demo_result_HistoImage -model ./model_cancer/cancer_model.pth -embedding spaGCN -transform logcpm -device gpu
 ```
 
 #### Command Line Arguments:
-*	-expression file path for raw gene expression data. [type:str]
-*	-meta file path for spatial meta file recording tissue positions. [type:str]
-*	-scaler file path for scale factors. [type:str]
-*	-model file path for pretrained model. [type:str]
-*	-histological file path for the corresponding histological image.[type:str]
-*	-output output root folder. [type:str]
-*	-embedding embedding method in use: scGNN or spaGCN. [type:str]
-*  	-transform data pre-transform method: log, logcpm or None. [type:str]
+*	-expression file path for raw gene expression data. [type: str]
+*	-meta file path for spatial meta data recording tissue positions. [type: str]
+*	-scaler file path for scale factors. [type: str]
+*	-model file path for pre-trained model. [type: str]
+*	-histological file path for the corresponding histological image.[type: str]
+*	-output output root folder. [type: str]
+*	-embedding embedding method in use: scGNN or spaGCN. [type: str] [default: spaGCN]
+*	-transform data pre-transform method: log, logcpm or None. [type: str] [default: logcpm]
+*	-device cpu/gpu device option: cpu or gpu. [type: str] [default: cpu] (CPU-based inference will come soon)
 
 #### Results
  ```RESEPT``` stores the generative results in the following structure:
    ```
-      Demo_result/
-      |__RGB_images/
-      |__segmentation_test/
-      |     |__segmentation_map/
-      |     |__top5_MI_value.csv
-      |__histological_segmentation/
-            |__category_n.png
+   Demo_result_HistoImage/
+   |__RGB_images/
+   |__segmentation_test/
+   |     |__segmentation_map/
+   |     |__top5_MI_value.csv
+   |__histological_segmentation/
+         |__category_1.png
+         |__category_2.png
+	          …
+         |__category_n.png
    ```
-*	The folder 'RGB_images' stores generative visuals of tissue architectures from different embedding parameters. 
-*	The folder 'segmentation_map' stores visuals of predictive tissue architectures with top5 Moran's I. 
-*	The file 'top5_MI_value.csv' records Moran's I value corresponding to the predictions.
-*	The file 'category_n.png ' refers to the histological image segmentation results.
-*	This Demo takes 30-35 mins to generate all results on a machine with a multi-core CPU.
+*	The folder 'RGB_images' stores generated RGB images of tissue architectures from different embedding parameters.
+*	The folder 'segmentation_map' provides predicted tissue architectures with top-5 Moran's I.
+*	The file 'top5_MI_value.csv' records Moran's I value corresponding to the tissue architectures.
+*	The file 'category_```n```.png' refers to the histological image segmentation results, where ```n``` denotes the segmentation number.   
+
+
+This Demo takes 30-35 mins to generate all results on a machine with the multi-core CPU.
 
 
 ## Built With
@@ -277,11 +313,11 @@ python histological_segmentation_pipeline.py -expression ./cancer/Parent_Visium_
 * [opencv](https://opencv.org/) - The image processing library used
 * [pytorch](https://pytorch.org/) - The deep learning backend used
 * [scikit-learn](https://scikit-learn.org/stable/) - The machine learning library used
-* [mmSegmentation](https://github.com/open-mmlab/mmsegmentation) - Used to train the deep learning based image segmentation model
+* [mmSegmentation](https://github.com/open-mmlab/mmsegmentation) - The image segmentation library used
  
 ## License
  
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
+This project is licensed under the MIT License - see the [LICENSE.md](https://github.com/coffee19850519/single_cell_spatial_image/blob/main/LICENSE) file for details
  
 ## Citation
 if you use ```RESEPT```, please cite [our paper](https://www.biorxiv.org/content/10.1101/2021.07.08.451210v1):

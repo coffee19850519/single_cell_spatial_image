@@ -10,85 +10,55 @@ from package_pipeline_multiprocessing import case_study_test
 from PIL import Image
 from train import train
 import cv2
+import shutil
 warnings.filterwarnings("ignore")
 
 def parse_args():
-    parser = argparse.ArgumentParser(description='training')
-    parser.add_argument('-data_folder', type=str, nargs='+', help='h5, csv and json file path')
-    # parser.add_argument('-config', type=str, nargs='+', help='config path')
-    parser.add_argument('-model', type=str, nargs='+',default=[None], help='model path')
-    parser.add_argument('-output', type=str, nargs='*', default='output', help='generate output folder')
-    parser.add_argument('-gene', type=str, nargs='+', help='panel gene txt  path,one line is a panel gene',default=[None])
-    parser.add_argument('-embedding', type=str, nargs='+', default=['scGNN'], help='optional spaGCN or scGNN')
-    parser.add_argument('-pca', type=str, nargs='+', default=[True], help='pca optional:True or False')
-    parser.add_argument('-transform', type=str, nargs='+', default=['None'], help='data transform optional is log or logcpm or None')
+    parser = argparse.ArgumentParser(description='customize segmentation model')
+    parser.add_argument('-data_folder', type=str, nargs='+', help='a folder provides all training samples. The data including label file of each sample should follow our pre-defined schema in a sub-folder under this folder')
+    parser.add_argument('-model', type=str, nargs='+', help='file path for pre-trained model file')
+    parser.add_argument('-output', type=str, nargs='+', help='output root folder')
+    parser.add_argument('-embedding', type=str, nargs='+', default=['scGNN'], help='embedding method in use: scGNN or spaGCN')
+    parser.add_argument('-transform', type=str, nargs='+', default=['logcpm'], help='data pre-transform method: log, logcpm or None')
 
 
     args = parser.parse_args()
     return args
 
 def save_spot_RGB_to_image(label_path, adata):
-    # data_file = os.path.join(data_folder, expression_file)
     X = pd.read_csv(label_path)
     X = X.sort_values(by=['barcode'])
-    # print(X)
-    # print(adata.obs)
     assert all(adata.obs.index == X.iloc[:, 0].values)
     layers = X.iloc[:, 1].values
-    # print(layers)
     spot_row = adata.obs["pxl_col_in_fullres"]
     spot_col = adata.obs["pxl_row_in_fullres"]
-
     radius = int(0.5 * adata.uns['fiducial_diameter_fullres'] + 1)
-    # radius = int(scaler['spot_diameter_fullres'] + 1)
     max_row = max_col = int((2000 / adata.uns['tissue_hires_scalef']) + 1)
-    # radius = round(radius * (600 / 2000))
-
-    # max_row = np.max(spot_row)
-    # max_col = np.max(spot_col)
-
     img = np.zeros(shape=(max_row + 1, max_col + 1), dtype=np.int)
 
     img = img.astype(np.uint8)
     for index in range(len(layers)):
         if layers[index] == 'Layer1':
-            # print('layer1')
-            # img[spot_row[index], spot_col[index]] = [0,0,255]
             img[(spot_row[index] - radius):(spot_row[index] + radius),
             (spot_col[index] - radius):(spot_col[index] + radius)] = 1
-            # print(img[spot_row[index],spot_col[index]])
-            # cv2.circle(img,(spot_row[index], spot_col[index]),radius,(0,0,255),thickness=-1)
         elif layers[index] == 'Layer2':
             img[(spot_row[index] - radius):(spot_row[index] + radius),
             (spot_col[index] - radius):(spot_col[index] + radius)] = 2
-            # img[spot_row[index], spot_col[index]] = [0,255,0]
-            # cv2.circle(img,(spot_row[index], spot_col[index]),radius,(0,255,0),thickness=-1)
-            # print(img[spot_row[index],spot_col[index]])
         elif layers[index] == 'Layer3':
             img[(spot_row[index] - radius):(spot_row[index] + radius),
             (spot_col[index] - radius):(spot_col[index] + radius)] = 3
-            # img[spot_row[index], spot_col[index]] = [255,0,0]
-            # cv2.circle(img,(spot_row[index], spot_col[index]),radius,(255,0,0),thickness=-1)
         elif layers[index] == 'Layer4':
             img[(spot_row[index] - radius):(spot_row[index] + radius),
             (spot_col[index] - radius):(spot_col[index] + radius)] = 4
-            # img[spot_row[index], spot_col[index]] = [255,0,255]
-            # cv2.circle(img,(spot_row[index], spot_col[index]),radius,(255,0,255),thickness=-1)
         elif layers[index] == 'Layer5':
             img[(spot_row[index] - radius):(spot_row[index] + radius),
             (spot_col[index] - radius):(spot_col[index] + radius)] = 5
-            # img[spot_row[index], spot_col[index]] = [0,255,255]
-            # cv2.circle(img,(spot_row[index], spot_col[index]),radius,(0,255,255),thickness=-1)
         elif layers[index] == 'Layer6':
             img[(spot_row[index] - radius):(spot_row[index] + radius),
             (spot_col[index] - radius):(spot_col[index] + radius)] = 6
-            # img[spot_row[index], spot_col[index]] = [255,255,0]
-            # cv2.circle(img,(spot_row[index], spot_col[index]),radius,(255,255,0),thickness=-1)
         elif layers[index] == 'WM':
             img[(spot_row[index] - radius):(spot_row[index] + radius),
             (spot_col[index] - radius):(spot_col[index] + radius)] = 7
-            # img[spot_row[index], spot_col[index]] = [0,0,0]
-            # cv2.circle(img,(spot_row[index], spot_col[index]),radius,(0,0,0),thickness=-1)
 
     shape = adata.uns["img_shape"]
     label_img = cv2.resize(img, dsize=(shape, shape), interpolation=cv2.INTER_NEAREST)
@@ -96,19 +66,17 @@ def save_spot_RGB_to_image(label_path, adata):
 
 
 
-def train_preprocessing(path, sample_name, adata):
+def train_preprocessing(path, sample_name, adata, output_folder):
 
-    output_path = './Demo_result/RGB_images_label/'
-    img_path = './Demo_result/RGB_images/'
+    output_path = './'+output_folder+'/RGB_images_label/'
+    img_path = './'+output_folder+'/RGB_images/'
     if not os.path.exists(output_path):
         os.makedirs(output_path)
     for name in os.listdir(img_path):
         sample = name.split('_',4)[0]
-        # print(sample_name,sample)
         if sample_name == sample:
 
             data_file = path+'/'+sample+'/'+sample+'_annotation.csv'
-            # scale_factor_path = path +'/'+sample+'/spatial/scalefactors_json.json'
             label = save_spot_RGB_to_image(data_file, adata)
             savehi =  Image.fromarray(label)
             savehi.convert("P").save(os.path.join(output_path,name))
@@ -144,35 +112,21 @@ if __name__ == '__main__':
 
     args = parse_args()
     path = args.data_folder[0]
-    # config = args.config[0]
     model = args.model[0]
     output_folder = args.output[0]
-    panel_gene_path = args.gene[0]
     method = args.embedding[0]
-    pca_opt = args.pca[0]
     transform_opt = args.transform[0]
-    # if not os.path.exists('./pseudo_images/'):
-    #     os.makedirs('./pseudo_images/')
     for name in os.listdir(path):
-        # print(name)
-        # print(name.split('.',2)[1])
-
-        # print(name)
         h5_path = path+'/'+name+'/filtered_feature_bc_matrix.h5'
         spatial_path = path +'/'+name+'/spatial/tissue_positions_list.csv'
         scale_factor_path = path +'/'+name+'/spatial/scalefactors_json.json'
-        # print(h5_path)
-        # print(spatial_path)
-        # print(scale_factor_path)
         adata,spatial_all = load_data(h5_path, spatial_path, scale_factor_path)
         adata.uns["img_shape"] = 600
 
-        pseudo_images(h5_path, spatial_path, scale_factor_path, output_folder,method, panel_gene_path, pca_opt, transform_opt)
-
-# path = './pseudo_images/pseudo_images/'
-
-        train_preprocessing(path, name, adata)
+        pseudo_images(h5_path, spatial_path, scale_factor_path, output_folder,method, None, False, transform_opt)
+        train_preprocessing(path, name, adata, output_folder)
     config = './configs/config.py'
-    train(config, model)
+    train(config, model, output_folder)
+    shutil.rmtree(output_folder+'/RGB_images_label')
 
 

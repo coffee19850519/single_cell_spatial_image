@@ -15,15 +15,10 @@ def save_spot_RGB_to_image(anndata,metadata_all,img_col,img_row):
     tissue = X.iloc[:, 0].values
 
     radius = int(0.5 * anndata.uns['fiducial_diameter_fullres'] + 1)
-    # radius = int(scaler['spot_diameter_fullres'] + 1)
     max_row = max_col = int((2000 / anndata.uns['tissue_hires_scalef']) + 1)
-    # print(max_col)
     radius = round(radius * (img_row/max_row))
-    # print(radius)
-
     spot_row = X.iloc[:, 3].values * (img_row/max_row)
     spot_row = spot_row.astype(np.int)
-    # print(X.iloc[:, 4])
     spot_col = X.iloc[:, 4].values * (img_col/max_col)
     spot_col = spot_col.astype(np.int)
 
@@ -57,9 +52,7 @@ def KNN(point,point_list,num):
 
 def inpaint(img_path, sample, anndata, metadata_all):
     for name in os.listdir(img_path):
-        # print(name.split('_',5)[0], sample)
         if name.split('_',5)[0]==sample:
-            # print(img_path,name)
             img = cv2.imread(os.path.join(img_path, name))
             gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
             ret, binary = cv2.threshold(gray,230,255,cv2.THRESH_BINARY_INV)
@@ -77,7 +70,6 @@ def inpaint(img_path, sample, anndata, metadata_all):
             k = 6
             inpaint_path = img_path
             for i in range(len(out_tissue)):
-                # print(out_tissue[i])
                 dist = cv2.pointPolygonTest(contours[max_idx], (int(out_tissue[i][1]),int(out_tissue[i][0])),False)
                 if dist == 1.0:
                     nn_list, weight = KNN(out_tissue[i], in_tissue, k)
@@ -88,12 +80,7 @@ def inpaint(img_path, sample, anndata, metadata_all):
                     pixel_sum_g = np.array(pixel_sum)[:, 1].sum()
                     pixel_sum_b = np.array(pixel_sum)[:, 2].sum()
                     pixel = (pixel_sum_r, pixel_sum_g, pixel_sum_b)
-                    # print(pixel)
                     img[(out_tissue[i][0] - radius):(out_tissue[i][0] + radius),(out_tissue[i][1] - radius):(out_tissue[i][1] + radius)] = pixel
-                    # print(img)
-                    # print(pixel_sum)
-
-                    # inpaint_path = img_path.split('/')[0]+"/pseudo_images/"
                     if not os.path.exists(inpaint_path):
                         os.makedirs(inpaint_path)
                     cv2.imwrite(inpaint_path +name, img)

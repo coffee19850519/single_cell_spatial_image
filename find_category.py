@@ -10,7 +10,6 @@ def seg_category_map(optical_img,category_map, output_path):
 
     print(optical_img.shape)
     category_map = cv2.resize(category_map, dsize=(optical_img.shape[0], optical_img.shape[1]),  interpolation= cv2.INTER_NEAREST)
-    # category_map = cv2.cvtColor(category_map, cv2.COLOR_BGR2GRAY)
     print(category_map.shape)
     category_list = np.unique(category_map)
     print(category_list)
@@ -25,6 +24,3 @@ def seg_category_map(optical_img,category_map, output_path):
                 os.makedirs(output_path+'/histological_segmentation/')
             cv2.imwrite(output_path+'/histological_segmentation/category_'+str(category)+'.png', img)
 
-# optical_img = cv2.imread('./optical_images/151507.png')
-# category_map = cv2.imread('./label/151507.png')
-# seg_category_map(optical_img, category_map)

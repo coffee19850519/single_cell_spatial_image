@@ -17,22 +17,20 @@ import json
 import numpy as np
 from sklearn.metrics.cluster import adjusted_rand_score
 from sklearn.metrics.cluster import normalized_mutual_info_score
-
+import sys
 np.set_printoptions(threshold=np.inf)
 np.set_printoptions(suppress=True)
 # np.set_printoptions(threshold=0)
 
 
-def segmentation(adata,img_path,label_path,method,checkpoint_path):   # img_path: output_folder+ "/pseudo_images/"
-    # args = parse_args()
-    # adata.uns["img_shape"] = 600
-    config = './configs/2-8_logcpm_deeplabv3_r101-d8_512x512_80k_singlecell.py'
-    # if method == 'scGNN':
-    #     checkpoint = './checkpoint/151507_sc_logcpm.pth'
-    # elif method == 'spaGCN':
-    #     checkpoint = './checkpoint/151507_spa.pth'
+def segmentation(adata,img_path,label_path,method,checkpoint_path,device):  
+
+    if device=='cpu':
+        print('cpu function is under development...')
+        sys.exit(0)
+
+    config = './configs/deeplabv3_r101-d8_512x512_80k_singlecell.py'
     checkpoint = checkpoint_path
-    # args.show_dir = 'segmentation/show5/temp_'+img_path.split('/')[1]+'/'
     if label_path == None:
         output_folder = img_path.split('/')[0]+'/segmentation_test/'
     else:
@@ -40,40 +38,14 @@ def segmentation(adata,img_path,label_path,method,checkpoint_path):   # img_path
     show_dir = output_folder+'show_temp/'
     if not os.path.exists(show_dir):
         os.makedirs(show_dir)
-    # assert args.out or args.eval or args.format_only or args.show \
-    #     or args.show_dir, \
-    #     ('Please specify at least one operation (save/eval/format/show the '
-    #      'results / save the results) with the argument "--out", "--eval"'
-    #      ', "--format-only", "--show" or "--show-dir"')
-
-    # if args.eval and args.format_only:
-    #     raise ValueError('--eval and --format_only cannot be both specified')
-
-    # if args.out is not None and not args.out.endswith(('.pkl', '.pickle')):
-    #     raise ValueError('The output file must be a pkl file.')
-
     cfg = mmcv.Config.fromfile(config)
-    # img_path = '/mnt/data/exp_spa_logcpm/2-5'
     cfg.data.test['data_root'] = None
     cfg.data.test['img_dir'] = img_path
-    # print(cfg.data.test['data_root'])
-    # print(cfg.data.test['img_dir'])
-
-    # if args.options is not None:
-    #     cfg.merge_from_dict(args.options)
-    # set cudnn_benchmark
     if cfg.get('cudnn_benchmark', False):
         torch.backends.cudnn.benchmark = True
-    # args.aug_test = False
-    # if args.aug_test:
-    #     # hard code index
-    #     cfg.data.test.pipeline[1].img_ratios = [
-    #         0.5, 0.75, 1.0, 1.25, 1.5, 1.75
-    #         # 1.0, 1.0, 1.0, 1.0, 1.0, 1.0
-    #     ]
-    #     cfg.data.test.pipeline[1].flip = True
     cfg.model.pretrained = None
     cfg.data.test.test_mode = True
+
 
     # init distributed env first, since logger depends on the dist info.
     launcher = 'none'
@@ -115,25 +87,6 @@ def segmentation(adata,img_path,label_path,method,checkpoint_path):   # img_path
                                   efficient_test)
     return top1_csv_name
         
-    # else:
-    #     model = MMDistributedDataParallel(
-    #         model.cuda(),
-    #         device_ids=[torch.cuda.current_device()],
-    #         broadcast_buffers=False)
-    #     outputs = multi_gpu_test(model, data_loader, args.tmpdir,
-    #                              args.gpu_collect, efficient_test)
- 
-    # rank, _ = get_dist_info()
-    # if rank == 0:
-    #     if args.out:
-    #         print(f'\nwriting results to {args.out}')
-    #         mmcv.dump(outputs, args.out)
-    #     kwargs = {} if args.eval_options is None else args.eval_options
-    #     if args.format_only:
-    #         dataset.format_results(outputs, **kwargs)
-    #     if args.eval:
-    #         dataset.evaluate(outputs, args.eval, **kwargs)
-    # return outputs
 
 if __name__ == '__main__':
     main()

@@ -211,28 +211,28 @@ def pseudo_images(h5_path, spatial_path, scale_factor_path, output_folder,method
         pool.join()
 
 
-def segmentation_test(h5_path, spatial_path, scale_factor_path, output_path, method,panel_gene_path,pca_opt,transform_opt,checkpoint):
+def segmentation_test(h5_path, spatial_path, scale_factor_path, output_path, method,panel_gene_path,pca_opt,transform_opt,checkpoint, device):
     pseudo_images(h5_path, spatial_path, scale_factor_path, output_path, method,panel_gene_path,pca_opt,transform_opt)   # output_folder+ "/pseudo_images/"
     img_path = output_path + "/RGB_images/"
     label_path = None
     adata = None
-    top1_csv_name= segmentation(adata,img_path,label_path,method,checkpoint)
+    top1_csv_name= segmentation(adata,img_path,label_path,method,checkpoint, device)
     return top1_csv_name
 
 
-def segmentation_category_map(h5_path, spatial_path, scale_factor_path, optical_path, output_path, method, panel_gene_path, pca_opt, transform_opt, checkpoint):
+def segmentation_category_map(h5_path, spatial_path, scale_factor_path, optical_path, output_path, method, panel_gene_path, pca_opt, transform_opt, checkpoint, device):
     optical_img = cv2.imread(optical_path)
-    top1_csv_name = segmentation_test(h5_path, spatial_path, scale_factor_path, output_path, method, panel_gene_path, pca_opt, transform_opt, checkpoint)
-    category_map = np.loadtxt(top1_csv_name,dtype=np.int32, delimiter=",")  
+    category_map = segmentation_test(h5_path, spatial_path, scale_factor_path, output_path, method, panel_gene_path, pca_opt, transform_opt, checkpoint, device)
+#     category_map = np.loadtxt(top1_csv_name,dtype=np.int32, delimiter=",")  
     seg_category_map(optical_img, category_map, output_path)
 
 
-def segmentation_evaluation(h5_path, spatial_path, scale_factor_path, output_path, method,label_path, panel_gene_path,pca_opt,transform_opt,checkpoint):
+def segmentation_evaluation(h5_path, spatial_path, scale_factor_path, output_path, method,label_path, panel_gene_path,pca_opt,transform_opt,checkpoint, device):
     pseudo_images(h5_path, spatial_path, scale_factor_path, output_path, method, panel_gene_path,pca_opt,transform_opt)
     img_path =output_path + "/RGB_images/"
     adata,spatial_all = load_data(h5_path, spatial_path, scale_factor_path)
     adata.uns["img_shape"] = 600
-    top1_csv_name= segmentation(adata,img_path,label_path,method,checkpoint)
+    top1_csv_name= segmentation(adata,img_path,label_path,method,checkpoint, device)
 
 
 def case_study_test(h5_path, spatial_path, scale_factor_path, output_path, method,  panel_gene_path , pca_opt, transform_opt,r_tuple,g_tuple,b_tuple):
