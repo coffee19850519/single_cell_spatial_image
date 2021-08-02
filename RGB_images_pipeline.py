@@ -13,9 +13,9 @@ def parse_args():
     parser.add_argument('-expression', type=str, nargs='+', help='h5 file path')
     parser.add_argument('-meta', type=str, nargs='+', help='metadata csv file path')
     parser.add_argument('-scaler', type=str, nargs='+', help='json file path')
-    parser.add_argument('-output', '--output_path', type=str, nargs='*', default=['output'], help='generate output folder')
+    parser.add_argument('-output', '--output_path', type=str, nargs='*', default=['output_img'], help='generate output folder')
     parser.add_argument('-embedding', type=str, nargs='+', default=['scGNN'], help='optional spaGCN or scGNN')
-    parser.add_argument('-transform', type=str, nargs='+', default=['None'], help='data transform optional is log or logcpm or None')
+    parser.add_argument('-transform', type=str, nargs='+', default=['logcpm'], help='data transform optional is log or logcpm or None')
     args = parser.parse_args()
     return args
 
