@@ -36,6 +36,5 @@ if __name__ == '__main__':
     checkpoint = args1.model[0]
     if not os.path.exists(output_path):
         os.makedirs(output_path)
-    # segmentation_category_map(h5_path[0], spatial_path[0], scale_factor_path[0], optical_path[0], output_path)
     segmentation_test(h5_path, spatial_path, scale_factor_path, output_path, method,None,False,transform_opt,checkpoint)
 
