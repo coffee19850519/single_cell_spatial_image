@@ -215,7 +215,7 @@ python test_pipeline.py -expression S13/S13_filtered_feature_bc_matrix.h5  -meta
 *	-output output root folder. [type: str]
 *	-embedding embedding method in use: scGNN or spaGCN. [type: str] [default: scGNN]
 *	-transform data pre-transform method: log, logcpm or None. [type: str] [default: logcpm]
-*	-device cpu/gpu device option: cpu or gpu. [type: str] [default: cpu] (CPU-based function is under development)
+*	-device cpu/gpu device option: cpu or gpu. [type: str] [default: cpu] (CPU-based inference will come soon)
 
 #### Results
  ```RESEPT``` stores the generative results in the following structure:
@@ -283,7 +283,7 @@ python histological_segmentation_pipeline.py -expression ./cancer/Parent_Visium_
 *	-output output root folder. [type: str]
 *	-embedding embedding method in use: scGNN or spaGCN. [type: str] [default: spaGCN]
 *	-transform data pre-transform method: log, logcpm or None. [type: str] [default: logcpm]
-*	-device cpu/gpu device option: cpu or gpu. [type: str] [default: cpu] (CPU-based function is under development)
+*	-device cpu/gpu device option: cpu or gpu. [type: str] [default: cpu] (CPU-based inference will come soon)
 
 #### Results
  ```RESEPT``` stores the generative results in the following structure:
