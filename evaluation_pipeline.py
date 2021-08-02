@@ -11,15 +11,16 @@ from package_pipeline_multiprocessing import  segmentation_evaluation
 warnings.filterwarnings("ignore")
 
 def parse_args1():
-    parser = argparse.ArgumentParser(description='Evaluate predictive tissue architecture with annotations')
-    parser.add_argument('-expression', type=str, nargs='+', help='h5 file path')
-    parser.add_argument('-meta', type=str, nargs='+', help='metadata csv file path')
-    parser.add_argument('-scaler', type=str, nargs='+', help='json file path')
-    parser.add_argument('-label', '--label_path', type=str, nargs='*',  help='label folder')
-    parser.add_argument('-model', type=str, nargs='+', help='checkpoint path')
-    parser.add_argument('-output', '--output_path', type=str, nargs='*', default=['output_evaluation'], help='generate output folder')
-    parser.add_argument('-embedding', type=str, nargs='+', default=['scGNN'], help='optional spaGCN or scGNN')
-    parser.add_argument('-transform', type=str, nargs='+', default=['logcpm'], help='data transform optional is log or logcpm or None')
+    parser = argparse.ArgumentParser(description='evaluate predictive tissue architecture with annotations')
+    parser.add_argument('-expression', type=str, nargs='+', help='file path for raw gene expression data')
+    parser.add_argument('-meta', type=str, nargs='+', help='file path for spatial meta data recording tissue positions')
+    parser.add_argument('-scaler', type=str, nargs='+', help='file path for scale factors')
+    parser.add_argument('-label', '--label_path', type=str, nargs='+',  help='file path for labels recording spot barcodes and their annotations for calculating evaluation metrics')
+    parser.add_argument('-model', type=str, nargs='+', help='file path for pre-trained model')
+    parser.add_argument('-output', '--output_path', type=str, nargs='+', help='output root folder')
+    parser.add_argument('-embedding', type=str, nargs='+', default=['scGNN'], help='embedding method in use: scGNN or spaGCN')
+    parser.add_argument('-transform', type=str, nargs='+', default=['logcpm'], help='data pre-transform method: log, logcpm or None')
+    parser.add_argument('-device', type=str, nargs='+', default=['cpu'], help='cpu/gpu device option: cpu or gpu')
     args = parser.parse_args()
     return args
 
@@ -36,7 +37,8 @@ if __name__ == '__main__':
     method = args1.embedding[0]
     transform_opt = args1.transform[0]
     checkpoint = args1.model[0]
+    device = args1.device[0]
     if not os.path.exists(output_path):
         os.makedirs(output_path)
-    segmentation_evaluation(h5_path, spatial_path, scale_factor_path, output_path, method,label_path,None,False,transform_opt,checkpoint)
+    segmentation_evaluation(h5_path, spatial_path, scale_factor_path, output_path, method,label_path,None,False,transform_opt,checkpoint, device)
 

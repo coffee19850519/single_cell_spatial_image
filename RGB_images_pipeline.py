@@ -9,13 +9,13 @@ from package_pipeline_multiprocessing import  pseudo_images
 warnings.filterwarnings("ignore")
 
 def parse_args():
-    parser = argparse.ArgumentParser(description='Generate RGB images')
-    parser.add_argument('-expression', type=str, nargs='+', help='h5 file path')
-    parser.add_argument('-meta', type=str, nargs='+', help='metadata csv file path')
-    parser.add_argument('-scaler', type=str, nargs='+', help='json file path')
-    parser.add_argument('-output', '--output_path', type=str, nargs='*', default=['output_img'], help='generate output folder')
-    parser.add_argument('-embedding', type=str, nargs='+', default=['scGNN'], help='optional spaGCN or scGNN')
-    parser.add_argument('-transform', type=str, nargs='+', default=['logcpm'], help='data transform optional is log or logcpm or None')
+    parser = argparse.ArgumentParser(description='visualize tissue architecture')
+    parser.add_argument('-expression', type=str, nargs='+', help='file path for raw gene expression data')
+    parser.add_argument('-meta', type=str, nargs='+', help='file path for spatial meta data recording tissue positions')
+    parser.add_argument('-scaler', type=str, nargs='+', help='file path for scale factors')
+    parser.add_argument('-output', '--output_path', type=str, nargs='+', help='output root folder')
+    parser.add_argument('-embedding', type=str, nargs='+', default=['scGNN'], help='embedding method in use')
+    parser.add_argument('-transform', type=str, nargs='+', default=['logcpm'], help='data pre-transform method: log, logcpm or None')
     args = parser.parse_args()
     return args
 

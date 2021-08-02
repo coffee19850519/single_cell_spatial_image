@@ -17,13 +17,18 @@ import json
 import numpy as np
 from sklearn.metrics.cluster import adjusted_rand_score
 from sklearn.metrics.cluster import normalized_mutual_info_score
-
+import sys
 np.set_printoptions(threshold=np.inf)
 np.set_printoptions(suppress=True)
 # np.set_printoptions(threshold=0)
 
 
-def segmentation(adata,img_path,label_path,method,checkpoint_path):   
+def segmentation(adata,img_path,label_path,method,checkpoint_path,device):  
+
+    if device=='cpu':
+        print('cpu function is under development...')
+        sys.exit(0)
+
     config = './configs/deeplabv3_r101-d8_512x512_80k_singlecell.py'
     checkpoint = checkpoint_path
     if label_path == None:
@@ -40,6 +45,7 @@ def segmentation(adata,img_path,label_path,method,checkpoint_path):
         torch.backends.cudnn.benchmark = True
     cfg.model.pretrained = None
     cfg.data.test.test_mode = True
+
 
     # init distributed env first, since logger depends on the dist info.
     launcher = 'none'

@@ -10,15 +10,16 @@ from package_pipeline_multiprocessing import case_study_test
 from PIL import Image
 from train import train
 import cv2
+import shutil
 warnings.filterwarnings("ignore")
 
 def parse_args():
-    parser = argparse.ArgumentParser(description='training')
-    parser.add_argument('-data_folder', type=str, nargs='+', help='a folder provides all training samples.The data including label file of each sample should follow our predefined schema in a sub-folder under this folder.')
-    parser.add_argument('-model', type=str, nargs='+',default=[None], help='file path for pre-trained model file')
-    parser.add_argument('-output', type=str, nargs='*', default=['output_train'], help='output root folder')
-    parser.add_argument('-embedding', type=str, nargs='+', default=['scGNN'], help='optional spaGCN or scGNN')
-    parser.add_argument('-transform', type=str, nargs='+', default=['None'], help='data transform optional is log or logcpm or None')
+    parser = argparse.ArgumentParser(description='customize segmentation model')
+    parser.add_argument('-data_folder', type=str, nargs='+', help='a folder provides all training samples. The data including label file of each sample should follow our pre-defined schema in a sub-folder under this folder')
+    parser.add_argument('-model', type=str, nargs='+', help='file path for pre-trained model file')
+    parser.add_argument('-output', type=str, nargs='+', help='output root folder')
+    parser.add_argument('-embedding', type=str, nargs='+', default=['scGNN'], help='embedding method in use: scGNN or spaGCN')
+    parser.add_argument('-transform', type=str, nargs='+', default=['logcpm'], help='data pre-transform method: log, logcpm or None')
 
 
     args = parser.parse_args()
@@ -126,5 +127,6 @@ if __name__ == '__main__':
         train_preprocessing(path, name, adata, output_folder)
     config = './configs/config.py'
     train(config, model, output_folder)
+    shutil.rmtree(output_folder+'/RGB_images_label')
 
 
