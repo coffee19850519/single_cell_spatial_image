@@ -157,6 +157,7 @@ python RGB_images_pipeline.py -expression S13/S13_filtered_feature_bc_matrix.h5 
       |__RGB_images/
    ```
 *	The folder 'RGB_images' stores generated RGB images of tissue architectures from different embedding parameters.  
+
 This demo takes 25-30 mins to generate all results on the machine with a 64-core CPU.
 
 ### Evaluate predictive tissue architecture with annotations
