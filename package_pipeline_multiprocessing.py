@@ -222,8 +222,8 @@ def segmentation_test(h5_path, spatial_path, scale_factor_path, output_path, met
 
 def segmentation_category_map(h5_path, spatial_path, scale_factor_path, optical_path, output_path, method, panel_gene_path, pca_opt, transform_opt, checkpoint):
     optical_img = cv2.imread(optical_path)
-    top1_csv_name = segmentation_test(h5_path, spatial_path, scale_factor_path, output_path, method, panel_gene_path, pca_opt, transform_opt, checkpoint)
-    category_map = np.loadtxt(top1_csv_name,dtype=np.int32, delimiter=",")  
+    category_map = segmentation_test(h5_path, spatial_path, scale_factor_path, output_path, method, panel_gene_path, pca_opt, transform_opt, checkpoint)
+#     category_map = np.loadtxt(top1_csv_name,dtype=np.int32, delimiter=",")  
     seg_category_map(optical_img, category_map, output_path)
 
 
