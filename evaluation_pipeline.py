@@ -16,10 +16,10 @@ def parse_args1():
     parser.add_argument('-meta', type=str, nargs='+', help='metadata csv file path')
     parser.add_argument('-scaler', type=str, nargs='+', help='json file path')
     parser.add_argument('-label', '--label_path', type=str, nargs='*',  help='label folder')
+    parser.add_argument('-model', type=str, nargs='+', help='checkpoint path')
     parser.add_argument('-output', '--output_path', type=str, nargs='*', default=['output_evaluation'], help='generate output folder')
     parser.add_argument('-embedding', type=str, nargs='+', default=['scGNN'], help='optional spaGCN or scGNN')
     parser.add_argument('-transform', type=str, nargs='+', default=['logcpm'], help='data transform optional is log or logcpm or None')
-    parser.add_argument('-model', type=str, nargs='+', help='checkpoint path')
     args = parser.parse_args()
     return args
 
