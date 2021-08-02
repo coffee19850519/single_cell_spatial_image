@@ -76,20 +76,17 @@ def save_spot_RGB_to_image(label_path, adata):
     return label_img
 
 
+def train_preprocessing(path, sample_name, adata, output_folder):
 
-def train_preprocessing(path, sample_name, adata):
-
-    output_path = './Demo_result/RGB_images_label/'
-    img_path = './Demo_result/RGB_images/'
+    output_path = './'+output_folder+'/RGB_images_label/'
+    img_path = './'+output_folder+'/RGB_images/'
     if not os.path.exists(output_path):
         os.makedirs(output_path)
     for name in os.listdir(img_path):
         sample = name.split('_',4)[0]
-        # print(sample_name,sample)
         if sample_name == sample:
 
             data_file = path+'/'+sample+'/'+sample+'_annotation.csv'
-            # scale_factor_path = path +'/'+sample+'/spatial/scalefactors_json.json'
             label = save_spot_RGB_to_image(data_file, adata)
             savehi =  Image.fromarray(label)
             savehi.convert("P").save(os.path.join(output_path,name))
@@ -127,10 +124,10 @@ if __name__ == '__main__':
     path = args.data_folder[0]
     model = args.model[0]
     output_folder = args.output[0]
+    panel_gene_path = args.gene[0]
     method = args.embedding[0]
+    pca_opt = args.pca[0]
     transform_opt = args.transform[0]
-    # if not os.path.exists('./pseudo_images/'):
-    #     os.makedirs('./pseudo_images/')
     for name in os.listdir(path):
         h5_path = path+'/'+name+'/filtered_feature_bc_matrix.h5'
         spatial_path = path +'/'+name+'/spatial/tissue_positions_list.csv'
@@ -138,10 +135,7 @@ if __name__ == '__main__':
         adata,spatial_all = load_data(h5_path, spatial_path, scale_factor_path)
         adata.uns["img_shape"] = 600
 
-        pseudo_images(h5_path, spatial_path, scale_factor_path, output_folder,method, None, False, transform_opt)
-
-        train_preprocessing(path, name, adata)
+        pseudo_images(h5_path, spatial_path, scale_factor_path, output_folder,method, panel_gene_path, pca_opt, transform_opt)
+        train_preprocessing(path, name, adata, output_folder)
     config = './configs/config.py'
     train(config, model)
-
-
