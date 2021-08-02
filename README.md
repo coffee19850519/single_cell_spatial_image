@@ -17,7 +17,7 @@ Given inputs as gene expression or RNA velocity, ```RESEPT``` learns a three-dim
 
 ### Hardware Requirements
  
-``` RESEPT ``` suggests a standard computer with a 64-core CPU, 8G RAM, and a GPU with 11G VRAM.
+``` RESEPT ``` was trained on a standard computer with a 64-core CPU, 20G RAM, and a GPU with 11G VRAM. The function of customizing the segmentation model only can run on GPU device now. Other functions for RESEPT need the minimum requirements of a CPU with 8 cores and 8G RAM. 
 
 ### Software Requirements
 
