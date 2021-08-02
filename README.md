@@ -296,7 +296,7 @@ python histological_segmentation_pipeline.py -expression ./cancer/Parent_Visium_
    |__histological_segmentation/
          |__category_1.png
          |__category_2.png
-	…
+	          …
          |__category_n.png
    ```
 *	The folder 'RGB_images' stores generated RGB images of tissue architectures from different embedding parameters.
