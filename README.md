@@ -17,16 +17,16 @@ Given inputs as gene expression or RNA velocity, ```RESEPT``` learns a three-dim
 
 ### Hardware Requirements
  
-``` RESEPT ``` was trained on a standard computer with a 64-core CPU, 20G RAM, and a GPU with 11G VRAM. The function of customizing the segmentation model only can run on GPU device now. Other functions for RESEPT need the minimum requirements of a CPU with 8 cores and 8G RAM. 
+``` RESEPT ``` was trained on a workstation with a 64-core CPU, 20G RAM, and a GPU with 11G VRAM. The function of customizing the segmentation model only can run on GPU device now. Other functions for RESEPT need the minimum requirements of a CPU with 8 cores and 8G RAM. 
 
 ### Software Requirements
 
 #### OS Requirements
-This package is supported for Linux. The package has been tested on the following systems:
+``` RESEPT ``` can run on Linux. The package has been tested on the following systems:
 * Linux: Ubuntu 20.04
 
 #### Python Dependencies
-``` RESEPT ``` mainly depends on the Python scientific stack.
+``` RESEPT ``` mainly depends on the Python (3.6+) scientific stack.
 ```
 numpy 1.18.1
 torch 1.4.0
@@ -81,6 +81,7 @@ cd RESEPT
  * gene expression file: A HDF5 file stores raw gene expression data.  
  * tissue_positions_list file: A csv file contains meta information of spots including their connectivity and spatial coordinates.
  * scalefactors_json file: A json file collects the scaling factors converting spots to different resolutions.
+More details can be found [here] (https://support.10xgenomics.com/spatial-gene-expression/software/pipelines/latest/using/count)
 
 ### Annotation file
 
