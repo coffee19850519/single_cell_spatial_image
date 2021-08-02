@@ -43,23 +43,24 @@ data = dict(
         type=dataset_type,
         data_root=data_root,
 
-        img_dir=['Demo_result/RGB_images'],
-        ann_dir=['Demo_result/RGB_images_label'],
+        img_dir=['RGB_images'],
+        ann_dir=['RGB_images_label'],
 
         pipeline=train_pipeline),
     val=dict(
         type=dataset_type,
         data_root=data_root,
 
-        img_dir='Demo_result/RGB_images',
-        ann_dir='Demo_result/RGB_images_label', 
- 
+        img_dir=['RGB_images'],
+        ann_dir=['RGB_images_label'],
+
         pipeline=test_pipeline),
     test=dict(
         type=dataset_type,
         data_root=data_root,
 
-        img_dir='Demo_result/RGB_images',
-        ann_dir='Demo_result/RGB_images_label', 
+        img_dir=['RGB_images'],
+        ann_dir=['RGB_images_label'],
+
 
         pipeline=test_pipeline))
