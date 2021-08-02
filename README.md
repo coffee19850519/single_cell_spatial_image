@@ -317,7 +317,7 @@ This Demo takes 30-35 mins to generate all results on a machine with the multi-c
  
 ## License
  
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
+This project is licensed under the MIT License - see the [LICENSE.md](https://github.com/coffee19850519/single_cell_spatial_image/blob/main/LICENSE) file for details
  
 ## Citation
 if you use ```RESEPT```, please cite [our paper](https://www.biorxiv.org/content/10.1101/2021.07.08.451210v1):
