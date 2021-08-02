@@ -33,13 +33,11 @@ if __name__ == '__main__':
     scale_factor_path = args1.scaler[0]
     optical_path = args1.histological[0]
     output_path = args1.output[0]
-    panel_gene_path = args1.gene[0]
     model = args1.model[0]
     method = args1.embedding[0]
-    pca_opt = args1.pca[0]
     transform_opt = args1.transform[0]
     device = args1.device[0]
     if not os.path.exists(output_path):
         os.makedirs(output_path)
-    segmentation_category_map(h5_path, spatial_path, scale_factor_path, optical_path, output_path, method, panel_gene_path, pca_opt, transform_opt, model, device)
+    segmentation_category_map(h5_path, spatial_path, scale_factor_path, optical_path, output_path, method, None, False, transform_opt, model, device)
 
