@@ -160,7 +160,7 @@ python RGB_images_pipeline.py -expression S13/S13_filtered_feature_bc_matrix.h5 
 
 This demo takes 25-30 mins to generate all results on the machine with a 64-core CPU.
 
-### Fuction 2: Evaluate predictive tissue architectures with annotation
+### Fuction 2: evaluate predictive tissue architectures with annotation
 Run the following command line to construct RGB images based on gene expression from different embedding parameters, segment the constructed RGB images to tissue architectures with top-5 Moran's I, and evaluate the tissue architectures (e.g., ARI). For demonstration, please download the example data from [here](https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/S13.zip) and the pretrained model from [here](https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/model_S13.zip). Then put unzip folders 'S13' and 'model_S13' in the source code folder.
 ```
 wget https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/S13.zip 
