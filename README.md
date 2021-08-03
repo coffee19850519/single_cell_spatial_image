@@ -185,7 +185,7 @@ python evaluation_pipeline.py -expression S13/S13_filtered_feature_bc_matrix.h5 
 #### Results
  ```RESEPT``` stores the generated results in the following structure:
    ```
-      Demo_result/
+      Demo_result_evaluation/
       |__RGB_images/
       |__segmentation_evaluation/
             |__segmentation_map/
