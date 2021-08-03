@@ -133,7 +133,7 @@ The data schema to customize our segmentation model is as follows:
 
 ## Demo
 
-### Visualize tissue architecture 
+### Fuction 1: visualize tissue architecture 
 Run the following command line to construct RGB images based on gene expression from different embedding parameters. For demonstration, please download the example data from [here](https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/S13.zip) and put the unzip folder 'S13' in the source code folder.
 ```
 wget https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/S13.zip 
@@ -197,7 +197,7 @@ python evaluation_pipeline.py -expression S13/S13_filtered_feature_bc_matrix.h5 
 
 This Demo takes 30-35 mins to generate all results on a machine with a 64-core CPU.
 
-### Predict tissue architecture without annotation
+### Fuction 2: predict tissue architecture without annotation
 Run the following command line to generate RGB images based on gene expression from different embedding parameters and predict tissue architectures with top-5 Moran's I. For demonstration, please download the example data from here and the pre-trained model from [here](https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/S13.zip) and the pre-trained model from [here](https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/model_S13.zip). Then put unzip folders 'S13' and 'model_S13' in the source code folder.
 ```
 wget https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/S13.zip 
@@ -232,7 +232,7 @@ python test_pipeline.py -expression S13/S13_filtered_feature_bc_matrix.h5  -meta
 
 This demo takes 30-35 mins to generate all the results on the machine with a 64-core CPU.
 
-### Customize segmentation model 
+### Fuction 3: customize segmentation model 
  ```RESEPT``` supports fine-tuning our segmentation model by using users' 10x Visium data. Organize all samples and their annotations according to our pre-defined data schema and download our pre-trained model from [here](https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/model_S13.zip) as a training start point. Each sample for the training model should be placed in an individual folder with a specific format (the folder structure can be found [here](https://github.com/coffee19850519/single_cell_spatial_image#data-structure)). Then gather all the individual folders into one main folder (e.g., named “training_data_folder”).  For demonstration, download the example training data from [here](https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/training_data_folder.zip), and then run the following command line to generate the RGB images of your own data and customized model.
 ```
 wget https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/model_S13.zip
@@ -264,7 +264,7 @@ python training_pipeline.py -data_folder training_data_folder -output Demo_resul
 
 This Demo takes about 3 hours to generate the model on the machine with 11G VRAM GPU.
 
-### Segment histological images
+### Fuction 4: segment histological images
 ```RESEPT``` allows to segment a histological image according to predicted tissue architectures. It may help pathologists to focus on specific functional zonation. Run the following command line to predict tissue architectures with top-5 Moran's I and segment the histological image accordingly. For demonstration, please download the example data from [here](https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/cancer.zip) and the pre-trained model from [here](https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/model_cancer.zip). Then put unzip folders 'cancer' and 'model_cancer' in the source code folder.
 ```
 wget https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/cancer.zip
