@@ -167,7 +167,7 @@ wget https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/S13.zip
 wget https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/model_S13.zip
 unzip S13.zip
 unzip model_S13.zip
-python evaluation_pipeline.py -expression S13/S13_filtered_feature_bc_matrix.h5  -meta S13/spatial/tissue_positions_list.csv  -scaler S13/spatial/scalefactors_json.json -output Demo_result_evaluation  -embedding scGNN  -transform logcpm -label S13/S13_annotation.csv -model model_S13/S13_scGNN.pth -device gpu
+python evaluation_pipeline.py -expression S13/S13_filtered_feature_bc_matrix.h5  -meta S13/spatial/tissue_positions_list.csv  -scaler S13/spatial/scalefactors_json.json -output Demo_result_evaluation  -embedding scGNN  -transform logcpm -label S13/S13_annotation.csv -model model_S13/S13_scGNN.pth -device cpu
 ```
 
 #### Command Line Arguments:
@@ -179,13 +179,13 @@ python evaluation_pipeline.py -expression S13/S13_filtered_feature_bc_matrix.h5 
 *	-output output root folder. [type: str]
 *	-embedding embedding method in use: scGNN or spaGCN. [type: str] [default: scGNN]
 *	-transform data pre-transform method: log, logcpm or None. [type: str] [default: logcpm]
-*	-device cpu/gpu device option: cpu or gpu. [type: str] [default: cpu] (CPU-based inference will come soon)
+*	-device cpu/gpu device option: cpu or gpu. [type: str] [default: cpu]
 
 
 #### Results
  ```RESEPT``` stores the generated results in the following structure:
    ```
-      Demo_result/
+      Demo_result_evaluation/
       |__RGB_images/
       |__segmentation_evaluation/
             |__segmentation_map/
@@ -204,7 +204,7 @@ wget https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/S13.zip
 wget https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/model_S13.zip 
 unzip model_S13.zip
 unzip S13.zip
-python test_pipeline.py -expression S13/S13_filtered_feature_bc_matrix.h5  -meta S13/spatial/tissue_positions_list.csv  -scaler S13/spatial/scalefactors_json.json -output Demo_result_tissue_architecture  -embedding scGNN  -transform logcpm -model model_S13/S13_scGNN.pth -device gpu
+python test_pipeline.py -expression S13/S13_filtered_feature_bc_matrix.h5  -meta S13/spatial/tissue_positions_list.csv  -scaler S13/spatial/scalefactors_json.json -output Demo_result_tissue_architecture  -embedding scGNN  -transform logcpm -model model_S13/S13_scGNN.pth -device cpu
 ```
 
 #### Command Line Arguments:
@@ -215,7 +215,7 @@ python test_pipeline.py -expression S13/S13_filtered_feature_bc_matrix.h5  -meta
 *	-output output root folder. [type: str]
 *	-embedding embedding method in use: scGNN or spaGCN. [type: str] [default: scGNN]
 *	-transform data pre-transform method: log, logcpm or None. [type: str] [default: logcpm]
-*	-device cpu/gpu device option: cpu or gpu. [type: str] [default: cpu] (CPU-based inference will come soon)
+*	-device cpu/gpu device option: cpu or gpu. [type: str] [default: cpu]
 
 #### Results
  ```RESEPT``` stores the generative results in the following structure:
@@ -271,7 +271,7 @@ wget https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/cancer.zip
 wget https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/model_cancer.zip
 unzip cancer.zip
 unzip model_cancer.zip
-python histological_segmentation_pipeline.py -expression ./cancer/Parent_Visium_Human_Glioblas_filtered_feature_bc_matrix.h5 -meta ./cancer/spatial/tissue_positions_list.csv -scaler ./cancer/spatial/scalefactors_json.json -histological ./cancer/Parent_Visium_Human_Glioblast.tif -output Demo_result_HistoImage -model ./model_cancer/cancer_model.pth -embedding spaGCN -transform logcpm -device gpu
+python histological_segmentation_pipeline.py -expression ./cancer/Parent_Visium_Human_Glioblas_filtered_feature_bc_matrix.h5 -meta ./cancer/spatial/tissue_positions_list.csv -scaler ./cancer/spatial/scalefactors_json.json -histological ./cancer/Parent_Visium_Human_Glioblast.tif -output Demo_result_HistoImage -model ./model_cancer/cancer_model.pth -embedding spaGCN -transform logcpm -device cpu
 ```
 
 #### Command Line Arguments:
@@ -283,8 +283,7 @@ python histological_segmentation_pipeline.py -expression ./cancer/Parent_Visium_
 *	-output output root folder. [type: str]
 *	-embedding embedding method in use: scGNN or spaGCN. [type: str] [default: spaGCN]
 *	-transform data pre-transform method: log, logcpm or None. [type: str] [default: logcpm]
-*	-device cpu/gpu device option: cpu or gpu. [type: str] [default: cpu] (CPU-based inference will come soon)
-
+*	-device cpu/gpu device option: cpu or gpu. [type: str] [default: cpu]
 #### Results
  ```RESEPT``` stores the generative results in the following structure:
    ```

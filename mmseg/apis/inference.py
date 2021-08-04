@@ -8,7 +8,7 @@ from mmseg.datasets.pipelines import Compose
 from mmseg.models import build_segmentor
 
 
-def init_segmentor(config, checkpoint=None, device='cuda:0'):
+def init_segmentor(config, checkpoint=None, device='cpu'):
     """Initialize a segmentor from config file.
 
     Args:
