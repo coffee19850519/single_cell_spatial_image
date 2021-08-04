@@ -297,76 +297,7 @@ def single_gpu_test(adata,
         top1_csv_name = output_folder + 'result/' + top1_name.split('.png')[0] + '.csv'
 
         return results, top1_csv_name
-
-
-# def cluster_heterogeneity(image_test, category_map, background_category):
-#     if len(category_map.shape) > 2:
-#         category_map = cv2.cvtColor(category_map, cv2.COLOR_BGR2GRAY)
-#
-#     if len(image_test.shape) > 2:
-#         image_test = cv2.cvtColor(image_test, cv2.COLOR_BGR2GRAY)
-#     category_list = np.unique(category_map)
-#
-#
-#     # 邻接矩阵
-#     W = np.zeros((len(category_list), len(category_list)),dtype=int)
-#     for i in range(category_map.shape[0]):
-#         flag1 = category_map[i][0]
-#         flag2 = category_map[0][i]
-#         for j in range(category_map.shape[0]):
-#             if category_map[i][j] != flag1:  # 按行遍历
-#                 index1 = np.where(category_list == flag1)[0][0]
-#                 # print(np.where(category_list == flag1))
-#                 index2 = np.where(category_list == category_map[i][j])[0][0]
-#                 W[index1][index2] = 1
-#                 W[index2][index1] = 1
-#                 flag1 = category_map[i][j]
-#             if category_map[j][i] != flag2:  # 按列遍历
-#                 index1 = np.where(category_list == flag2)[0][0]
-#                 index2 = np.where(category_list == category_map[j][i])[0][0]
-#                 W[index1][index2] = 1
-#                 W[index2][index1] = 1
-#                 flag2 = category_map[j][i]
-#     W = W[1:, 1:]  #
-#     # print(W)
-#
-#     category_num = W.shape[0]
-#
-#     # print(category_map[871])
-#     # 计算每个cluster平均灰度和全图平均灰度
-#     num = 0
-#     gray_list = []
-#     gray_mean = 0
-#     for category in category_list:
-#         pixel_x, pixel_y = np.where(category_map == category)
-#         if category == background_category:
-#             num = len(pixel_x)
-#             continue
-#         gray = []
-#         for i in range(len(pixel_x)):
-#             gray.append(image_test[pixel_x[i], pixel_y[i]])
-#         gray_value = np.mean(gray)
-#         # print(gray_value)
-#         gray_list.append(gray_value)
-#         gray_mean += gray_value * len(pixel_x)
-#     gray_mean = gray_mean / (image_test.shape[0] ** 2 - num)
-#
-#     n = W.shape[0]
-#     a = 0
-#     b = 0
-#     for p in range(n):
-#         index, = np.where(W[p] == 1)
-#         for q in range(len(index)):
-#             a += abs((gray_list[p] - gray_mean) * (gray_list[index[q]] - gray_mean))
-#         b += (gray_list[p] - gray_mean) ** 2
-#     MI = n * a / (b * np.sum(W))
-#     # for i in range(n):
-#     #     adj_num = np.sum(W[i])
-#     #     if adj_num == n-1:
-#     #         MI = 0
-#     #         break
-#     return MI
-
+    
 def cluster_heterogeneity(image_test, category_map, background_category):
     if len(category_map.shape) > 2:
         category_map = cv2.cvtColor(category_map, cv2.COLOR_BGR2GRAY)
@@ -381,13 +312,13 @@ def cluster_heterogeneity(image_test, category_map, background_category):
         flag1 = category_map[i][0]
         flag2 = category_map[0][i]
         for j in range(category_map.shape[0]):
-            if category_map[i][j] != flag1:  # 按行遍历
+            if category_map[i][j] != flag1:  # for row
                 index1 = np.where(category_list == flag1)[0][0]
                 index2 = np.where(category_list == category_map[i][j])[0][0]
                 W[index1][index2] = 1
                 W[index2][index1] = 1
                 flag1 = category_map[i][j]
-            if category_map[j][i] != flag2:  # 按列遍历
+            if category_map[j][i] != flag2:  # for column
                 index1 = np.where(category_list == flag2)[0][0]
                 index2 = np.where(category_list == category_map[j][i])[0][0]
                 W[index1][index2] = 1
@@ -405,7 +336,7 @@ def cluster_heterogeneity(image_test, category_map, background_category):
     # print(R.shape)
     MI_list = []
     image_test_ori = image_test
-    # 计算每个cluster 每个通道 平均颜色值和全图平均颜色值
+    # Calculate the average color value of each channel in each cluster
     for channel in range(3):
         image_test = image_test_ori[:, :, channel]
         # print(image_test)

@@ -16,9 +16,9 @@ def parse_args1():
     parser.add_argument('-meta', type=str, nargs='+', help='file path for spatial meta data recording tissue positions')
     parser.add_argument('-scaler', type=str, nargs='+', help='file path for scale factors')
     parser.add_argument('-model', type=str, nargs='+', help='file path for pre-trained model')
-    parser.add_argument('-output', '--output_path', type=str, nargs='+', help='generate output folder')
-    parser.add_argument('-embedding', type=str, nargs='+', default=['scGNN'], help='optional spaGCN or scGNN')
-    parser.add_argument('-transform', type=str, nargs='+', default=['logcpm'], help='data transform optional is log or logcpm or None')
+    parser.add_argument('-output', '--output_path', type=str, nargs='+', help='output root folder')
+    parser.add_argument('-embedding', type=str, nargs='+', default=['scGNN'], help='embedding method in use: scGNN or spaGCN')
+    parser.add_argument('-transform', type=str, nargs='+', default=['logcpm'], help='data pre-transform method: log, logcpm or None')
     parser.add_argument('-device', type=str, nargs='+', default=['cpu'], help='cpu/gpu device option: cpu or gpu')
     args = parser.parse_args()
     return args
