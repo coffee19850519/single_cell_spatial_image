@@ -201,13 +201,13 @@ def cluster_heterogeneity(image_test, category_map, background_category):
         flag1 = category_map[i][0]
         flag2 = category_map[0][i]
         for j in range(category_map.shape[0]):
-            if category_map[i][j] != flag1:  # 按行遍历
+            if category_map[i][j] != flag1:  # for row
                 index1 = np.where(category_list == flag1)[0][0]
                 index2 = np.where(category_list == category_map[i][j])[0][0]
                 W[index1][index2] = 1
                 W[index2][index1] = 1
                 flag1 = category_map[i][j]
-            if category_map[j][i] != flag2:  # 按列遍历
+            if category_map[j][i] != flag2:  # for column
                 index1 = np.where(category_list == flag2)[0][0]
                 index2 = np.where(category_list == category_map[j][i])[0][0]
                 W[index1][index2] = 1
@@ -217,15 +217,11 @@ def cluster_heterogeneity(image_test, category_map, background_category):
     # print(W)
     category_num = W.shape[0]
 
-    # print(image_test.shape)
-    # print(image_test)
-    # R = image_test[:,:,0]
-    # G = image_test[:,:,1]
 
     # print(R.shape)
     MI_list = []
     image_test_ori = image_test
-    # 计算每个cluster 每个通道 平均颜色值和全图平均颜色值
+    # Calculate the average color value of each channel in each cluster
     for channel in range(3):
         image_test = image_test_ori[:, :, channel]
         # print(image_test)
