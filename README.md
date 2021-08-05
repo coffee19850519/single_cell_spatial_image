@@ -195,7 +195,7 @@ python evaluation_pipeline.py -expression S13/S13_filtered_feature_bc_matrix.h5 
 *	The folder 'segmentation_map' stores the predicted tissue architectures with top-5 Moran's I.
 *	The file 'top5_evaluation.csv' records various evaluation metrics corresponding to the tissue architectures.  
 
-This Demo takes 30-35 mins to generate all results on a machine with a 64-core CPU.
+This demo takes 30-35 mins to generate all results on the machine with a 64-core CPU.
 
 ### Function 3: predict tissue architecture without annotation
 Run the following command line to generate RGB images based on gene expression from different embedding parameters and predict tissue architectures with top-5 Moran's I. For demonstration, please download the example data from here and the pre-trained model from [here](https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/S13.zip) and the pre-trained model from [here](https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/model_S13.zip). Then put unzip folders 'S13' and 'model_S13' in the source code folder.
@@ -232,7 +232,7 @@ python test_pipeline.py -expression S13/S13_filtered_feature_bc_matrix.h5  -meta
 
 This demo takes 30-35 mins to generate all the results on the machine with a 64-core CPU.
 
-### Function 4: customize segmentation model 
+### Function 4: customize segmentation model (GPU required)
  ```RESEPT``` supports fine-tuning our segmentation model by using users' 10x Visium data. Organize all samples and their annotations according to our pre-defined data schema and download our pre-trained model from [here](https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/model_S13.zip) as a training start point. Each sample for the training model should be placed in an individual folder with a specific format (the folder structure can be found [here](https://github.com/coffee19850519/single_cell_spatial_image#data-structure)). Then gather all the individual folders into one main folder (e.g., named “training_data_folder”).  For demonstration, download the example training data from [here](https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/training_data_folder.zip), and then run the following command line to generate the RGB images of your own data and customized model.
 ```
 wget https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/model_S13.zip
@@ -262,7 +262,7 @@ python training_pipeline.py -data_folder training_data_folder -output Demo_resul
 *	The folder 'RGB_images' contains generated RGB images of tissue architectures of all input 10x data from different embedding parameters.
 *	The file 'epoch_50.pth' is the customized model.  
 
-This Demo takes about 3 hours to generate the model on the machine with 11G VRAM GPU.
+This demo takes about 3 hours to generate the model on the machine with 11G VRAM GPU.
 
 ### Function 5: segment histological images
 ```RESEPT``` allows to segment a histological image according to predicted tissue architectures. It may help pathologists to focus on specific functional zonation. Run the following command line to predict tissue architectures with top-5 Moran's I and segment the histological image accordingly. For demonstration, please download the example data from [here](https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/cancer.zip) and the pre-trained model from [here](https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/model_cancer.zip). Then put unzip folders 'cancer' and 'model_cancer' in the source code folder.
@@ -304,7 +304,7 @@ python histological_segmentation_pipeline.py -expression ./cancer/Parent_Visium_
 *	The file 'category_```n```.png' refers to the histological image segmentation results, where ```n``` denotes the segmentation number.   
 
 
-This Demo takes 30-35 mins to generate all results on a machine with the multi-core CPU.
+This demo takes 30-35 mins to generate all results on the machine with the multi-core CPU.
 
 
 ## Built With
