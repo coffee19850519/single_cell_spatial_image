@@ -297,7 +297,10 @@ def single_gpu_test(adata,
         top1_csv_name = output_folder + 'result/' + top1_name.split('.png')[0] + '.csv'
 
         return results, top1_csv_name
-    
+
+
+
+
 def cluster_heterogeneity(image_test, category_map, background_category):
     if len(category_map.shape) > 2:
         category_map = cv2.cvtColor(category_map, cv2.COLOR_BGR2GRAY)
@@ -312,13 +315,13 @@ def cluster_heterogeneity(image_test, category_map, background_category):
         flag1 = category_map[i][0]
         flag2 = category_map[0][i]
         for j in range(category_map.shape[0]):
-            if category_map[i][j] != flag1:  # for row
+            if category_map[i][j] != flag1: 
                 index1 = np.where(category_list == flag1)[0][0]
                 index2 = np.where(category_list == category_map[i][j])[0][0]
                 W[index1][index2] = 1
                 W[index2][index1] = 1
                 flag1 = category_map[i][j]
-            if category_map[j][i] != flag2:  # for column
+            if category_map[j][i] != flag2:  
                 index1 = np.where(category_list == flag2)[0][0]
                 index2 = np.where(category_list == category_map[j][i])[0][0]
                 W[index1][index2] = 1
@@ -336,7 +339,7 @@ def cluster_heterogeneity(image_test, category_map, background_category):
     # print(R.shape)
     MI_list = []
     image_test_ori = image_test
-    # Calculate the average color value of each channel in each cluster
+
     for channel in range(3):
         image_test = image_test_ori[:, :, channel]
         # print(image_test)
@@ -510,11 +513,6 @@ def calculate(adata, output, img_path, label_path):
     samples_num = img_name.split('_')[0]  # eg:151507
 
     labels = save_spot_RGB_to_image(label_path, adata)  # label
-    # print(labels[300])
-    # print(output[0])
-    # predict = output[0].astype(np.uint8)
-    # cv2.imwrite('/home/fei/Desktop/scdata/predict/predict_'+img_name,predict)
-    # cv2.imwrite('vis_'+img_name,labels*36)
 
     label = labels.flatten().tolist()
     output = np.array(output).flatten().tolist()
@@ -528,8 +526,6 @@ def calculate(adata, output, img_path, label_path):
             label_final.append(label[i])
             output_final.append(output[i])
 
-    # WV = cluster_deviation(test,np.array(outputs[k]),0)
-    # MI = cluster_heterogeneity(test,np.array(outputs[k]),0)
 
     ARI = adjusted_rand_score(label_final, output_final)
     AMI = adjusted_mutual_info_score(label_final, output_final)
