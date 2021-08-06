@@ -257,12 +257,12 @@ python training_pipeline.py -data_folder training_data_folder -output Demo_resul
    
    work_dirs/
    |__config/
-         |__epoch_50.pth
+         |__Fine-tune_Model.pth
    ```
 *	The folder 'RGB_images' contains generated RGB images of tissue architectures of all input 10x data from different embedding parameters.
-*	The file 'epoch_50.pth' is the customized model.  
+*	The file 'Fine-tune_Model.pth' is the customized model.  
 
-This demo takes about 3 hours to generate the model on the machine with 11G VRAM GPU.
+This demo takes about 3-5 hours to generate the model on the machine with 11G VRAM GPU.
 
 ### Function 5: segment histological images
 ```RESEPT``` allows to segment a histological image according to predicted tissue architectures. It may help pathologists to focus on specific functional zonation. Run the following command line to predict tissue architectures with top-5 Moran's I and segment the histological image accordingly. For demonstration, please download the example data from [here](https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/cancer.zip) and the pre-trained model from [here](https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/model_cancer.zip). Then put unzip folders 'cancer' and 'model_cancer' in the source code folder.
