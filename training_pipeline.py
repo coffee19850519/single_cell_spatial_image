@@ -98,7 +98,7 @@ def train_postprocessing(output_folder):
     # print(epoch)
     model_path = './work_dirs/config/'
     model_name = model_path+'epoch_'+str(epoch)+'.pth'
-    new_name = model_path+'Fine-tune_Model.pth'
+    new_name = model_path+'fine_tune_model.pth'
     os.rename(model_name, new_name)
     shutil.rmtree(output_folder+'/RGB_images_label')
     os.remove(file_name)
