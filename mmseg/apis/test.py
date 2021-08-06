@@ -608,3 +608,103 @@ def save_spot_RGB_to_image(label_path, adata):
     shape = adata.uns["img_shape"]
     label_img = cv2.resize(img, dsize=(shape, shape), interpolation=cv2.INTER_NEAREST)
     return label_img
+
+
+def single_gpu_train_pipeline(model,
+                    data_loader,
+                    show=False,
+                    out_dir=None,
+                    efficient_test=False):
+    """Test with single GPU.
+
+    Args:
+        model (nn.Module): Model to be tested.
+        data_loader (utils.data.Dataloader): Pytorch data loader.
+        show (bool): Whether show results during infernece. Default: False.
+        out_dir (str, optional): If specified, the results will be dumped into
+            the directory to save output results.
+        efficient_test (bool): Whether save the results as local numpy files to
+            save CPU memory during evaluation. Default: False.
+
+    Returns:
+        list: The prediction results.
+    """
+
+    model.eval()
+    results = []
+    ARI_list = []
+    MI_list = []
+    name_list = []  
+    ARI_dic = {}
+    MI_dic = {}
+    # epoch_list = {}
+
+    dataset = data_loader.dataset
+    prog_bar = mmcv.ProgressBar(len(dataset))
+    for i, data in enumerate(data_loader):
+        with torch.no_grad():
+            result = model(return_loss=False, **data)
+
+            #calculate ARI
+
+            img_name = data['img_metas'][0].data[0][0]['filename']
+            name = img_name.split('/')[-1]
+            # name, ARI = calculate(result,img_name)
+            name_list.append(img_name)
+            # ARI_list.append(ARI)
+            # ARI_dic[name] = ARI
+            image_test = cv2.imread(img_name)
+            predict = result[0].astype(np.uint8)
+            num = name.split('_')[0]
+            norm = name.split('_')[1]
+            MI = cluster_heterogeneity(image_test, predict, 0)
+            MI_list.append(MI)
+            MI_dic[name] = MI
+        if show or out_dir:
+            img_tensor = data['img'][0]
+            img_metas = data['img_metas'][0].data[0]
+            imgs = tensor2imgs(img_tensor, **img_metas[0]['img_norm_cfg'])
+            assert len(imgs) == len(img_metas)
+
+            for img, img_meta in zip(imgs, img_metas):
+                h, w, _ = img_meta['img_shape']
+                img_show = img[:h, :w, :]
+
+                ori_h, ori_w = img_meta['ori_shape'][:-1]
+                img_show = mmcv.imresize(img_show, (ori_w, ori_h))
+
+                if out_dir:
+                    out_file = osp.join(out_dir, img_meta['ori_filename'])
+                else:
+                    out_file = None
+
+                model.module.show_result(
+                    img_show,
+                    result,
+                    palette=dataset.PALETTE,
+                    show=show,
+                    out_file=out_file)
+
+        if isinstance(result, list):
+            if efficient_test:
+                result = [np2tmp(_) for _ in result]
+            results.extend(result)
+        else:
+            if efficient_test:
+                result = np2tmp(result)
+            results.append(result)
+
+        batch_size = data['img'][0].size(0)
+        for _ in range(batch_size):
+            prog_bar.update()
+
+    ARI_result = {
+                  'name':name_list,
+                  # "ARI":ARI_list,
+                  'MI':MI_list,
+                  }
+    ARI_result = pd.DataFrame(ARI_result)
+    ARI_result = ARI_result.sort_values(by=['MI'], ascending=False)
+    ARI_result.to_csv('./train_pipeline_test'+'.csv',index=False, header=False,mode='a')
+
+    return results
