@@ -81,6 +81,31 @@ def train_preprocessing(path, sample_name, adata, output_folder):
             savehi =  Image.fromarray(label)
             savehi.convert("P").save(os.path.join(output_path,name))
 
+def train_postprocessing(output_folder):
+    img_path = './'+output_folder+'/RGB_images/'
+    num = len(os.listdir(img_path))
+    # print(num)
+    file_name = './train_pipeline_test.csv'
+    df = pd.read_csv(file_name, header=None,names=['name', 'MI'])
+    # print(df)
+
+    # print(df.loc(df['MI'].max()))
+    for i,data in enumerate(df['MI']):
+        if data == df['MI'].max():
+            n = i+1
+            break
+    epoch = n//num+1
+    # print(epoch)
+    model_path = './work_dirs/config/'
+    model_name = model_path+'epoch_'+str(epoch)+'.pth'
+    new_name = model_path+'Fine-tune_Model.pth'
+    os.rename(model_name, new_name)
+    shutil.rmtree(output_folder+'/RGB_images_label')
+    os.remove(file_name)
+    for name in os.listdir(model_path):
+        if name != 'Fine-tune_Model.pth':
+            os.remove(model_path+name)
+
 
 def load_data(h5_path, spatial_path, scale_factor_path):
     # Read in gene expression and spatial location
@@ -125,8 +150,7 @@ if __name__ == '__main__':
 
         pseudo_images(h5_path, spatial_path, scale_factor_path, output_folder,method, None, False, transform_opt)
         train_preprocessing(path, name, adata, output_folder)
+
     config = './configs/config.py'
     train(config, model, output_folder)
-    shutil.rmtree(output_folder+'/RGB_images_label')
-
-
+    train_postprocessing(output_folder)
