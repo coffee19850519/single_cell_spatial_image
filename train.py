@@ -29,10 +29,6 @@ def train(config, model, output_folder):
     if cfg.get('cudnn_benchmark', False):
         torch.backends.cudnn.benchmark = True
 
-    # work_dir is determined in this priority: CLI > segment in file > filename
-    # if args.work_dir is not None:
-    #     # update configs according to CLI args if args.work_dir is not None
-    #     cfg.work_dir = args.work_dir
     if cfg.get('work_dir', None) is None:
         # use config filename as default work_dir if cfg.work_dir is None
         cfg.work_dir = osp.join('./work_dirs',
@@ -40,22 +36,12 @@ def train(config, model, output_folder):
     # if args.load_from is not None:
     #     cfg.load_from = None
     # if args.resume_from is not None:
-    #     cfg.resume_from = model
-        
+    #     cfg.resume_from = model     
     if model is not None:
-        cfg.resume_from = model
-        print(cfg.resume_from)
-    # if args.gpu_ids is not None:
-    #     cfg.gpu_ids = args.gpu_ids
-    # else:
-    #     cfg.gpu_ids = range(1) if args.gpus is None else range(args.gpus)
+        cfg.load_from = model
     cfg.gpu_ids = range(1)
-    # init distributed env first, since logger depends on the dist info.
-    # if args.launcher == 'none':
     distributed = False
-    # else:
-    #     distributed = True
-    #     init_dist(args.launcher, **cfg.dist_params)
+
 
     # create work_dir
     mmcv.mkdir_or_exist(osp.abspath(cfg.work_dir))
@@ -122,7 +108,7 @@ def train(config, model, output_folder):
         datasets,
         cfg,
         distributed=distributed,
-        # validate=(not args.no_validate),
+        validate=True,
         timestamp=timestamp,
         meta=meta)
 

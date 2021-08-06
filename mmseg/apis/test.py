@@ -297,7 +297,10 @@ def single_gpu_test(adata,
         top1_csv_name = output_folder + 'result/' + top1_name.split('.png')[0] + '.csv'
 
         return results, top1_csv_name
-    
+
+
+
+
 def cluster_heterogeneity(image_test, category_map, background_category):
     if len(category_map.shape) > 2:
         category_map = cv2.cvtColor(category_map, cv2.COLOR_BGR2GRAY)
@@ -312,13 +315,13 @@ def cluster_heterogeneity(image_test, category_map, background_category):
         flag1 = category_map[i][0]
         flag2 = category_map[0][i]
         for j in range(category_map.shape[0]):
-            if category_map[i][j] != flag1:  # for row
+            if category_map[i][j] != flag1: 
                 index1 = np.where(category_list == flag1)[0][0]
                 index2 = np.where(category_list == category_map[i][j])[0][0]
                 W[index1][index2] = 1
                 W[index2][index1] = 1
                 flag1 = category_map[i][j]
-            if category_map[j][i] != flag2:  # for column
+            if category_map[j][i] != flag2:  
                 index1 = np.where(category_list == flag2)[0][0]
                 index2 = np.where(category_list == category_map[j][i])[0][0]
                 W[index1][index2] = 1
@@ -336,7 +339,7 @@ def cluster_heterogeneity(image_test, category_map, background_category):
     # print(R.shape)
     MI_list = []
     image_test_ori = image_test
-    # Calculate the average color value of each channel in each cluster
+
     for channel in range(3):
         image_test = image_test_ori[:, :, channel]
         # print(image_test)
@@ -510,11 +513,6 @@ def calculate(adata, output, img_path, label_path):
     samples_num = img_name.split('_')[0]  # eg:151507
 
     labels = save_spot_RGB_to_image(label_path, adata)  # label
-    # print(labels[300])
-    # print(output[0])
-    # predict = output[0].astype(np.uint8)
-    # cv2.imwrite('/home/fei/Desktop/scdata/predict/predict_'+img_name,predict)
-    # cv2.imwrite('vis_'+img_name,labels*36)
 
     label = labels.flatten().tolist()
     output = np.array(output).flatten().tolist()
@@ -528,8 +526,6 @@ def calculate(adata, output, img_path, label_path):
             label_final.append(label[i])
             output_final.append(output[i])
 
-    # WV = cluster_deviation(test,np.array(outputs[k]),0)
-    # MI = cluster_heterogeneity(test,np.array(outputs[k]),0)
 
     ARI = adjusted_rand_score(label_final, output_final)
     AMI = adjusted_mutual_info_score(label_final, output_final)
@@ -608,3 +604,103 @@ def save_spot_RGB_to_image(label_path, adata):
     shape = adata.uns["img_shape"]
     label_img = cv2.resize(img, dsize=(shape, shape), interpolation=cv2.INTER_NEAREST)
     return label_img
+
+
+def single_gpu_train_pipeline(model,
+                    data_loader,
+                    show=False,
+                    out_dir=None,
+                    efficient_test=False):
+    """Test with single GPU.
+
+    Args:
+        model (nn.Module): Model to be tested.
+        data_loader (utils.data.Dataloader): Pytorch data loader.
+        show (bool): Whether show results during infernece. Default: False.
+        out_dir (str, optional): If specified, the results will be dumped into
+            the directory to save output results.
+        efficient_test (bool): Whether save the results as local numpy files to
+            save CPU memory during evaluation. Default: False.
+
+    Returns:
+        list: The prediction results.
+    """
+
+    model.eval()
+    results = []
+    ARI_list = []
+    MI_list = []
+    name_list = []  
+    ARI_dic = {}
+    MI_dic = {}
+    # epoch_list = {}
+
+    dataset = data_loader.dataset
+    prog_bar = mmcv.ProgressBar(len(dataset))
+    for i, data in enumerate(data_loader):
+        with torch.no_grad():
+            result = model(return_loss=False, **data)
+
+            #calculate ARI
+
+            img_name = data['img_metas'][0].data[0][0]['filename']
+            name = img_name.split('/')[-1]
+            # name, ARI = calculate(result,img_name)
+            name_list.append(img_name)
+            # ARI_list.append(ARI)
+            # ARI_dic[name] = ARI
+            image_test = cv2.imread(img_name)
+            predict = result[0].astype(np.uint8)
+            num = name.split('_')[0]
+            norm = name.split('_')[1]
+            MI = cluster_heterogeneity(image_test, predict, 0)
+            MI_list.append(MI)
+            MI_dic[name] = MI
+        if show or out_dir:
+            img_tensor = data['img'][0]
+            img_metas = data['img_metas'][0].data[0]
+            imgs = tensor2imgs(img_tensor, **img_metas[0]['img_norm_cfg'])
+            assert len(imgs) == len(img_metas)
+
+            for img, img_meta in zip(imgs, img_metas):
+                h, w, _ = img_meta['img_shape']
+                img_show = img[:h, :w, :]
+
+                ori_h, ori_w = img_meta['ori_shape'][:-1]
+                img_show = mmcv.imresize(img_show, (ori_w, ori_h))
+
+                if out_dir:
+                    out_file = osp.join(out_dir, img_meta['ori_filename'])
+                else:
+                    out_file = None
+
+                model.module.show_result(
+                    img_show,
+                    result,
+                    palette=dataset.PALETTE,
+                    show=show,
+                    out_file=out_file)
+
+        if isinstance(result, list):
+            if efficient_test:
+                result = [np2tmp(_) for _ in result]
+            results.extend(result)
+        else:
+            if efficient_test:
+                result = np2tmp(result)
+            results.append(result)
+
+        batch_size = data['img'][0].size(0)
+        for _ in range(batch_size):
+            prog_bar.update()
+
+    ARI_result = {
+                  'name':name_list,
+                  # "ARI":ARI_list,
+                  'MI':MI_list,
+                  }
+    ARI_result = pd.DataFrame(ARI_result)
+    ARI_result = ARI_result.sort_values(by=['MI'], ascending=False)
+    ARI_result.to_csv('./train_pipeline_test'+'.csv',index=False, header=False,mode='a')
+
+    return results

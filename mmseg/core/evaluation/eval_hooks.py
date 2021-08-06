@@ -34,9 +34,9 @@ class EvalHook(Hook):
         """After train epoch hook."""
         if not self.by_epoch or not self.every_n_epochs(runner, self.interval):
             return
-        from mmseg.apis import single_gpu_test
+        from mmseg.apis.test import single_gpu_train_pipeline
         runner.log_buffer.clear()
-        results = single_gpu_test(runner.model, self.dataloader, show=False)
+        results = single_gpu_train_pipeline(runner.model, self.dataloader, show=False)
         self.evaluate(runner, results)
 
     def evaluate(self, runner, results):
