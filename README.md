@@ -257,10 +257,10 @@ python training_pipeline.py -data_folder training_data_folder -output Demo_resul
    
    work_dirs/
    |__config/
-         |__Fine-tune_Model.pth
+         |__fine_tune_model.pth
    ```
 *	The folder 'RGB_images' contains generated RGB images of tissue architectures of all input 10x data from different embedding parameters.
-*	The file 'Fine-tune_Model.pth' is the customized model.  
+*	The file 'fine_tune_model.pth' is the customized model.  
 
 This demo takes about 3-5 hours to generate the model on the machine with 11G VRAM GPU.
 
