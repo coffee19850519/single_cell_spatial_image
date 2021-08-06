@@ -1,8 +1,9 @@
-from .class_names import get_classes, get_palette
-from .eval_hooks import DistEvalHook, EvalHook
-from .metrics import eval_metrics, mean_dice, mean_iou
+from .inference import inference_segmentor, init_segmentor, show_result_pyplot
+from .test import multi_gpu_test, single_gpu_test
+from .train import get_root_logger, set_random_seed, train_segmentor
 
 __all__ = [
-    'EvalHook', 'DistEvalHook', 'mean_dice', 'mean_iou', 'eval_metrics',
-    'get_classes', 'get_palette'
+    'get_root_logger', 'set_random_seed', 'train_segmentor', 'init_segmentor',
+    'inference_segmentor', 'multi_gpu_test', 'single_gpu_test','single_gpu_train_pipeline',
+    'show_result_pyplot'
 ]
