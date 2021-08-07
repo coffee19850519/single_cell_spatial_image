@@ -1,5 +1,5 @@
 [docs-image]: https://readthedocs.org/projects/pytorch-geometric/badge/?version=latest
-[docs-url]: https://resept-last.readthedocs.io/en/latest/Case%20study.html
+[docs-url]: https://resept.readthedocs.io/en/latest/index.html
 
 # Define and visualize pathological architectures of human tissues from spatially resolved transcriptomics using deep learning
 <img src="https://img.shields.io/badge/RESEPT-v1.0.0-green"> <img src="https://img.shields.io/badge/Platform-Linux-green"> <img src="https://img.shields.io/badge/Language-python3-green"> <img src="https://img.shields.io/badge/License-MIT-green">
@@ -135,11 +135,11 @@ The data schema to customize our segmentation model is as follows:
 ## Demo
 
 ### Function 1: visualize tissue architecture 
-Run the following command line to construct RGB images based on gene expression from different embedding parameters. For demonstration, please download the example data from [here](https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/S13.zip) and put the unzip folder 'S13' in the source code folder.
+Run the following command line to construct RGB images based on gene expression from different embedding parameters. For demonstration, please download the example data from [here](https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/S10.zip) and put the unzip folder 'S10' in the source code folder.
 ```
-wget https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/S13.zip 
-unzip S13.zip
-python RGB_images_pipeline.py -expression S13/S13_filtered_feature_bc_matrix.h5  -meta S13/spatial/tissue_positions_list.csv  -scaler S13/spatial/scalefactors_json.json -output Demo_result  -embedding scGNN  -transform logcpm 
+wget https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/S10.zip 
+unzip S10.zip
+python RGB_images_pipeline.py -expression S10/S10_filtered_feature_bc_matrix.h5  -meta S10/spatial/tissue_positions_list.csv  -scaler S10/spatial/scalefactors_json.json -output Demo_result  -embedding scGNN  -transform logcpm 
 ```
 
 #### Command Line Arguments:
@@ -162,13 +162,13 @@ python RGB_images_pipeline.py -expression S13/S13_filtered_feature_bc_matrix.h5 
 This demo takes 25-30 mins to generate all results on the machine with a 64-core CPU.
 
 ### Function 2: evaluate predictive tissue architectures with annotation
-Run the following command line to construct RGB images based on gene expression from different embedding parameters, segment the constructed RGB images to tissue architectures with top-5 Moran's I, and evaluate the tissue architectures (e.g., ARI). For demonstration, please download the example data from [here](https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/S13.zip) and the pretrained model from [here](https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/model_S13.zip). Then put unzip folders 'S13' and 'model_S13' in the source code folder.
+Run the following command line to construct RGB images based on gene expression from different embedding parameters, segment the constructed RGB images to tissue architectures with top-5 Moran's I, and evaluate the tissue architectures (e.g., ARI). For demonstration, please download the example data from [here](https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/S10.zip) and the pretrained model from [here](https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/model_S10.zip). Then put unzip folders 'S10' and 'model_S10' in the source code folder.
 ```
-wget https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/S13.zip 
-wget https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/model_S13.zip
-unzip S13.zip
-unzip model_S13.zip
-python evaluation_pipeline.py -expression S13/S13_filtered_feature_bc_matrix.h5  -meta S13/spatial/tissue_positions_list.csv  -scaler S13/spatial/scalefactors_json.json -output Demo_result_evaluation  -embedding scGNN  -transform logcpm -label S13/S13_annotation.csv -model model_S13/S13_scGNN.pth -device cpu
+wget https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/S10.zip 
+wget https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/model_S10.zip
+unzip S10.zip
+unzip model_S10.zip
+python evaluation_pipeline.py -expression S10/S10_filtered_feature_bc_matrix.h5  -meta S10/spatial/tissue_positions_list.csv  -scaler S10/spatial/scalefactors_json.json -output Demo_result_evaluation  -embedding scGNN  -transform logcpm -label S10/S10_annotation.csv -model model_S10/S10_scGNN.pth -device cpu
 ```
 
 #### Command Line Arguments:
@@ -199,13 +199,13 @@ python evaluation_pipeline.py -expression S13/S13_filtered_feature_bc_matrix.h5 
 This demo takes 30-35 mins to generate all results on the machine with a 64-core CPU.
 
 ### Function 3: predict tissue architecture without annotation
-Run the following command line to generate RGB images based on gene expression from different embedding parameters and predict tissue architectures with top-5 Moran's I. For demonstration, please download the example data from here and the pre-trained model from [here](https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/S13.zip) and the pre-trained model from [here](https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/model_S13.zip). Then put unzip folders 'S13' and 'model_S13' in the source code folder.
+Run the following command line to generate RGB images based on gene expression from different embedding parameters and predict tissue architectures with top-5 Moran's I. For demonstration, please download the example data from here and the pre-trained model from [here](https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/S10.zip) and the pre-trained model from [here](https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/model_S10.zip). Then put unzip folders 'S10' and 'model_S10' in the source code folder.
 ```
-wget https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/S13.zip 
-wget https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/model_S13.zip 
-unzip model_S13.zip
-unzip S13.zip
-python test_pipeline.py -expression S13/S13_filtered_feature_bc_matrix.h5  -meta S13/spatial/tissue_positions_list.csv  -scaler S13/spatial/scalefactors_json.json -output Demo_result_tissue_architecture  -embedding scGNN  -transform logcpm -model model_S13/S13_scGNN.pth -device cpu
+wget https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/S10.zip 
+wget https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/model_.zip 
+unzip model_S10.zip
+unzip S10.zip
+python test_pipeline.py -expression S10/S10_filtered_feature_bc_matrix.h5  -meta S10/spatial/tissue_positions_list.csv  -scaler S10/spatial/scalefactors_json.json -output Demo_result_tissue_architecture  -embedding scGNN  -transform logcpm -model model_S10/S10_scGNN.pth -device cpu
 ```
 
 #### Command Line Arguments:
@@ -234,13 +234,13 @@ python test_pipeline.py -expression S13/S13_filtered_feature_bc_matrix.h5  -meta
 This demo takes 30-35 mins to generate all the results on the machine with a 64-core CPU.
 
 ### Function 4: customize segmentation model (GPU required)
- ```RESEPT``` supports fine-tuning our segmentation model by using users' 10x Visium data. Organize all samples and their annotations according to our pre-defined data schema and download our pre-trained model from [here](https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/model_S13.zip) as a training start point. Each sample for the training model should be placed in an individual folder with a specific format (the folder structure can be found [here](https://github.com/coffee19850519/single_cell_spatial_image#data-structure)). Then gather all the individual folders into one main folder (e.g., named “training_data_folder”).  For demonstration, download the example training data from [here](https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/training_data_folder.zip), and then run the following command line to generate the RGB images of your own data and customized model.
+ ```RESEPT``` supports fine-tuning our segmentation model by using users' 10x Visium data. Organize all samples and their annotations according to our pre-defined data schema and download our pre-trained model from [here](https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/model_S10.zip) as a training start point. Each sample for the training model should be placed in an individual folder with a specific format (the folder structure can be found [here](https://github.com/coffee19850519/single_cell_spatial_image#data-structure)). Then gather all the individual folders into one main folder (e.g., named “training_data_folder”).  For demonstration, download the example training data from [here](https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/training_data_folder.zip), and then run the following command line to generate the RGB images of your own data and customized model.
 ```
-wget https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/model_S13.zip
+wget https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/model_S10.zip
 wget https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/training_data_folder.zip
-unzip model_S13.zip
+unzip model_S10.zip
 unzip training_data_folder.zip
-python training_pipeline.py -data_folder training_data_folder -output Demo_result_model -embedding scGNN  -transform logcpm -model model_S13/S13_scGNN.pth
+python training_pipeline.py -data_folder training_data_folder -output Demo_result_model -embedding scGNN  -transform logcpm -model model_S10/S10_scGNN.pth
 ```
 
 #### Command Line Arguments:
