@@ -199,7 +199,7 @@ python evaluation_pipeline.py -expression S10/S10_filtered_feature_bc_matrix.h5 
 This demo takes 30-35 mins to generate all results on the machine with a 64-core CPU.
 
 ### Function 3: predict tissue architecture without annotation
-Run the following command line to generate RGB images based on gene expression from different embedding parameters and predict tissue architectures with top-5 Moran's I. For demonstration, please download the example data from here and the pre-trained model from [here](https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/S10.zip) and the pre-trained model from [here](https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/model_S10.zip). Then put unzip folders 'S10' and 'model_S10' in the source code folder.
+Run the following command line to generate RGB images based on gene expression from different embedding parameters and predict tissue architectures with top-5 Moran's I. For demonstration, please download the example data from [here](https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/S10.zip) and the pre-trained model from [here](https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/model_S10.zip). Then put unzip folders 'S10' and 'model_S10' in the source code folder.
 ```
 wget https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/S10.zip 
 wget https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/model_.zip 
