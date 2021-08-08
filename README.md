@@ -1,6 +1,3 @@
-[docs-image]: https://readthedocs.org/projects/pytorch-geometric/badge/?version=latest
-[docs-url]: https://resept.readthedocs.io/en/latest/index.html
-
 # Define and visualize pathological architectures of human tissues from spatially resolved transcriptomics using deep learning
 <img src="https://img.shields.io/badge/RESEPT-v1.0.0-green"> <img src="https://img.shields.io/badge/Platform-Linux-green"> <img src="https://img.shields.io/badge/Language-python3-green"> <img src="https://img.shields.io/badge/License-MIT-green">
 
@@ -12,6 +9,8 @@ Given inputs as gene expression or RNA velocity, ```RESEPT``` learns a three-dim
 <p align="center">
   <img height="300" width="700" src="https://github.com/yuyang-0825/image/blob/main/figure1.png" />
 </p>
+
+Documentation: https://resept.readthedocs.io/
 
  
 ## System Requirements
