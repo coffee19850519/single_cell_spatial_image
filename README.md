@@ -201,7 +201,7 @@ This demo takes 30-35 mins to generate all results on the machine with a 64-core
 Run the following command line to generate RGB images based on gene expression from different embedding parameters and predict tissue architectures with top-5 Moran's I. For demonstration, please download the example data from [here](https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/S10.zip) and the pre-trained model from [here](https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/model_S10.zip). Then put unzip folders 'S10' and 'model_S10' in the source code folder.
 ```
 wget https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/S10.zip 
-wget https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/model_.zip 
+wget https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/model_S10.zip 
 unzip model_S10.zip
 unzip S10.zip
 python test_pipeline.py -expression S10/S10_filtered_feature_bc_matrix.h5  -meta S10/spatial/tissue_positions_list.csv  -scaler S10/spatial/scalefactors_json.json -output Demo_result_tissue_architecture  -embedding scGNN  -transform logcpm -model model_S10/S10_scGNN.pth -device cpu
