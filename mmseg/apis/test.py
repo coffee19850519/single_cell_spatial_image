@@ -45,7 +45,7 @@ def single_gpu_test(adata,
                     output_folder,
                     show=False,
                     out_dir=None,
-                    efficient_test=False):
+                    efficient_test=False, k=7):
     """Test with single GPU.
     Args:
         model (nn.Module): Model to be tested.
@@ -75,7 +75,7 @@ def single_gpu_test(adata,
     if label_path == None:  # test
         for i, data in enumerate(data_loader):
             with torch.no_grad():
-                result = model(return_loss=False, **data)
+                result = model(return_loss=False, k=k, **data)
 
                 # calculate MI
 
@@ -187,7 +187,7 @@ def single_gpu_test(adata,
     else:  # evaluation
         for i, data in enumerate(data_loader):
             with torch.no_grad():
-                result = model(return_loss=False, **data)
+                result = model(return_loss=False, k=k, **data)
 
                 # calculate MI
 
