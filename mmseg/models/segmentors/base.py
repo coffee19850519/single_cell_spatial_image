@@ -109,6 +109,8 @@ class BaseSegmentor(nn.Module):
 
     @auto_fp16(apply_to=('img', ))
     def forward(self, img, img_metas, return_loss=True, **kwargs):
+        for k, v in kwargs.items():
+            print ('Optional argument %s (kwargs): %s' % (k, v))
         """Calls either :func:`forward_train` or :func:`forward_test` depending
         on whether ``return_loss`` is ``True``.
 

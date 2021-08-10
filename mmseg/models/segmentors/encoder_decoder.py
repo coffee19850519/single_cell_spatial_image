@@ -7,7 +7,7 @@ from mmseg.ops import resize
 from .. import builder
 from ..builder import SEGMENTORS
 from .base import BaseSegmentor
-
+from ..cluster.kmeans import kmeans_debackground
 import numpy as np
 @SEGMENTORS.register_module()
 class EncoderDecoder(BaseSegmentor):
@@ -232,7 +232,7 @@ class EncoderDecoder(BaseSegmentor):
 
         return seg_logit
 
-    def inference(self, img, img_meta, rescale):
+    def inference(self, img, img_meta, rescale,k):
         """Inference with slide/whole style.
 
         Args:
@@ -257,7 +257,11 @@ class EncoderDecoder(BaseSegmentor):
         else:
             seg_logit = self.whole_inference(img, img_meta, rescale)
             # print('\n',seg_logit.size())
-        output = F.softmax(seg_logit, dim=1)
+        
+        if k==7:
+            output = F.softmax(seg_logit, dim=1)
+        else:
+            output = seg_logit
         # print(output.size())
         flip = img_meta[0]['flip']
         if flip:
@@ -270,11 +274,19 @@ class EncoderDecoder(BaseSegmentor):
 
         return output
 
-    def simple_test(self, img, img_meta, rescale=True):
+    def simple_test(self, img, img_meta, rescale=True, k=7):
         """Simple test with single image."""
-        seg_logit = self.inference(img, img_meta, rescale)
+
+        # print(k)
+        seg_logit = self.inference(img, img_meta, rescale,k)
         # print('\n',seg_logit.size())
-        seg_pred = seg_logit.argmax(dim=1)
+        # np.save('embedding',seg_logit)
+        
+        if k==7:
+            seg_pred = seg_logit.argmax(dim=1)
+        else:
+            seg_pred = kmeans_debackground(img_meta, seg_logit, k+1)[0]
+
         # print(seg_pred.size())
         if torch.onnx.is_in_onnx_export():
             # our inference backend only support 4D output
