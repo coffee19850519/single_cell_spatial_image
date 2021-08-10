@@ -167,15 +167,15 @@ wget https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/S10.zip
 wget https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/model_S10.zip
 unzip S10.zip
 unzip model_S10.zip
-python evaluation_pipeline.py -expression S10/S10_filtered_feature_bc_matrix.h5  -meta S10/spatial/tissue_positions_list.csv  -scaler S10/spatial/scalefactors_json.json -label S10/S10_annotation.csv -k 7 -model model_S10/S10_scGNN.pth -output Demo_result_evaluation  -embedding scGNN  -transform logcpm  -device cpu
+python evaluation_pipeline.py -expression S10/S10_filtered_feature_bc_matrix.h5  -meta S10/spatial/tissue_positions_list.csv  -scaler S10/spatial/scalefactors_json.json -k 7 -label S10/S10_annotation.csv -model model_S10/S10_scGNN.pth -output Demo_result_evaluation  -embedding scGNN  -transform logcpm  -device cpu
 ```
 
 #### Command Line Arguments:
 *	-expression file path for raw gene expression data. [type: str]
 *	-meta file path for spatial meta data recording tissue positions. [type: str]
 *	-scaler file path for scale factors. [type: str]
-*	-label file path for labels recording spot barcodes and their annotations for calculating evaluation metrics. [type: str]
 *	-k segmentation number. [type: int] [default: 7]
+*	-label file path for labels recording spot barcodes and their annotations for calculating evaluation metrics. [type: str]
 *	-model file path for pre-trained model. [type: str]
 *	-output output root folder. [type: str]
 *	-embedding embedding method in use: scGNN or spaGCN. [type: str] [default: scGNN]
