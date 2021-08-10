@@ -13,7 +13,7 @@ def parse_args1():
     parser.add_argument('-expression', type=str, nargs='+', help='file path for raw gene expression data')
     parser.add_argument('-meta', type=str, nargs='+', help='file path for spatial meta data recording tissue positions')
     parser.add_argument('-scaler', type=str, nargs='+', help='file path for scale factors')
-    parser.add_argument('-k', type=int, nargs='+', default=[7], help='the number of Kmeans')
+    parser.add_argument('-k', type=int, nargs='+', default=[7], help='the number of tissue architectures')
     parser.add_argument('-model', type=str, nargs='+', help='file path for pre-trained model')
     parser.add_argument('-histological', type=str, nargs='+', help='file path for the corresponding histological image')
     parser.add_argument('-output',  type=str, nargs='+', help='generate output folder')
