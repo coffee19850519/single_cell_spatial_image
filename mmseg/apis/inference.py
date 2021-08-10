@@ -66,7 +66,7 @@ class LoadImage:
         return results
 
 
-def inference_segmentor(model, img):
+def inference_segmentor(model, img, k):
     """Inference image(s) with the segmentor.
 
     Args:
@@ -77,6 +77,7 @@ def inference_segmentor(model, img):
     Returns:
         (list[Tensor]): The segmentation result.
     """
+
     cfg = model.cfg
     device = next(model.parameters()).device  # model device
     # build the data pipeline
@@ -94,7 +95,7 @@ def inference_segmentor(model, img):
 
     # forward the model
     with torch.no_grad():
-        result = model(return_loss=False, rescale=True, **data)
+        result = model(return_loss=False, rescale=True, k=k, **data)
     return result
 
 
