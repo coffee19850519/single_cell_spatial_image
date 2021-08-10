@@ -21,14 +21,14 @@ import math
 from mmseg.apis.inference import inference_segmentor
 from mmseg.apis.inference import init_segmentor
 
-def testing_metric(img_path, output_folder, model, show_dir):
+def testing_metric(img_path, output_folder, model, show_dir, k):
     MI_list = [] 
     name_list = []
 
     for name in os.listdir(img_path):
         img_name = img_path+name
         name_list.append(name)
-        result = inference_segmentor(model, img_name)
+        result = inference_segmentor(model, img_name, k)
         # print(result[0])
         # print(img_name)
         out_file=show_dir+name
@@ -96,19 +96,19 @@ def testing_metric(img_path, output_folder, model, show_dir):
     shutil.rmtree(output_folder + 'result/')
     return top1_category_map
 
-def evaluation_metric(adata, img_path, output_folder, model, show_dir, label_path):
+def evaluation_metric(adata, img_path, output_folder, model, show_dir, label_path, k):
     MI_list = []
     name_list = []
     ARI_list = []
     AMI_list = []
     FMI_list = []
     RI_list = []
-
+  
     for name in os.listdir(img_path):
         img_name = img_path+name
         name_list.append(name)
 
-        result = inference_segmentor(model, img_name)
+        result = inference_segmentor(model, img_name, k)
         name0, ARI, AMI, FMI, RI = calculate(adata, result[0], img_name, label_path)
         ARI_list.append(ARI)
         AMI_list.append(AMI)

@@ -23,7 +23,7 @@ from mmseg.apis.inference import inference_segmentor
 from mmseg.apis.inference import init_segmentor
 from cal_metric import testing_metric, evaluation_metric
 
-def segmentation(adata,img_path,label_path,method,checkpoint_path,device):  
+def segmentation(adata,img_path,label_path,method,checkpoint_path,device, k):  
 
     config = './configs/deeplabv3_r101-d8_512x512_80k_singlecell.py'
     checkpoint = checkpoint_path
@@ -60,11 +60,11 @@ def segmentation(adata,img_path,label_path,method,checkpoint_path,device):
         # test a single image
         # for i, data in enumerate(data_loader): 
         if label_path==None:
-            top1_csv_name = testing_metric(img_path, output_folder, model, show_dir)
+            top1_csv_name = testing_metric(img_path, output_folder, model, show_dir, k)
         else:
-            top1_csv_name = evaluation_metric(adata, img_path, output_folder, model, show_dir, label_path)
+            top1_csv_name = evaluation_metric(adata, img_path, output_folder, model, show_dir, label_path, k)
 
-        print('ok')
+        print('using cpu')
 
     else:
         # build the dataloader
@@ -94,7 +94,7 @@ def segmentation(adata,img_path,label_path,method,checkpoint_path,device):
         if not distributed:
             model = MMDataParallel(model, device_ids=[0])
             outputs, top1_csv_name = single_gpu_test(adata, model, data_loader,label_path, output_folder, show, show_dir,
-                                      efficient_test)
+                                      efficient_test, k)
 
 
     return top1_csv_name
