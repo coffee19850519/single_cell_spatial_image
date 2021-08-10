@@ -13,6 +13,7 @@ def parse_args1():
     parser.add_argument('-expression', type=str, nargs='+', help='file path for raw gene expression data')
     parser.add_argument('-meta', type=str, nargs='+', help='file path for spatial meta data recording tissue positions')
     parser.add_argument('-scaler', type=str, nargs='+', help='file path for scale factors')
+    parser.add_argument('-k', type=int, nargs='+', default=[7], help='the number of Kmeans')
     parser.add_argument('-model', type=str, nargs='+', help='file path for pre-trained model')
     parser.add_argument('-histological', type=str, nargs='+', help='file path for the corresponding histological image')
     parser.add_argument('-output',  type=str, nargs='+', help='generate output folder')
@@ -31,6 +32,7 @@ if __name__ == '__main__':
     h5_path = args1.expression[0]
     spatial_path = args1.meta[0]
     scale_factor_path = args1.scaler[0]
+    k = args1.k[0]
     optical_path = args1.histological[0]
     output_path = args1.output[0]
     model = args1.model[0]
@@ -39,5 +41,5 @@ if __name__ == '__main__':
     device = args1.device[0]
     if not os.path.exists(output_path):
         os.makedirs(output_path)
-    segmentation_category_map(h5_path, spatial_path, scale_factor_path, optical_path, output_path, method, None, False, transform_opt, model, device)
+    segmentation_category_map(h5_path, spatial_path, scale_factor_path, optical_path, output_path, method, None, False, transform_opt, model, device, k)
 
