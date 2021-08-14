@@ -34,7 +34,7 @@ Documentation: https://resept.readthedocs.io/
 ```
 pip install -r requirements.txt
 ```
-The above steps take 20-25 mins to install all dependencies.
+The above step takes 20-25 mins to install all dependencies.
 
 ### Install RESEPT from GitHub
 ```
