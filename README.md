@@ -26,46 +26,13 @@ Documentation: https://resept.readthedocs.io/
 * Linux: Ubuntu 20.04
 
 #### Python Dependencies
-``` RESEPT ``` mainly depends on the Python (3.6+) scientific stack.
-```
-numpy 1.18.1
-torch 1.4.0
-networkx 2.4
-pandas 0.25.3
-matplotlib 3.1.2
-seaborn 0.9.0
-umap-learn 0.3.10
-munkres 1.1.2
-tqdm 4.48.0
-python-igraph 0.8.3
-scanpy 1.7.2
-scikit-image 0.18.1
-opencv-python 4.5.1.48
-louvain  0.7.0
-anndata 0.7.6
-mmcv-full  1.3.0
-mmsegmentation 0.12.0
-```
+``` RESEPT ``` mainly depends on the Python (3.6+) scientific stack. More details of dependencies can be found in the [requirements.txt](https://github.com/coffee19850519/single_cell_spatial_image/blob/main/requirements.txt).
 
 ## Installation Guide
 
 ### Install dependency packages
 ```
-pip install numpy 
-pip install networkx 
-pip install pandas 
-pip install matplotlib 
-pip install seaborn 
-pip install umap-learn 
-pip install munkres 
-pip install tqdm 
-pip install python-igraph 
-pip install scanpy 
-pip install scikit-image
-pip install opencv-python 
-pip install louvain  
-pip install anndata
-pip install mmcv-full  
+pip install -r requirements.txt
 ```
 The above steps take 20-25 mins to install all dependencies.
 
