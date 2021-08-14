@@ -26,7 +26,7 @@ Documentation: https://resept.readthedocs.io/
 * Linux: Ubuntu 20.04
 
 #### Python Dependencies
-``` RESEPT ``` mainly depends on the Python (3.6+) scientific stack. More details of dependencies can be found in the [requirements.txt](https://github.com/coffee19850519/single_cell_spatial_image/blob/main/requirements.txt).
+``` RESEPT ``` mainly depends on the Python (3.6+) scientific stack as shown in the [requirements.txt](https://github.com/coffee19850519/single_cell_spatial_image/blob/main/requirements.txt).
 
 ## Installation Guide
 
