@@ -5,7 +5,6 @@ import numpy as np
 from mmseg.ops import resize
 from ..builder import HEADS
 from .decode_head import BaseDecodeHead
-from ..kmeans import label_generator_kmeans
 
 class ASPPModule(nn.ModuleList):
     """Atrous Spatial Pyramid Pooling (ASPP) Module.
