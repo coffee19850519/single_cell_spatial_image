@@ -2,7 +2,7 @@
 
 import warnings
 import cv2
-import faiss
+# import faiss
 import torch
 from sklearn.cluster import KMeans
 from ..torch_utils import to_numpy, to_torch
