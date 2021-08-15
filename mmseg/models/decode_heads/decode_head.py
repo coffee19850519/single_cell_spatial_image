@@ -10,8 +10,8 @@ from mmseg.ops import resize
 from ..builder import build_loss
 from ..losses import accuracy
 from .torch_utils import to_numpy, to_torch
-from ..kmeans import label_generator_kmeans
-from ..kmeans import label_generator_kmeans_test
+# from ..kmeans import label_generator_kmeans
+# from ..kmeans import label_generator_kmeans_test
 from torch.autograd import Variable
 class BaseDecodeHead(nn.Module, metaclass=ABCMeta):
     """Base class for BaseDecodeHead.
