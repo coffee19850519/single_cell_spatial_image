@@ -59,8 +59,8 @@ umap==0.1.1
 ## Installation Guide
 
 ### Install dependency packages
-1. Install ```PyTorch 1.5.0```, use the command in the [official guide](https://pytorch.org/get-started/previous-versions/#linux-and-windows-9).
-2. Install ```mmcv-full 1.3.0```, use the following command:
+1. Install ```PyTorch 1.5.0``` following the [official guide](https://pytorch.org/get-started/previous-versions/#linux-and-windows-9).
+2. Install ```mmcv-full 1.3.0``` by running the following command:
     ```
     pip install mmcv-full==1.3.0 -f https://download.openmmlab.com/mmcv/dist/${CUDA}/torch1.5.0/index.html
     ```
