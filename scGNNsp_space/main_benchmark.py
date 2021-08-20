@@ -1,5 +1,5 @@
 import time
-import resource
+# import resource
 import datetime
 import argparse
 import sys
@@ -234,8 +234,8 @@ bench_celltype = bench_pd.iloc[:, 0].to_numpy()
 def debuginfoStr(info):
     if args.debuginfo:
         print('---'+str(datetime.timedelta(seconds=int(time.time()-start_time)))+'---'+info)
-        mem = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss
-        print('Mem consumption: '+str(mem))
+#         mem = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss
+#         print('Mem consumption: '+str(mem))
 
 
 debuginfoStr('scRNA has been successfully loaded')
