@@ -258,7 +258,7 @@ class EncoderDecoder(BaseSegmentor):
             seg_logit = self.whole_inference(img, img_meta, rescale)
             # print('\n',seg_logit.size())
         
-        if k==7:
+        if k==7 or k==-1:
             output = F.softmax(seg_logit, dim=1)
         else:
             output = seg_logit
@@ -282,7 +282,7 @@ class EncoderDecoder(BaseSegmentor):
         # print('\n',seg_logit.size())
         # np.save('embedding',seg_logit)
         
-        if k==7:
+        if k==7 or k==-1:
             seg_pred = seg_logit.argmax(dim=1)
         else:
             seg_pred = kmeans_debackground(img_meta, seg_logit, k+1)[0]
