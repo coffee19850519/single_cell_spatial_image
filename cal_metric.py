@@ -24,76 +24,166 @@ from mmseg.apis.inference import init_segmentor
 def testing_metric(img_path, output_folder, model, show_dir, k):
     MI_list = [] 
     name_list = []
+    k_list = []
+    if k==-1:
+        for name in os.listdir(img_path):
+            MI_max = 0  
+            img_name = img_path+name
+            result = inference_segmentor(model, img_name, k)
+            out_file=show_dir+name
+            image_test = cv2.imread(img_name)
+            MI = cluster_heterogeneity(image_test, result[0], 0)
+            if MI_max < MI:
+                MI_max = MI
+                optimal_name = name 
 
-    for name in os.listdir(img_path):
-        img_name = img_path+name
-        name_list.append(name)
-        result = inference_segmentor(model, img_name, k)
-        # print(result[0])
-        # print(img_name)
-        out_file=show_dir+name
-        print(out_file)
+        for tmp_k in range(4, 10):
+            MI_max = 0     
+            img_name = img_path+optimal_name       
+            result = inference_segmentor(model, img_name, tmp_k)
+            out_file=show_dir+name
+            model.show_result(
+                                    img_name,
+                                    result,
+                                    palette=None,
+                                    show=False,
+                                    out_file=out_file)
+
+            image_test = cv2.imread(img_name)
+            if not os.path.exists(output_folder+'result_temp/'):
+                os.makedirs(output_folder+'result_temp/')
+            np.savetxt(output_folder+'result_temp/'+name.split('.png')[0]+'.csv', result[0], delimiter=',')
+            MI = cluster_heterogeneity(image_test, result[0], 0)
+            if MI_max < MI:
+                MI_max = MI
+                optimal_k = tmp_k
+
+        result = inference_segmentor(model, img_name, optimal_k)
         model.show_result(
                                 img_name,
                                 result,
                                 palette=None,
                                 show=False,
                                 out_file=out_file)
+        k_list.append(optimal_k)
+        name_list.append(optimal_name)
+        MI_list.append(MI_max)
 
-        image_test = cv2.imread(img_name)
-        if not os.path.exists(output_folder+'result_temp/'):
-            os.makedirs(output_folder+'result_temp/')
-        np.savetxt(output_folder+'result_temp/'+name.split('.png')[0]+'.csv', result[0], delimiter=',')
 
-        MI = cluster_heterogeneity(image_test, result[0], 0)
-        MI_list.append(MI)
+        MI_result = {
+            'name': name_list,
+            'k':k_list,
+            'MI': MI_list,
+        }
+        MI_result = pd.DataFrame(MI_result)
+        MI_result = MI_result.sort_values(by=['MI'], ascending=False)
 
-    MI_result = {
-        'name': name_list,
-        'MI': MI_list,
-    }
-    MI_result = pd.DataFrame(MI_result)
-    MI_result = MI_result.sort_values(by=['MI'], ascending=False)
+        if len(name_list) > 5:
+            MI_result_top5 = MI_result[0:5]
+            name = MI_result_top5.iloc[:, 0].values
+            for n in name:
+                prefix = n.split('.png')[0]
+                show = cv2.imread(show_dir + n)
+                if not os.path.exists(output_folder + 'segmentation_map/'):
+                    os.makedirs(output_folder + 'segmentation_map/')
+                cv2.imwrite(output_folder + 'segmentation_map/' + n, show)
 
-    if len(name_list) > 5:
-        MI_result_top5 = MI_result[0:5]
-        # print(MI_result_top5)
-        name = MI_result_top5.iloc[:, 0].values
-        for n in name:
-            prefix = n.split('.png')[0]
-            show = cv2.imread(show_dir + n)
-            if not os.path.exists(output_folder + 'segmentation_map/'):
-                os.makedirs(output_folder + 'segmentation_map/')
-            cv2.imwrite(output_folder + 'segmentation_map/' + n, show)
+                if not os.path.exists(output_folder+'result/'):
+                    os.makedirs(output_folder+'result/')
+                shutil.move(output_folder+'result_temp/'+prefix+'.csv', output_folder+'result/'+prefix+'.csv')
 
-            if not os.path.exists(output_folder+'result/'):
-                os.makedirs(output_folder+'result/')
-            shutil.move(output_folder+'result_temp/'+prefix+'.csv', output_folder+'result/'+prefix+'.csv')
+            # shutil.rmtree(show_dir)
+            # shutil.rmtree(output_folder+'result_temp/')
+            MI_result_top5.to_csv(output_folder + 'top5_MI_value.csv', index=True, header=True)
+        else:
+            name = MI_result.iloc[:, 0].values
+            for n in name:
+                prefix = n.split('.png')[0]
+                show = cv2.imread(show_dir + n)
+                if not os.path.exists(output_folder + 'segmentation_map/'):
+                    os.makedirs(output_folder + 'segmentation_map/')
+                cv2.imwrite(output_folder + 'segmentation_map/' + n, show)
 
-        shutil.rmtree(show_dir)
-        shutil.rmtree(output_folder+'result_temp/')
-        MI_result_top5.to_csv(output_folder + 'top5_MI_value.csv', index=True, header=True)
+                if not os.path.exists(output_folder + 'result/'):
+                    os.makedirs(output_folder + 'result/')
+                shutil.move(output_folder + 'result_temp/' + prefix + '.csv', output_folder + 'result/' + prefix + '.csv')
+
+            shutil.rmtree(show_dir)
+            shutil.rmtree(output_folder + 'result_temp/')
+            MI_result.to_csv(output_folder + 'top5_MI_value.csv', index=True, header=True)
+
+        top1_name = MI_result.iloc[:, 0].values[0]
+        top1_csv_name = output_folder + 'result/' + top1_name.split('.png')[0] + '.csv'
+        top1_category_map = np.loadtxt(top1_csv_name,dtype=np.int32, delimiter=",")
     else:
-        name = MI_result.iloc[:, 0].values
-        for n in name:
-            prefix = n.split('.png')[0]
-            show = cv2.imread(show_dir + n)
-            if not os.path.exists(output_folder + 'segmentation_map/'):
-                os.makedirs(output_folder + 'segmentation_map/')
-            cv2.imwrite(output_folder + 'segmentation_map/' + n, show)
+        for name in os.listdir(img_path):
+            img_name = img_path+name
+            name_list.append(name)
+            result = inference_segmentor(model, img_name, k)
 
-            if not os.path.exists(output_folder + 'result/'):
-                os.makedirs(output_folder + 'result/')
-            shutil.move(output_folder + 'result_temp/' + prefix + '.csv', output_folder + 'result/' + prefix + '.csv')
+            out_file=show_dir+name
+            print(out_file)
+            model.show_result(
+                                    img_name,
+                                    result,
+                                    palette=None,
+                                    show=False,
+                                    out_file=out_file)
 
-        shutil.rmtree(show_dir)
-        shutil.rmtree(output_folder + 'result_temp/')
-        MI_result.to_csv(output_folder + 'top5_MI_value.csv', index=True, header=True)
+            image_test = cv2.imread(img_name)
+            if not os.path.exists(output_folder+'result_temp/'):
+                os.makedirs(output_folder+'result_temp/')
+            np.savetxt(output_folder+'result_temp/'+name.split('.png')[0]+'.csv', result[0], delimiter=',')
 
-    top1_name = MI_result.iloc[:, 0].values[0]
-    top1_csv_name = output_folder + 'result/' + top1_name.split('.png')[0] + '.csv'
-    top1_category_map = np.loadtxt(top1_csv_name,dtype=np.int32, delimiter=",")
-    shutil.rmtree(output_folder + 'result/')
+            MI = cluster_heterogeneity(image_test, result[0], 0)
+            MI_list.append(MI)
+
+        MI_result = {
+            'name': name_list,
+            'MI': MI_list,
+        }
+        MI_result = pd.DataFrame(MI_result)
+        MI_result = MI_result.sort_values(by=['MI'], ascending=False)
+
+        if len(name_list) > 5:
+            MI_result_top5 = MI_result[0:5]
+            # print(MI_result_top5)
+            name = MI_result_top5.iloc[:, 0].values
+            for n in name:
+                prefix = n.split('.png')[0]
+                show = cv2.imread(show_dir + n)
+                if not os.path.exists(output_folder + 'segmentation_map/'):
+                    os.makedirs(output_folder + 'segmentation_map/')
+                cv2.imwrite(output_folder + 'segmentation_map/' + n, show)
+
+                if not os.path.exists(output_folder+'result/'):
+                    os.makedirs(output_folder+'result/')
+                shutil.move(output_folder+'result_temp/'+prefix+'.csv', output_folder+'result/'+prefix+'.csv')
+
+            # shutil.rmtree(show_dir)
+            # shutil.rmtree(output_folder+'result_temp/')
+            MI_result_top5.to_csv(output_folder + 'top5_MI_value.csv', index=True, header=True)
+        else:
+            name = MI_result.iloc[:, 0].values
+            for n in name:
+                prefix = n.split('.png')[0]
+                show = cv2.imread(show_dir + n)
+                if not os.path.exists(output_folder + 'segmentation_map/'):
+                    os.makedirs(output_folder + 'segmentation_map/')
+                cv2.imwrite(output_folder + 'segmentation_map/' + n, show)
+
+                if not os.path.exists(output_folder + 'result/'):
+                    os.makedirs(output_folder + 'result/')
+                shutil.move(output_folder + 'result_temp/' + prefix + '.csv', output_folder + 'result/' + prefix + '.csv')
+
+            shutil.rmtree(show_dir)
+            shutil.rmtree(output_folder + 'result_temp/')
+            MI_result.to_csv(output_folder + 'top5_MI_value.csv', index=True, header=True)
+
+        top1_name = MI_result.iloc[:, 0].values[0]
+        top1_csv_name = output_folder + 'result/' + top1_name.split('.png')[0] + '.csv'
+        top1_category_map = np.loadtxt(top1_csv_name,dtype=np.int32, delimiter=",")
+    # shutil.rmtree(output_folder + 'result/')
     return top1_category_map
 
 def evaluation_metric(adata, img_path, output_folder, model, show_dir, label_path, k):
@@ -103,87 +193,197 @@ def evaluation_metric(adata, img_path, output_folder, model, show_dir, label_pat
     AMI_list = []
     FMI_list = []
     RI_list = []
-  
-    for name in os.listdir(img_path):
-        img_name = img_path+name
-        name_list.append(name)
+    k_list = []
+    if k == -1:
+        for name in os.listdir(img_path):
+            MI_max = 0
+            img_name = img_path+name
+            result = inference_segmentor(model, img_name, k)
+            out_file=show_dir+name
+            image_test = cv2.imread(img_name)
+            MI = cluster_heterogeneity(image_test, result[0], 0)
+            if MI_max < MI:
+                MI_max = MI
+                optimal_name = name 
 
-        result = inference_segmentor(model, img_name, k)
-        name0, ARI, AMI, FMI, RI = calculate(adata, result[0], img_name, label_path)
-        ARI_list.append(ARI)
-        AMI_list.append(AMI)
-        FMI_list.append(FMI)
-        RI_list.append(RI)
-        # print(result[0])
-        print(img_name)
-        out_file=show_dir+name
-        # print(out_file)
+
+        for tmp_k in range(4, 10):
+            MI_max = 0     
+            img_name = img_path+optimal_name       
+            result = inference_segmentor(model, img_name, tmp_k)
+            out_file=show_dir+name
+            model.show_result(
+                                    img_name,
+                                    result,
+                                    palette=None,
+                                    show=False,
+                                    out_file=out_file)
+
+            image_test = cv2.imread(img_name)
+            if not os.path.exists(output_folder+'result_temp/'):
+                os.makedirs(output_folder+'result_temp/')
+            np.savetxt(output_folder+'result_temp/'+name.split('.png')[0]+'.csv', result[0], delimiter=',')
+            MI = cluster_heterogeneity(image_test, result[0], 0)
+            name0, ARI, AMI, FMI, RI = calculate(adata, result[0], img_name, label_path)
+
+            if MI_max < MI:
+
+                MI_max = MI
+                optimal_k = tmp_k
+                optimal_ARI = ARI
+                optimal_MI = MI
+                optimal_AMI = AMI
+                optimal_FMI = FMI
+                optimal_RI = RI
+
+        result = inference_segmentor(model, img_name, optimal_k)
         model.show_result(
                                 img_name,
                                 result,
                                 palette=None,
                                 show=False,
                                 out_file=out_file)
+        k_list.append(optimal_k)
+        name_list.append(optimal_name)
+        MI_list.append(optimal_MI)
+        ARI_list.append(optimal_ARI)
+        AMI_list.append(optimal_AMI)
+        FMI_list.append(optimal_FMI)
+        RI_list.append(optimal_RI)
 
-        image_test = cv2.imread(img_name)
-        if not os.path.exists(output_folder+'result_temp/'):
-            os.makedirs(output_folder+'result_temp/')
-        np.savetxt(output_folder+'result_temp/'+name.split('.png')[0]+'.csv', result[0], delimiter=',')
+        MI_result = {
+                    'name': name_list,
+                    'k':k_list,
+                    "ARI": ARI_list,
+                    "AMI": AMI_list,
+                    "FMI": FMI_list,
+                    "RI": RI_list,
+                    'MI': MI_list,
 
-        MI = cluster_heterogeneity(image_test, result[0], 0)
-        MI_list.append(MI)
+                }
+        MI_result = pd.DataFrame(MI_result)
+        MI_result = MI_result.sort_values(by=['MI'], ascending=False)
+        
+        if len(name_list) > 5:
+            MI_result_top5 = MI_result[0:5]
+            # print(MI_result_top5)
+            name = MI_result_top5.iloc[:, 0].values
+            for n in name:
+                prefix = n.split('.png')[0]
+                show = cv2.imread(show_dir + n)
+                if not os.path.exists(output_folder + 'segmentation_map/'):
+                    os.makedirs(output_folder + 'segmentation_map/')
+                cv2.imwrite(output_folder + 'segmentation_map/' + n, show)
 
-    MI_result = {
-                'name': name_list,
-                "ARI": ARI_list,
-                "AMI": AMI_list,
-                "FMI": FMI_list,
-                "RI": RI_list,
-                'MI': MI_list,
+                if not os.path.exists(output_folder+'result/'):
+                    os.makedirs(output_folder+'result/')
+                shutil.move(output_folder+'result_temp/'+prefix+'.csv', output_folder+'result/'+prefix+'.csv')
 
-            }
-    MI_result = pd.DataFrame(MI_result)
-    MI_result = MI_result.sort_values(by=['MI'], ascending=False)
-    
-    if len(name_list) > 5:
-        MI_result_top5 = MI_result[0:5]
-        # print(MI_result_top5)
-        name = MI_result_top5.iloc[:, 0].values
-        for n in name:
-            prefix = n.split('.png')[0]
-            show = cv2.imread(show_dir + n)
-            if not os.path.exists(output_folder + 'segmentation_map/'):
-                os.makedirs(output_folder + 'segmentation_map/')
-            cv2.imwrite(output_folder + 'segmentation_map/' + n, show)
+            shutil.rmtree(show_dir)
+            shutil.rmtree(output_folder+'result_temp/')
+            MI_result_top5.to_csv(output_folder + 'top5_MI_value.csv', index=True, header=True)
+        else:
+            name = MI_result.iloc[:, 0].values
+            for n in name:
+                prefix = n.split('.png')[0]
+                show = cv2.imread(show_dir + n)
+                if not os.path.exists(output_folder + 'segmentation_map/'):
+                    os.makedirs(output_folder + 'segmentation_map/')
+                cv2.imwrite(output_folder + 'segmentation_map/' + n, show)
 
-            if not os.path.exists(output_folder+'result/'):
-                os.makedirs(output_folder+'result/')
-            shutil.move(output_folder+'result_temp/'+prefix+'.csv', output_folder+'result/'+prefix+'.csv')
+                if not os.path.exists(output_folder + 'result/'):
+                    os.makedirs(output_folder + 'result/')
+                shutil.move(output_folder + 'result_temp/' + prefix + '.csv', output_folder + 'result/' + prefix + '.csv')
 
-        shutil.rmtree(show_dir)
-        shutil.rmtree(output_folder+'result_temp/')
-        MI_result_top5.to_csv(output_folder + 'top5_MI_value.csv', index=True, header=True)
+            shutil.rmtree(show_dir)
+            shutil.rmtree(output_folder + 'result_temp/')
+            MI_result.to_csv(output_folder + 'top5_MI_value.csv', index=True, header=True)
+
+        top1_name = MI_result.iloc[:, 0].values[0]
+        top1_csv_name = output_folder + 'result/' + top1_name.split('.png')[0] + '.csv'
+        top1_category_map = np.loadtxt(top1_csv_name,dtype=np.int32, delimiter=",")
+        shutil.rmtree(output_folder + 'result/')
     else:
-        name = MI_result.iloc[:, 0].values
-        for n in name:
-            prefix = n.split('.png')[0]
-            show = cv2.imread(show_dir + n)
-            if not os.path.exists(output_folder + 'segmentation_map/'):
-                os.makedirs(output_folder + 'segmentation_map/')
-            cv2.imwrite(output_folder + 'segmentation_map/' + n, show)
+        for name in os.listdir(img_path):
+            img_name = img_path+name
+            name_list.append(name)
 
-            if not os.path.exists(output_folder + 'result/'):
-                os.makedirs(output_folder + 'result/')
-            shutil.move(output_folder + 'result_temp/' + prefix + '.csv', output_folder + 'result/' + prefix + '.csv')
+            result = inference_segmentor(model, img_name, k)
+            name0, ARI, AMI, FMI, RI = calculate(adata, result[0], img_name, label_path)
+            ARI_list.append(ARI)
+            AMI_list.append(AMI)
+            FMI_list.append(FMI)
+            RI_list.append(RI)
+            # print(result[0])
+            print(img_name)
+            out_file=show_dir+name
+            # print(out_file)
+            model.show_result(
+                                    img_name,
+                                    result,
+                                    palette=None,
+                                    show=False,
+                                    out_file=out_file)
 
-        shutil.rmtree(show_dir)
-        shutil.rmtree(output_folder + 'result_temp/')
-        MI_result.to_csv(output_folder + 'top5_MI_value.csv', index=True, header=True)
+            image_test = cv2.imread(img_name)
+            if not os.path.exists(output_folder+'result_temp/'):
+                os.makedirs(output_folder+'result_temp/')
+            np.savetxt(output_folder+'result_temp/'+name.split('.png')[0]+'.csv', result[0], delimiter=',')
 
-    top1_name = MI_result.iloc[:, 0].values[0]
-    top1_csv_name = output_folder + 'result/' + top1_name.split('.png')[0] + '.csv'
-    top1_category_map = np.loadtxt(top1_csv_name,dtype=np.int32, delimiter=",")
-    shutil.rmtree(output_folder + 'result/')
+            MI = cluster_heterogeneity(image_test, result[0], 0)
+            MI_list.append(MI)
+
+        MI_result = {
+                    'name': name_list,
+                    "ARI": ARI_list,
+                    "AMI": AMI_list,
+                    "FMI": FMI_list,
+                    "RI": RI_list,
+                    'MI': MI_list,
+
+                }
+        MI_result = pd.DataFrame(MI_result)
+        MI_result = MI_result.sort_values(by=['MI'], ascending=False)
+        
+        if len(name_list) > 5:
+            MI_result_top5 = MI_result[0:5]
+            # print(MI_result_top5)
+            name = MI_result_top5.iloc[:, 0].values
+            for n in name:
+                prefix = n.split('.png')[0]
+                show = cv2.imread(show_dir + n)
+                if not os.path.exists(output_folder + 'segmentation_map/'):
+                    os.makedirs(output_folder + 'segmentation_map/')
+                cv2.imwrite(output_folder + 'segmentation_map/' + n, show)
+
+                if not os.path.exists(output_folder+'result/'):
+                    os.makedirs(output_folder+'result/')
+                shutil.move(output_folder+'result_temp/'+prefix+'.csv', output_folder+'result/'+prefix+'.csv')
+
+            shutil.rmtree(show_dir)
+            shutil.rmtree(output_folder+'result_temp/')
+            MI_result_top5.to_csv(output_folder + 'top5_MI_value.csv', index=True, header=True)
+        else:
+            name = MI_result.iloc[:, 0].values
+            for n in name:
+                prefix = n.split('.png')[0]
+                show = cv2.imread(show_dir + n)
+                if not os.path.exists(output_folder + 'segmentation_map/'):
+                    os.makedirs(output_folder + 'segmentation_map/')
+                cv2.imwrite(output_folder + 'segmentation_map/' + n, show)
+
+                if not os.path.exists(output_folder + 'result/'):
+                    os.makedirs(output_folder + 'result/')
+                shutil.move(output_folder + 'result_temp/' + prefix + '.csv', output_folder + 'result/' + prefix + '.csv')
+
+            shutil.rmtree(show_dir)
+            shutil.rmtree(output_folder + 'result_temp/')
+            MI_result.to_csv(output_folder + 'top5_MI_value.csv', index=True, header=True)
+
+        top1_name = MI_result.iloc[:, 0].values[0]
+        top1_csv_name = output_folder + 'result/' + top1_name.split('.png')[0] + '.csv'
+        top1_category_map = np.loadtxt(top1_csv_name,dtype=np.int32, delimiter=",")
+        shutil.rmtree(output_folder + 'result/')
     return top1_category_map
 
 
@@ -191,10 +391,6 @@ def cluster_heterogeneity(image_test, category_map, background_category):
     if len(category_map.shape) > 2:
         category_map = cv2.cvtColor(category_map, cv2.COLOR_BGR2GRAY)
     category_list = np.unique(category_map)
-
-    # if len(image_test.shape) > 2:
-    #     # image_test = cv2.cvtColor(image_test, cv2.COLOR_BGR2GRAY)
-    #      image_test = cv2.imread(image_test)
 
     W = np.zeros((len(category_list), len(category_list)))
     for i in range(category_map.shape[0]):
