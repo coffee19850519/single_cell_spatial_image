@@ -17,7 +17,7 @@ def parse_args1():
     parser.add_argument('-model', type=str, nargs='+', help='file path for pre-trained model')
     parser.add_argument('-histological', type=str, nargs='+', help='file path for the corresponding histological image')
     parser.add_argument('-output',  type=str, nargs='+', help='generate output folder')
-    parser.add_argument('-embedding', type=str, nargs='+', default=['spaGCN'], help='embedding method in use: scGNN or spaGCN')
+    parser.add_argument('-embedding', type=str, nargs='+', default=['spaGCN'], help='embedding method in use: scGNN, spaGCN, UMAP or SEDR')
     parser.add_argument('-transform', type=str, nargs='+', default=['logcpm'], help='data pre-transform method: log, logcpm or None')
     parser.add_argument('-device', type=str, nargs='+', default=['cpu'], help='cpu/gpu device option: cpu or gpu')
 

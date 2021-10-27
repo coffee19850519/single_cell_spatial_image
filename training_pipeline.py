@@ -18,7 +18,7 @@ def parse_args():
     parser.add_argument('-data_folder', type=str, nargs='+', help='a folder provides all training samples. The data including label file of each sample should follow our pre-defined schema in a sub-folder under this folder')
     parser.add_argument('-model', type=str, nargs='+', help='file path for pre-trained model file')
     parser.add_argument('-output', type=str, nargs='+', help='output root folder')
-    parser.add_argument('-embedding', type=str, nargs='+', default=['scGNN'], help='embedding method in use: scGNN or spaGCN')
+    parser.add_argument('-embedding', type=str, nargs='+', default=['scGNN'], help='embedding method in use: scGNN, spaGCN, UMAP or SEDR')
     parser.add_argument('-transform', type=str, nargs='+', default=['logcpm'], help='data pre-transform method: log, logcpm or None')
 
 
