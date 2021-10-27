@@ -149,7 +149,7 @@ python RGB_images_pipeline.py -expression S10/S10_filtered_feature_bc_matrix.h5 
 *	-meta file path for spatial meta data recording tissue positions. [type: str]
 *	-scaler file path for scale factors. [type: str]
 *	-output output root folder. [type: str]
-*	-embedding embedding method in use: scGNN or spaGCN. [type: str] [default: scGNN]
+*	-embedding embedding method in use: scGNN, spaGCN, UMAP or SEDR. [type: str] [default: scGNN]
 *	-transform data pre-transform method: log, logcpm or None. [type: str] [default: logcpm]
 
 
@@ -181,7 +181,7 @@ python evaluation_pipeline.py -expression S10/S10_filtered_feature_bc_matrix.h5 
 *	-label file path for labels recording spot barcodes and their annotations for calculating evaluation metrics. [type: str]
 *	-model file path for pre-trained model. [type: str]
 *	-output output root folder. [type: str]
-*	-embedding embedding method in use: scGNN or spaGCN. [type: str] [default: scGNN]
+*	-embedding embedding method in use: scGNN, spaGCN, UMAP or SEDR. [type: str] [default: scGNN]
 *	-transform data pre-transform method: log, logcpm or None. [type: str] [default: logcpm]
 *	-device cpu/gpu device option: cpu or gpu. [type: str] [default: cpu]
 
@@ -218,7 +218,7 @@ python test_pipeline.py -expression S10/S10_filtered_feature_bc_matrix.h5  -meta
 *	-k the number of tissue architectures(setting -1 will recommend a K for you). [type: int] [default: 7]
 *	-model file path for pre-trained model. [type: str]
 *	-output output root folder. [type: str]
-*	-embedding embedding method in use: scGNN or spaGCN. [type: str] [default: scGNN]
+*	-embedding embedding method in use: scGNN, spaGCN, UMAP or SEDR. [type: str] [default: scGNN]
 *	-transform data pre-transform method: log, logcpm or None. [type: str] [default: logcpm]
 *	-device cpu/gpu device option: cpu or gpu. [type: str] [default: cpu]
 
@@ -255,7 +255,7 @@ python histological_segmentation_pipeline.py -expression ./cancer/Parent_Visium_
 *	-model file path for pre-trained model. [type: str]
 *	-histological file path for the corresponding histological image.[type: str]
 *	-output output root folder. [type: str]
-*	-embedding embedding method in use: scGNN or spaGCN. [type: str] [default: spaGCN]
+*	-embedding embedding method in use: scGNN, spaGCN, UMAP or SEDR. [type: str] [default: spaGCN]
 *	-transform data pre-transform method: log, logcpm or None. [type: str] [default: logcpm]
 *	-device cpu/gpu device option: cpu or gpu. [type: str] [default: cpu]
 #### Results
@@ -294,7 +294,7 @@ python training_pipeline.py -data_folder training_data_folder -output Demo_resul
 * 	-data_folder a folder provides all training samples. The data including label file of each sample should follow our pre-defined schema in a sub-folder under this folder. [type: str]
 * 	-model file path for pre-trained model file. [type: str]
 * 	-output output root folder. [type: str]
-* 	-embedding embedding method in use: scGNN or spaGCN. [type: str] [default: scGNN]
+* 	-embedding embedding method in use: scGNN, spaGCN, UMAP or SEDR. [type: str] [default: scGNN]
 * 	-transform data pre-transform method: log, logcpm or None. [type: str] [default: logcpm]
 
 #### Results
