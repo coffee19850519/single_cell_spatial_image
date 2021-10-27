@@ -19,7 +19,7 @@ def parse_args1():
     parser.add_argument('-label', '--label_path', type=str, nargs='+',  help='file path for labels recording spot barcodes and their annotations for calculating evaluation metrics')
     parser.add_argument('-model', type=str, nargs='+', help='file path for pre-trained model')
     parser.add_argument('-output', '--output_path', type=str, nargs='+', help='output root folder')
-    parser.add_argument('-embedding', type=str, nargs='+', default=['scGNN'], help='embedding method in use: scGNN or spaGCN')
+    parser.add_argument('-embedding', type=str, nargs='+', default=['scGNN'], help='embedding method in use: scGNN, spaGCN, UMAP or SEDR')
     parser.add_argument('-transform', type=str, nargs='+', default=['logcpm'], help='data pre-transform method: log, logcpm or None')
     parser.add_argument('-device', type=str, nargs='+', default=['cpu'], help='cpu/gpu device option: cpu or gpu')
     args = parser.parse_args()
