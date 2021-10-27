@@ -14,7 +14,7 @@ def parse_args():
     parser.add_argument('-meta', type=str, nargs='+', help='file path for spatial meta data recording tissue positions')
     parser.add_argument('-scaler', type=str, nargs='+', help='file path for scale factors')
     parser.add_argument('-output', '--output_path', type=str, nargs='+', help='output root folder')
-    parser.add_argument('-embedding', type=str, nargs='+', default=['scGNN'], help='embedding method in use')
+    parser.add_argument('-embedding', type=str, nargs='+', default=['scGNN'], help='embedding method in use:scGNN, spaGCN, UMAP or SEDR')
     parser.add_argument('-transform', type=str, nargs='+', default=['logcpm'], help='data pre-transform method: log, logcpm or None')
     args = parser.parse_args()
     return args
