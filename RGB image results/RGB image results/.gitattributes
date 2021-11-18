@@ -1,4 +1,0 @@
-scGNN.zip filter=lfs diff=lfs merge=lfs -text
-spaGCN.zip filter=lfs diff=lfs merge=lfs -text
-UMAP.zip filter=lfs diff=lfs merge=lfs -text
-*.zip filter=lfs diff=lfs merge=lfs -text
