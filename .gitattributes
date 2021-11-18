@@ -1,1 +1,2 @@
+RGB[[:space:]]image[[:space:]]results/ filter=lfs diff=lfs merge=lfs -text
 *.zip filter=lfs diff=lfs merge=lfs -text
