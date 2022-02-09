@@ -60,7 +60,7 @@ def segmentation(adata,img_path,label_path,method,checkpoint_path,device, k):
         # test a single image
         # for i, data in enumerate(data_loader): 
         if label_path==None:
-            top1_csv_name = testing_metric(img_path, output_folder, model, show_dir, k)
+            top1_csv_name = testing_metric(adata,img_path, output_folder, model, show_dir, k)
         else:
             top1_csv_name = evaluation_metric(adata, img_path, output_folder, model, show_dir, label_path, k)
 
