@@ -21,7 +21,7 @@ import math
 from mmseg.apis.inference import inference_segmentor
 from mmseg.apis.inference import init_segmentor
 
-def testing_metric(img_path, output_folder, model, show_dir, k):
+def testing_metric(adata,img_path, output_folder, model, show_dir, k):
     MI_list = [] 
     name_list = []
     k_list = []
@@ -91,9 +91,12 @@ def testing_metric(img_path, output_folder, model, show_dir, k):
                 if not os.path.exists(output_folder+'result/'):
                     os.makedirs(output_folder+'result/')
                 shutil.move(output_folder+'result_temp/'+prefix+'.csv', output_folder+'result/'+prefix+'.csv')
+                category_map = pd.read_csv(output_folder+'result/'+prefix+'.csv',header =None)
+                get_spot_category(adata, category_map, 'vote',prefix)
 
-            # shutil.rmtree(show_dir)
-            # shutil.rmtree(output_folder+'result_temp/')
+            shutil.rmtree(show_dir)
+            shutil.rmtree(output_folder+'result_temp/')
+            adata.obs.to_csv(output_folder + 'predicted_category.csv')
             MI_result_top5.to_csv(output_folder + 'top5_MI_value.csv', index=True, header=True)
         else:
             name = MI_result.iloc[:, 0].values
@@ -107,9 +110,12 @@ def testing_metric(img_path, output_folder, model, show_dir, k):
                 if not os.path.exists(output_folder + 'result/'):
                     os.makedirs(output_folder + 'result/')
                 shutil.move(output_folder + 'result_temp/' + prefix + '.csv', output_folder + 'result/' + prefix + '.csv')
+                category_map = pd.read_csv(output_folder+'result/'+prefix+'.csv',header =None)
+                get_spot_category(adata, category_map, 'vote',prefix)
 
             shutil.rmtree(show_dir)
             shutil.rmtree(output_folder + 'result_temp/')
+            adata.obs.to_csv(output_folder + 'predicted_category.csv')
             MI_result.to_csv(output_folder + 'top5_MI_value.csv', index=True, header=True)
 
         top1_name = MI_result.iloc[:, 0].values[0]
@@ -159,9 +165,12 @@ def testing_metric(img_path, output_folder, model, show_dir, k):
                 if not os.path.exists(output_folder+'result/'):
                     os.makedirs(output_folder+'result/')
                 shutil.move(output_folder+'result_temp/'+prefix+'.csv', output_folder+'result/'+prefix+'.csv')
+                category_map = pd.read_csv(output_folder+'result/'+prefix+'.csv',header =None)
+                get_spot_category(adata, category_map, 'vote',prefix)
 
-            # shutil.rmtree(show_dir)
-            # shutil.rmtree(output_folder+'result_temp/')
+            shutil.rmtree(show_dir)
+            shutil.rmtree(output_folder+'result_temp/')
+            adata.obs.to_csv(output_folder + 'predicted_category.csv')
             MI_result_top5.to_csv(output_folder + 'top5_MI_value.csv', index=True, header=True)
         else:
             name = MI_result.iloc[:, 0].values
@@ -175,15 +184,19 @@ def testing_metric(img_path, output_folder, model, show_dir, k):
                 if not os.path.exists(output_folder + 'result/'):
                     os.makedirs(output_folder + 'result/')
                 shutil.move(output_folder + 'result_temp/' + prefix + '.csv', output_folder + 'result/' + prefix + '.csv')
+                category_map = pd.read_csv(output_folder+'result/'+prefix+'.csv',header =None)
+                get_spot_category(adata, category_map, 'vote',prefix)
 
             shutil.rmtree(show_dir)
             shutil.rmtree(output_folder + 'result_temp/')
+            adata.obs.to_csv(output_folder + 'predicted_category.csv')
             MI_result.to_csv(output_folder + 'top5_MI_value.csv', index=True, header=True)
 
         top1_name = MI_result.iloc[:, 0].values[0]
         top1_csv_name = output_folder + 'result/' + top1_name.split('.png')[0] + '.csv'
         top1_category_map = np.loadtxt(top1_csv_name,dtype=np.int32, delimiter=",")
-    # shutil.rmtree(output_folder + 'result/')
+
+    shutil.rmtree(output_folder + 'result/')
     return top1_category_map
 
 def evaluation_metric(adata, img_path, output_folder, model, show_dir, label_path, k):
@@ -278,9 +291,12 @@ def evaluation_metric(adata, img_path, output_folder, model, show_dir, label_pat
                 if not os.path.exists(output_folder+'result/'):
                     os.makedirs(output_folder+'result/')
                 shutil.move(output_folder+'result_temp/'+prefix+'.csv', output_folder+'result/'+prefix+'.csv')
+                category_map = pd.read_csv(output_folder+'result/'+prefix+'.csv',header =None)
+                get_spot_category(adata, category_map, 'vote',prefix)
 
             shutil.rmtree(show_dir)
             shutil.rmtree(output_folder+'result_temp/')
+            adata.obs.to_csv(output_folder + 'predicted_category.csv')
             MI_result_top5.to_csv(output_folder + 'top5_MI_value.csv', index=True, header=True)
         else:
             name = MI_result.iloc[:, 0].values
@@ -294,15 +310,18 @@ def evaluation_metric(adata, img_path, output_folder, model, show_dir, label_pat
                 if not os.path.exists(output_folder + 'result/'):
                     os.makedirs(output_folder + 'result/')
                 shutil.move(output_folder + 'result_temp/' + prefix + '.csv', output_folder + 'result/' + prefix + '.csv')
+                category_map = pd.read_csv(output_folder+'result/'+prefix+'.csv',header =None)
+                get_spot_category(adata, category_map, 'vote',prefix)
 
             shutil.rmtree(show_dir)
             shutil.rmtree(output_folder + 'result_temp/')
+            adata.obs.to_csv(output_folder + 'predicted_category.csv')
             MI_result.to_csv(output_folder + 'top5_MI_value.csv', index=True, header=True)
 
         top1_name = MI_result.iloc[:, 0].values[0]
         top1_csv_name = output_folder + 'result/' + top1_name.split('.png')[0] + '.csv'
         top1_category_map = np.loadtxt(top1_csv_name,dtype=np.int32, delimiter=",")
-        shutil.rmtree(output_folder + 'result/')
+        # shutil.rmtree(output_folder + 'result/')
     else:
         for name in os.listdir(img_path):
             img_name = img_path+name
@@ -359,9 +378,12 @@ def evaluation_metric(adata, img_path, output_folder, model, show_dir, label_pat
                 if not os.path.exists(output_folder+'result/'):
                     os.makedirs(output_folder+'result/')
                 shutil.move(output_folder+'result_temp/'+prefix+'.csv', output_folder+'result/'+prefix+'.csv')
+                category_map = pd.read_csv(output_folder+'result/'+prefix+'.csv',header =None)
+                get_spot_category(adata, category_map, 'vote',prefix)
 
             shutil.rmtree(show_dir)
             shutil.rmtree(output_folder+'result_temp/')
+            adata.obs.to_csv(output_folder + 'predicted_category.csv')
             MI_result_top5.to_csv(output_folder + 'top5_MI_value.csv', index=True, header=True)
         else:
             name = MI_result.iloc[:, 0].values
@@ -375,15 +397,18 @@ def evaluation_metric(adata, img_path, output_folder, model, show_dir, label_pat
                 if not os.path.exists(output_folder + 'result/'):
                     os.makedirs(output_folder + 'result/')
                 shutil.move(output_folder + 'result_temp/' + prefix + '.csv', output_folder + 'result/' + prefix + '.csv')
+                category_map = pd.read_csv(output_folder+'result/'+prefix+'.csv',header =None)
+                get_spot_category(adata, category_map, 'vote',prefix)
 
             shutil.rmtree(show_dir)
             shutil.rmtree(output_folder + 'result_temp/')
+            adata.obs.to_csv(output_folder + 'predicted_category.csv')
             MI_result.to_csv(output_folder + 'top5_MI_value.csv', index=True, header=True)
 
         top1_name = MI_result.iloc[:, 0].values[0]
         top1_csv_name = output_folder + 'result/' + top1_name.split('.png')[0] + '.csv'
         top1_category_map = np.loadtxt(top1_csv_name,dtype=np.int32, delimiter=",")
-        shutil.rmtree(output_folder + 'result/')
+    shutil.rmtree(output_folder + 'result/')
     return top1_category_map
 
 
@@ -485,8 +510,6 @@ def save_spot_RGB_to_image(label_path, adata):
     # data_file = os.path.join(data_folder, expression_file)
     X = pd.read_csv(label_path)
     X = X.sort_values(by=['barcode'])
-    # print(X)
-    # print(adata.obs)
     assert all(adata.obs.index == X.iloc[:, 0].values)
     layers = X.iloc[:, 1].values
     # print(layers)
@@ -497,53 +520,108 @@ def save_spot_RGB_to_image(label_path, adata):
     # radius = int(scaler['spot_diameter_fullres'] + 1)
     max_row = max_col = int((2000 / adata.uns['tissue_hires_scalef']) + 1)
     # radius = round(radius * (600 / 2000))
-
-    # max_row = np.max(spot_row)
-    # max_col = np.max(spot_col)
-
     img = np.zeros(shape=(max_row + 1, max_col + 1), dtype=np.int)
 
     img = img.astype(np.uint8)
     for index in range(len(layers)):
         if layers[index] == 'Layer1':
-            # print('layer1')
-            # img[spot_row[index], spot_col[index]] = [0,0,255]
             img[(spot_row[index] - radius):(spot_row[index] + radius),
             (spot_col[index] - radius):(spot_col[index] + radius)] = 1
-            # print(img[spot_row[index],spot_col[index]])
-            # cv2.circle(img,(spot_row[index], spot_col[index]),radius,(0,0,255),thickness=-1)
         elif layers[index] == 'Layer2':
             img[(spot_row[index] - radius):(spot_row[index] + radius),
             (spot_col[index] - radius):(spot_col[index] + radius)] = 2
-            # img[spot_row[index], spot_col[index]] = [0,255,0]
-            # cv2.circle(img,(spot_row[index], spot_col[index]),radius,(0,255,0),thickness=-1)
-            # print(img[spot_row[index],spot_col[index]])
         elif layers[index] == 'Layer3':
             img[(spot_row[index] - radius):(spot_row[index] + radius),
             (spot_col[index] - radius):(spot_col[index] + radius)] = 3
-            # img[spot_row[index], spot_col[index]] = [255,0,0]
-            # cv2.circle(img,(spot_row[index], spot_col[index]),radius,(255,0,0),thickness=-1)
         elif layers[index] == 'Layer4':
             img[(spot_row[index] - radius):(spot_row[index] + radius),
             (spot_col[index] - radius):(spot_col[index] + radius)] = 4
-            # img[spot_row[index], spot_col[index]] = [255,0,255]
-            # cv2.circle(img,(spot_row[index], spot_col[index]),radius,(255,0,255),thickness=-1)
         elif layers[index] == 'Layer5':
             img[(spot_row[index] - radius):(spot_row[index] + radius),
             (spot_col[index] - radius):(spot_col[index] + radius)] = 5
-            # img[spot_row[index], spot_col[index]] = [0,255,255]
-            # cv2.circle(img,(spot_row[index], spot_col[index]),radius,(0,255,255),thickness=-1)
         elif layers[index] == 'Layer6':
             img[(spot_row[index] - radius):(spot_row[index] + radius),
             (spot_col[index] - radius):(spot_col[index] + radius)] = 6
-            # img[spot_row[index], spot_col[index]] = [255,255,0]
-            # cv2.circle(img,(spot_row[index], spot_col[index]),radius,(255,255,0),thickness=-1)
         elif layers[index] == 'WM':
             img[(spot_row[index] - radius):(spot_row[index] + radius),
             (spot_col[index] - radius):(spot_col[index] + radius)] = 7
-            # img[spot_row[index], spot_col[index]] = [0,0,0]
-            # cv2.circle(img,(spot_row[index], spot_col[index]),radius,(0,0,0),thickness=-1)
 
     shape = adata.uns["img_shape"]
     label_img = cv2.resize(img, dsize=(shape, shape), interpolation=cv2.INTER_NEAREST)
     return label_img
+
+def get_spot_category_by_center_pixel(category_map, center_x, center_y):
+
+    return category_map[center_x, center_y]
+
+def get_spot_category_by_pixel_vote(category_map, center_x, center_y,max_row, max_col, radius):
+
+    spot_region_start_x = center_x - radius
+    spot_region_end_x = center_x + radius
+    spot_region_start_y = center_y - radius
+    spot_region_end_y = center_y + radius
+
+    if spot_region_start_x < 0:
+        spot_region_start_x = 0
+    if spot_region_start_y < 0:
+        spot_region_start_y = 0
+    if spot_region_end_x > max_row:
+        spot_region_end_x = max_row
+    if spot_region_end_y > max_col:
+        spot_region_end_y = max_col
+
+    spot_region = category_map.values[spot_region_start_x:  spot_region_end_x,spot_region_start_y: spot_region_end_y]
+    # print(spot_region)
+    categories, votes = np.unique(spot_region, return_counts=True)
+
+    return int(categories[np.argmax(votes)])
+
+def get_spot_category(adata, category_map, strategy,name):
+    predict = []
+    #infer resolution
+    if category_map.shape[0] == 600:
+        # low resolution
+        resolution = 'low'
+        radius = int((0.5 * adata.uns['fiducial_diameter_fullres'] + 1) * adata.uns['tissue_lowres_scalef'])
+        max_row = max_col = 600
+    elif category_map.shape[0] == 400:
+        # low resolution
+        resolution = 'low'
+        radius = int((0.5 * adata.uns['fiducial_diameter_fullres'] + 1) * adata.uns['tissue_lowres_scalef'])
+        max_row = 400
+        max_col = 600
+    elif category_map.shape[0] == 2000:
+        #high resolution
+        resolution = 'high'
+        radius = int((0.5 * adata.uns['fiducial_diameter_fullres'] + 1) * adata.uns['tissue_hires_scalef'])
+        max_row = max_col = 2000
+    else:
+        #full resolution
+        resolution = 'full'
+        radius = int(0.5 * adata.uns['fiducial_diameter_fullres'] + 1)
+        max_row = max_col = int((2000 / adata.uns['tissue_hires_scalef']) + 1)
+    for index, row in adata.obs.iterrows():
+        if resolution == 'low':
+            center_x = int((row['pxl_col_in_fullres'] /(2000 / adata.uns['tissue_hires_scalef'] + 1)) *600)
+            center_y = int((row['pxl_row_in_fullres'] /(2000 / adata.uns['tissue_hires_scalef'] + 1)) *600)
+            # print(center_x, center_y)
+        elif resolution == 'high':
+            center_x = int((row['pxl_col_in_fullres'] /(2000 / adata.uns['tissue_hires_scalef'] + 1)) *2000)
+            center_y = int((row['pxl_row_in_fullres'] /(2000 / adata.uns['tissue_hires_scalef'] + 1)) *2000)
+        else:
+            center_x = row['pxl_col_in_fullres']
+            center_y = row['pxl_row_in_fullres']
+
+
+        if strategy == 'vote':
+            predictive_layer = get_spot_category_by_pixel_vote(category_map,
+                                                                      center_x, center_y, max_row,
+                                                                      max_col,radius)
+            # row[col_name] = predictive_layer
+            predict.append(predictive_layer)
+        else:
+            predictive_layer = get_spot_category_by_center_pixel(category_map,
+                                                                        center_x, center_y)
+            predict.append(predictive_layer)
+    col_name = 'predicted_category_'+name
+    adata.obs[col_name] = predict
