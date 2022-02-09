@@ -160,7 +160,7 @@ def single_gpu_test(adata,
 
             shutil.rmtree(out_dir)
             shutil.rmtree(output_folder+'result_temp/')
-            adata.obs.to_csv(output_folder + 'predicted_category.csv')
+            adata.obs.to_csv(output_folder + 'predicted_tissue_architecture.csv')
             # print(name)
             MI_result_top5.to_csv(output_folder + 'top5_MI_value.csv', index=True, header=True)
         else:
@@ -180,7 +180,7 @@ def single_gpu_test(adata,
 
             shutil.rmtree(out_dir)
             shutil.rmtree(output_folder + 'result_temp/')
-            adata.obs.to_csv(output_folder + 'predicted_category.csv')
+            adata.obs.to_csv(output_folder + 'predicted_tissue_architecture.csv')
             MI_result.to_csv(output_folder + 'top5_MI_value.csv', index=True, header=True)
 
         top1_name = MI_result.iloc[:, 0].values[0]
@@ -289,7 +289,7 @@ def single_gpu_test(adata,
             shutil.rmtree(output_folder+'result_temp/')
             shutil.rmtree(output_folder+'result/')
             # print(name)
-            adata.obs.to_csv(output_folder + 'predicted_category.csv')
+            adata.obs.to_csv(output_folder + 'predicted_tissue_architecture.csv')
             MI_result_top5.to_csv(output_folder + 'top5_evaluation.csv', index=False, header=True)
         else:
             name = MI_result.iloc[:, 0].values
@@ -310,7 +310,7 @@ def single_gpu_test(adata,
             shutil.rmtree(out_dir)
             shutil.rmtree(output_folder+'result_temp/')
             shutil.rmtree(output_folder+'result/')
-            adata.obs.to_csv(output_folder + 'predicted_category.csv')
+            adata.obs.to_csv(output_folder + 'predicted_tissue_architecture.csv')
             MI_result.to_csv(output_folder + 'top5_evaluation.csv', index=False, header=True)
 
         top1_name = MI_result.iloc[:, 0].values[0]
