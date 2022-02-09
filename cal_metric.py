@@ -96,7 +96,7 @@ def testing_metric(adata,img_path, output_folder, model, show_dir, k):
 
             shutil.rmtree(show_dir)
             shutil.rmtree(output_folder+'result_temp/')
-            adata.obs.to_csv(output_folder + 'predicted_category.csv')
+            adata.obs.to_csv(output_folder + 'predicted_tissue_architecture.csv')
             MI_result_top5.to_csv(output_folder + 'top5_MI_value.csv', index=True, header=True)
         else:
             name = MI_result.iloc[:, 0].values
@@ -115,7 +115,7 @@ def testing_metric(adata,img_path, output_folder, model, show_dir, k):
 
             shutil.rmtree(show_dir)
             shutil.rmtree(output_folder + 'result_temp/')
-            adata.obs.to_csv(output_folder + 'predicted_category.csv')
+            adata.obs.to_csv(output_folder + 'predicted_tissue_architecture.csv')
             MI_result.to_csv(output_folder + 'top5_MI_value.csv', index=True, header=True)
 
         top1_name = MI_result.iloc[:, 0].values[0]
@@ -170,7 +170,7 @@ def testing_metric(adata,img_path, output_folder, model, show_dir, k):
 
             shutil.rmtree(show_dir)
             shutil.rmtree(output_folder+'result_temp/')
-            adata.obs.to_csv(output_folder + 'predicted_category.csv')
+            adata.obs.to_csv(output_folder + 'predicted_tissue_architecture.csv')
             MI_result_top5.to_csv(output_folder + 'top5_MI_value.csv', index=True, header=True)
         else:
             name = MI_result.iloc[:, 0].values
@@ -189,7 +189,7 @@ def testing_metric(adata,img_path, output_folder, model, show_dir, k):
 
             shutil.rmtree(show_dir)
             shutil.rmtree(output_folder + 'result_temp/')
-            adata.obs.to_csv(output_folder + 'predicted_category.csv')
+            adata.obs.to_csv(output_folder + 'predicted_tissue_architecture.csv')
             MI_result.to_csv(output_folder + 'top5_MI_value.csv', index=True, header=True)
 
         top1_name = MI_result.iloc[:, 0].values[0]
@@ -296,7 +296,7 @@ def evaluation_metric(adata, img_path, output_folder, model, show_dir, label_pat
 
             shutil.rmtree(show_dir)
             shutil.rmtree(output_folder+'result_temp/')
-            adata.obs.to_csv(output_folder + 'predicted_category.csv')
+            adata.obs.to_csv(output_folder + 'predicted_tissue_architecture.csv')
             MI_result_top5.to_csv(output_folder + 'top5_MI_value.csv', index=True, header=True)
         else:
             name = MI_result.iloc[:, 0].values
@@ -315,7 +315,7 @@ def evaluation_metric(adata, img_path, output_folder, model, show_dir, label_pat
 
             shutil.rmtree(show_dir)
             shutil.rmtree(output_folder + 'result_temp/')
-            adata.obs.to_csv(output_folder + 'predicted_category.csv')
+            adata.obs.to_csv(output_folder + 'predicted_tissue_architecture.csv')
             MI_result.to_csv(output_folder + 'top5_MI_value.csv', index=True, header=True)
 
         top1_name = MI_result.iloc[:, 0].values[0]
@@ -383,7 +383,7 @@ def evaluation_metric(adata, img_path, output_folder, model, show_dir, label_pat
 
             shutil.rmtree(show_dir)
             shutil.rmtree(output_folder+'result_temp/')
-            adata.obs.to_csv(output_folder + 'predicted_category.csv')
+            adata.obs.to_csv(output_folder + 'predicted_tissue_architecture.csv')
             MI_result_top5.to_csv(output_folder + 'top5_MI_value.csv', index=True, header=True)
         else:
             name = MI_result.iloc[:, 0].values
@@ -402,7 +402,7 @@ def evaluation_metric(adata, img_path, output_folder, model, show_dir, label_pat
 
             shutil.rmtree(show_dir)
             shutil.rmtree(output_folder + 'result_temp/')
-            adata.obs.to_csv(output_folder + 'predicted_category.csv')
+            adata.obs.to_csv(output_folder + 'predicted_tissue_architecture.csv')
             MI_result.to_csv(output_folder + 'top5_MI_value.csv', index=True, header=True)
 
         top1_name = MI_result.iloc[:, 0].values[0]
