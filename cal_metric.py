@@ -297,7 +297,7 @@ def evaluation_metric(adata, img_path, output_folder, model, show_dir, label_pat
             shutil.rmtree(show_dir)
             shutil.rmtree(output_folder+'result_temp/')
             adata.obs.to_csv(output_folder + 'predicted_tissue_architecture.csv')
-            MI_result_top5.to_csv(output_folder + 'top5_MI_value.csv', index=True, header=True)
+            MI_result_top5.to_csv(output_folder + 'top5_evaluation.csv', index=True, header=True)
         else:
             name = MI_result.iloc[:, 0].values
             for n in name:
@@ -316,7 +316,7 @@ def evaluation_metric(adata, img_path, output_folder, model, show_dir, label_pat
             shutil.rmtree(show_dir)
             shutil.rmtree(output_folder + 'result_temp/')
             adata.obs.to_csv(output_folder + 'predicted_tissue_architecture.csv')
-            MI_result.to_csv(output_folder + 'top5_MI_value.csv', index=True, header=True)
+            MI_result.to_csv(output_folder + 'top5_evaluation.csv', index=True, header=True)
 
         top1_name = MI_result.iloc[:, 0].values[0]
         top1_csv_name = output_folder + 'result/' + top1_name.split('.png')[0] + '.csv'
@@ -384,7 +384,7 @@ def evaluation_metric(adata, img_path, output_folder, model, show_dir, label_pat
             shutil.rmtree(show_dir)
             shutil.rmtree(output_folder+'result_temp/')
             adata.obs.to_csv(output_folder + 'predicted_tissue_architecture.csv')
-            MI_result_top5.to_csv(output_folder + 'top5_MI_value.csv', index=True, header=True)
+            MI_result_top5.to_csv(output_folder + 'top5_evaluation.csv', index=True, header=True)
         else:
             name = MI_result.iloc[:, 0].values
             for n in name:
@@ -403,7 +403,7 @@ def evaluation_metric(adata, img_path, output_folder, model, show_dir, label_pat
             shutil.rmtree(show_dir)
             shutil.rmtree(output_folder + 'result_temp/')
             adata.obs.to_csv(output_folder + 'predicted_tissue_architecture.csv')
-            MI_result.to_csv(output_folder + 'top5_MI_value.csv', index=True, header=True)
+            MI_result.to_csv(output_folder + 'top5_evaluation.csv', index=True, header=True)
 
         top1_name = MI_result.iloc[:, 0].values[0]
         top1_csv_name = output_folder + 'result/' + top1_name.split('.png')[0] + '.csv'
