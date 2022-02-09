@@ -155,9 +155,12 @@ def single_gpu_test(adata,
                 if not os.path.exists(output_folder+'result/'):
                     os.makedirs(output_folder+'result/')
                 shutil.move(output_folder+'result_temp/'+prefix+'.csv', output_folder+'result/'+prefix+'.csv')
+                category_map = pd.read_csv(output_folder+'result/'+prefix+'.csv',header =None)
+                get_spot_category(adata, category_map, 'vote',prefix)
 
             shutil.rmtree(out_dir)
             shutil.rmtree(output_folder+'result_temp/')
+            adata.obs.to_csv(output_folder + 'predicted_category.csv')
             # print(name)
             MI_result_top5.to_csv(output_folder + 'top5_MI_value.csv', index=True, header=True)
         else:
@@ -172,11 +175,12 @@ def single_gpu_test(adata,
                 if not os.path.exists(output_folder + 'result/'):
                     os.makedirs(output_folder + 'result/')
                 shutil.move(output_folder + 'result_temp/' + prefix + '.csv', output_folder + 'result/' + prefix + '.csv')
+                category_map = pd.read_csv(output_folder+'result/'+prefix+'.csv',header =None)
+                get_spot_category(adata, category_map, 'vote',prefix)
 
             shutil.rmtree(out_dir)
-
             shutil.rmtree(output_folder + 'result_temp/')
-
+            adata.obs.to_csv(output_folder + 'predicted_category.csv')
             MI_result.to_csv(output_folder + 'top5_MI_value.csv', index=True, header=True)
 
         top1_name = MI_result.iloc[:, 0].values[0]
@@ -202,9 +206,12 @@ def single_gpu_test(adata,
 
                 image_test = cv2.imread(img_name)
                 predict = result[0].astype(np.int32)
-                # if not os.path.exists(output_folder+'result_temp/'):
-                #     os.makedirs(output_folder+'result_temp/')
-                # np.savetxt(output_folder+'result_temp/'+name.split('.png')[0]+'.csv', predict, delimiter=',')
+
+
+                if not os.path.exists(output_folder+'result_temp/'):
+                    os.makedirs(output_folder+'result_temp/')
+                np.savetxt(output_folder+'result_temp/'+name.split('.png')[0]+'.csv', predict, delimiter=',')
+
                 MI = cluster_heterogeneity(image_test, predict, 0)
                 MI_list.append(MI)
             if show or out_dir:
@@ -263,7 +270,6 @@ def single_gpu_test(adata,
 
         if len(name_list) > 5:
             MI_result_top5 = MI_result[0:5]
-            # print(MI_result_top5)
             name = MI_result_top5.iloc[:, 0].values
             for n in name:
                 prefix = n.split('.png')[0]
@@ -271,12 +277,19 @@ def single_gpu_test(adata,
                 if not os.path.exists(output_folder + 'segmentation_map/'):
                     os.makedirs(output_folder + 'segmentation_map/')
                 cv2.imwrite(output_folder + 'segmentation_map/' + n, show)
-            #                 if not os.path.exists(output_folder+'result/'):
-            #                     os.makedirs(output_folder+'result/')
-            #                 shutil.move(output_folder+'result_temp/'+prefix+'.csv', output_folder+'result/'+prefix+'.csv')
+
+                if not os.path.exists(output_folder+'result/'):
+                    os.makedirs(output_folder+'result/')
+                shutil.move(output_folder+'result_temp/'+prefix+'.csv', output_folder+'result/'+prefix+'.csv')
+
+                category_map = pd.read_csv(output_folder+'result/'+prefix+'.csv',header =None)
+                get_spot_category(adata, category_map, 'vote',prefix)
+
             shutil.rmtree(out_dir)
-            #             shutil.rmtree(output_folder+'result_temp/')
+            shutil.rmtree(output_folder+'result_temp/')
+            shutil.rmtree(output_folder+'result/')
             # print(name)
+            adata.obs.to_csv(output_folder + 'predicted_category.csv')
             MI_result_top5.to_csv(output_folder + 'top5_evaluation.csv', index=False, header=True)
         else:
             name = MI_result.iloc[:, 0].values
@@ -286,11 +299,18 @@ def single_gpu_test(adata,
                 if not os.path.exists(output_folder + 'segmentation_map/'):
                     os.makedirs(output_folder + 'segmentation_map/')
                 cv2.imwrite(output_folder + 'segmentation_map/' + n, show)
-            #                 if not os.path.exists(output_folder + 'result/'):
-            #                     os.makedirs(output_folder + 'result/')
-            #                 shutil.move(output_folder + 'result_temp/' + prefix + '.csv', output_folder + 'result/' + prefix + '.csv')
+
+                if not os.path.exists(output_folder+'result/'):
+                    os.makedirs(output_folder+'result/')
+                shutil.move(output_folder+'result_temp/'+prefix+'.csv', output_folder+'result/'+prefix+'.csv')
+
+                category_map = pd.read_csv(output_folder+'result/'+prefix+'.csv',header =None)
+                get_spot_category(adata, category_map, 'vote',prefix)
+
             shutil.rmtree(out_dir)
-            #             shutil.rmtree(output_folder + 'result_temp/')
+            shutil.rmtree(output_folder+'result_temp/')
+            shutil.rmtree(output_folder+'result/')
+            adata.obs.to_csv(output_folder + 'predicted_category.csv')
             MI_result.to_csv(output_folder + 'top5_evaluation.csv', index=False, header=True)
 
         top1_name = MI_result.iloc[:, 0].values[0]
@@ -704,3 +724,79 @@ def single_gpu_train_pipeline(model,
     ARI_result.to_csv('./train_pipeline_test'+'.csv',index=False, header=False,mode='a')
 
     return results
+
+def get_spot_category_by_center_pixel(category_map, center_x, center_y):
+
+    return category_map[center_x, center_y]
+
+def get_spot_category_by_pixel_vote(category_map, center_x, center_y,max_row, max_col, radius):
+
+    spot_region_start_x = center_x - radius
+    spot_region_end_x = center_x + radius
+    spot_region_start_y = center_y - radius
+    spot_region_end_y = center_y + radius
+
+    if spot_region_start_x < 0:
+        spot_region_start_x = 0
+    if spot_region_start_y < 0:
+        spot_region_start_y = 0
+    if spot_region_end_x > max_row:
+        spot_region_end_x = max_row
+    if spot_region_end_y > max_col:
+        spot_region_end_y = max_col
+
+    spot_region = category_map.values[spot_region_start_x:  spot_region_end_x,spot_region_start_y: spot_region_end_y]
+    # print(spot_region)
+    categories, votes = np.unique(spot_region, return_counts=True)
+
+    return int(categories[np.argmax(votes)])
+
+def get_spot_category(adata, category_map, strategy,name):
+    predict = []
+    #infer resolution
+    if category_map.shape[0] == 600:
+        # low resolution
+        resolution = 'low'
+        radius = int((0.5 * adata.uns['fiducial_diameter_fullres'] + 1) * adata.uns['tissue_lowres_scalef'])
+        max_row = max_col = 600
+    elif category_map.shape[0] == 400:
+        # low resolution
+        resolution = 'low'
+        radius = int((0.5 * adata.uns['fiducial_diameter_fullres'] + 1) * adata.uns['tissue_lowres_scalef'])
+        max_row = 400
+        max_col = 600
+    elif category_map.shape[0] == 2000:
+        #high resolution
+        resolution = 'high'
+        radius = int((0.5 * adata.uns['fiducial_diameter_fullres'] + 1) * adata.uns['tissue_hires_scalef'])
+        max_row = max_col = 2000
+    else:
+        #full resolution
+        resolution = 'full'
+        radius = int(0.5 * adata.uns['fiducial_diameter_fullres'] + 1)
+        max_row = max_col = int((2000 / adata.uns['tissue_hires_scalef']) + 1)
+    for index, row in adata.obs.iterrows():
+        if resolution == 'low':
+            center_x = int((row['pxl_col_in_fullres'] /(2000 / adata.uns['tissue_hires_scalef'] + 1)) *600)
+            center_y = int((row['pxl_row_in_fullres'] /(2000 / adata.uns['tissue_hires_scalef'] + 1)) *600)
+            # print(center_x, center_y)
+        elif resolution == 'high':
+            center_x = int((row['pxl_col_in_fullres'] /(2000 / adata.uns['tissue_hires_scalef'] + 1)) *2000)
+            center_y = int((row['pxl_row_in_fullres'] /(2000 / adata.uns['tissue_hires_scalef'] + 1)) *2000)
+        else:
+            center_x = row['pxl_col_in_fullres']
+            center_y = row['pxl_row_in_fullres']
+
+
+        if strategy == 'vote':
+            predictive_layer = get_spot_category_by_pixel_vote(category_map,
+                                                                      center_x, center_y, max_row,
+                                                                      max_col,radius)
+            # row[col_name] = predictive_layer
+            predict.append(predictive_layer)
+        else:
+            predictive_layer = get_spot_category_by_center_pixel(category_map,
+                                                                        center_x, center_y)
+            predict.append(predictive_layer)
+    col_name = 'predicted_category_'+name
+    adata.obs[col_name] = predict
