@@ -89,7 +89,7 @@ cd RESEPT
 
 ### Annotation file (optional)
 
-An annotation file should include spot barcodes and their corresponding annotations. It is used for evaluating predictive tissue architectures (e.g., ARI) and training user's segmentation models. The file should be named as:[sample_name]_annotation.csv. [[example]](https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/151670_annotation.csv)
+An annotation file should include spot barcodes and their corresponding annotations. It is used for evaluating predictive tissue architectures (e.g., ARI) and training user's segmentation models. The file should be named as:[sample_name]_annotation.csv. [[example]](https://bmblx.bmi.osumc.edu/downloadFiles/GitHub_files/151670_annotation.csv)
 
 ### Segmentation model file (optinal)
 
@@ -137,9 +137,9 @@ The data schema to customize our segmentation model is as follows:
 ## Demo
 
 ### Function 1: visualize tissue architecture 
-Run the following command line to construct RGB images based on gene expression from different embedding parameters. For demonstration, please download the example data from [here](https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/151669.zip) and put the unzip folder '151669' in the source code folder.
+Run the following command line to construct RGB images based on gene expression from different embedding parameters. For demonstration, please download the example data from [here](https://bmblx.bmi.osumc.edu/downloadFiles/GitHub_files/151669.zip) and put the unzip folder '151669' in the source code folder.
 ```
-wget https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/151669.zip 
+wget https://bmblx.bmi.osumc.edu/downloadFiles/GitHub_files/151669.zip 
 unzip 151669.zip
 python RGB_images_pipeline.py -expression 151669/151669_filtered_feature_bc_matrix.h5  -meta 151669/spatial/tissue_positions_list.csv  -scaler 151669/spatial/scalefactors_json.json -output Demo_result  -embedding scGNN  -transform logcpm 
 ```
@@ -164,10 +164,10 @@ python RGB_images_pipeline.py -expression 151669/151669_filtered_feature_bc_matr
 This demo takes 25-30 mins to generate all results on the machine with a 64-core CPU.
 
 ### Function 2: evaluate predictive tissue architectures with annotation
-Run the following command line to construct RGB images based on gene expression from different embedding parameters, segment the constructed RGB images to tissue architectures with top-5 Moran's I, and evaluate the tissue architectures (e.g., ARI). For demonstration, please download the example data from [here](https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/151669.zip) and the pretrained model from [here](https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/model_151669.zip). Then put unzip folders '151669' and 'model_151669' in the source code folder.
+Run the following command line to construct RGB images based on gene expression from different embedding parameters, segment the constructed RGB images to tissue architectures with top-5 Moran's I, and evaluate the tissue architectures (e.g., ARI). For demonstration, please download the example data from [here](https://bmblx.bmi.osumc.edu/downloadFiles/GitHub_files/151669.zip) and the pretrained model from [here](https://bmblx.bmi.osumc.edu/downloadFiles/GitHub_files/model_151669.zip). Then put unzip folders '151669' and 'model_151669' in the source code folder.
 ```
-wget https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/151669.zip 
-wget https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/model_151669.zip
+wget https://bmblx.bmi.osumc.edu/downloadFiles/GitHub_files/151669.zip 
+wget https://bmblx.bmi.osumc.edu/downloadFiles/GitHub_files/model_151669.zip
 unzip 151669.zip
 unzip model_151669.zip
 python evaluation_pipeline.py -expression 151669/151669_filtered_feature_bc_matrix.h5  -meta 151669/spatial/tissue_positions_list.csv  -scaler 151669/spatial/scalefactors_json.json -k 7 -label 151669/151669_annotation.csv -model model_151669/151669_scGNN.pth -output Demo_result_evaluation  -embedding scGNN  -transform logcpm  -device cpu
@@ -204,10 +204,10 @@ python evaluation_pipeline.py -expression 151669/151669_filtered_feature_bc_matr
 This demo takes 30-35 mins to generate all results on the machine with a 64-core CPU.
 
 ### Function 3: predict tissue architecture without annotation
-Run the following command line to generate RGB images based on gene expression from different embedding parameters and predict tissue architectures with top-5 Moran's I. For demonstration, please download the example data from [here](https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/151669.zip) and the pre-trained model from [here](https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/model_151669.zip). Then put unzip folders '151669' and 'model_151669' in the source code folder.
+Run the following command line to generate RGB images based on gene expression from different embedding parameters and predict tissue architectures with top-5 Moran's I. For demonstration, please download the example data from [here](https://bmblx.bmi.osumc.edu/downloadFiles/GitHub_files/151669.zip) and the pre-trained model from [here](https://bmblx.bmi.osumc.edu/downloadFiles/GitHub_files/model_151669.zip). Then put unzip folders '151669' and 'model_151669' in the source code folder.
 ```
-wget https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/151669.zip 
-wget https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/model_151669.zip 
+wget https://bmblx.bmi.osumc.edu/downloadFiles/GitHub_files/151669.zip 
+wget https://bmblx.bmi.osumc.edu/downloadFiles/GitHub_files/model_151669.zip 
 unzip model_151669.zip
 unzip 151669.zip
 python test_pipeline.py -expression 151669/151669_filtered_feature_bc_matrix.h5  -meta 151669/spatial/tissue_positions_list.csv  -scaler 151669/spatial/scalefactors_json.json -k 7 -model model_151669/151669_scGNN.pth -output Demo_result_tissue_architecture  -embedding scGNN  -transform logcpm -device cpu
@@ -242,10 +242,10 @@ python test_pipeline.py -expression 151669/151669_filtered_feature_bc_matrix.h5 
 This demo takes 30-35 mins to generate all the results on the machine with a 64-core CPU.
 
 ### Function 4: segment histological images
-```RESEPT``` allows to segment a histological image according to predicted tissue architectures. It may help pathologists to focus on specific functional zonation. Run the following command line to predict tissue architectures with top-5 Moran's I and segment the histological image accordingly. For demonstration, please download the example data from [here](https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/cancer.zip) and the pre-trained model from [here](https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/model_cancer.zip). Then put unzip folders 'cancer' and 'model_cancer' in the source code folder.
+```RESEPT``` allows to segment a histological image according to predicted tissue architectures. It may help pathologists to focus on specific functional zonation. Run the following command line to predict tissue architectures with top-5 Moran's I and segment the histological image accordingly. For demonstration, please download the example data from [here](https://bmblx.bmi.osumc.edu/downloadFiles/GitHub_files/cancer.zip) and the pre-trained model from [here](https://bmblx.bmi.osumc.edu/downloadFiles/GitHub_files/model_cancer.zip). Then put unzip folders 'cancer' and 'model_cancer' in the source code folder.
 ```
-wget https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/cancer.zip
-wget https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/model_cancer.zip
+wget https://bmblx.bmi.osumc.edu/downloadFiles/GitHub_files/cancer.zip
+wget https://bmblx.bmi.osumc.edu/downloadFiles/GitHub_files/model_cancer.zip
 unzip cancer.zip
 unzip model_cancer.zip
 python histological_segmentation_pipeline.py -expression ./cancer/Parent_Visium_Human_Glioblas_filtered_feature_bc_matrix.h5 -meta ./cancer/spatial/tissue_positions_list.csv -scaler ./cancer/spatial/scalefactors_json.json -k 7 -model ./model_cancer/cancer_model.pth -histological ./cancer/Parent_Visium_Human_Glioblast.tif -output Demo_result_HistoImage -embedding spaGCN -transform logcpm -device cpu
@@ -287,7 +287,7 @@ python histological_segmentation_pipeline.py -expression ./cancer/Parent_Visium_
 This demo takes 30-35 mins to generate all results on the machine with the multi-core CPU.
 
 ### Function 5: customize segmentation model (GPU required)
- ```RESEPT``` supports fine-tuning our segmentation model by using users' 10x Visium data. Organize all samples and their annotations according to our pre-defined data schema and download our pre-trained model from [here](https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/model_151669.zip) as a training start point. Each sample for the training model should be placed in an individual folder with a specific format (the folder structure can be found [here](https://github.com/coffee19850519/single_cell_spatial_image#data-structure)). Then gather all the individual folders into one main folder (e.g., named “training_data_folder”).  For demonstration, download the example training data from [here](https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/training_data_folder.zip), and then run the following command line to generate the RGB images of your own data and customized model.
+ ```RESEPT``` supports fine-tuning our segmentation model by using users' 10x Visium data. Organize all samples and their annotations according to our pre-defined data schema and download our pre-trained model from [here](https://bmblx.bmi.osumc.edu/downloadFiles/GitHub_files/model_151669.zip) as a training start point. Each sample for the training model should be placed in an individual folder with a specific format (the folder structure can be found [here](https://github.com/coffee19850519/single_cell_spatial_image#data-structure)). Then gather all the individual folders into one main folder (e.g., named “training_data_folder”).  For demonstration, download the example training data from [here](https://bmblx.bmi.osumc.edu/downloadFiles/GitHub_files/training_data_folder.zip), and then run the following command line to generate the RGB images of your own data and customized model.
 ```
 wget https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/model_151669.zip
 wget https://bmbl.bmi.osumc.edu/downloadFiles/GitHub_files/training_data_folder.zip
