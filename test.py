@@ -29,9 +29,9 @@ def segmentation(adata,img_path,label_path,method,checkpoint_path,device, k):
     checkpoint = checkpoint_path
 
     if label_path == None:
-        output_folder = img_path.split('/')[0]+'/segmentation_test/'
+        output_folder = os.path.split(os.path.split(img_path)[0])[0]+'/segmentation_test/'
     else:
-        output_folder = img_path.split('/')[0] + '/segmentation_evaluation/'
+        output_folder = os.path.split(os.path.split(img_path)[0])[0] + '/segmentation_evaluation/'
     show_dir = output_folder+'show_temp/'
     if not os.path.exists(show_dir):
         os.makedirs(show_dir)

@@ -80,7 +80,8 @@ def single_gpu_test(adata,
                 # calculate MI
 
                 img_name = data['img_metas'][0].data[0][0]['filename']
-                name = img_name.split('/')[-1]
+                # name = img_name.split('/')[-1]
+                name = os.path.basename(img_name)
                 name_list.append(name)
                 image_test = cv2.imread(img_name)
                 predict = result[0].astype(np.int32)
@@ -197,7 +198,6 @@ def single_gpu_test(adata,
 
                 img_name = data['img_metas'][0].data[0][0]['filename']
                 name, ARI, AMI, FMI, RI = calculate(adata, result, img_name, label_path)
-                # name = img_name.split('/', 7 )[-1]
                 name_list.append(name)
                 ARI_list.append(ARI)
                 AMI_list.append(AMI)
@@ -528,8 +528,7 @@ def collect_results_gpu(result_part, size):
 
 
 def calculate(adata, output, img_path, label_path):
-    img_name = img_path.split('/')[-1]  # eg:151507_50_32_....png
-
+    img_name = os.path.basename(img_path)
     samples_num = img_name.split('_')[0]  # eg:151507
 
     labels = save_spot_RGB_to_image(label_path, adata)  # label
@@ -664,7 +663,9 @@ def single_gpu_train_pipeline(model,
             #calculate ARI
 
             img_name = data['img_metas'][0].data[0][0]['filename']
-            name = img_name.split('/')[-1]
+            # name = img_name.split('/')[-1]
+            name = os.path.basename(img_name)
+            
             # name, ARI = calculate(result,img_name)
             name_list.append(img_name)
             # ARI_list.append(ARI)
