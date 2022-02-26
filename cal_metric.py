@@ -480,10 +480,9 @@ def cluster_heterogeneity(image_test, category_map, background_category):
 
 
 def calculate(adata, output, img_path, label_path):
-    img_name = img_path.split('/')[-1]  # eg:151507_50_32_....png
 
-    samples_num = img_name.split('_')[0]  # eg:151507
-
+    img_name = os.path.basename(img_path)
+    
     labels = save_spot_RGB_to_image(label_path, adata)  # label
     label = labels.flatten().tolist()
     output = np.array(output).flatten().tolist()
