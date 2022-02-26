@@ -23,7 +23,7 @@ from mmseg.apis.inference import init_segmentor
 
 def testing_metric(adata,img_path, output_folder, model, show_dir, k):
     MI_list = [] 
-    name_list = []
+    name_list = [] 
     k_list = []
     if k==-1:
         for name in os.listdir(img_path):
