@@ -75,18 +75,11 @@ def pseduo_images_scGNN(h5_path, spatial_path, scale_factor_path, output_folder,
     print('load data finish')
 
     scgnnsp_knn_distanceList = ['euclidean']
-    # scgnnsp_PEalphaList = ['0.1', '0.2', '0.3', '0.5', '1.0', '1.2', '1.5', '2.0']
-    # scgnnsp_PEalphaList = [ '0.1',  '0.3', '0.5',  '1.0',  '1.5', '2.0']
-    # scgnnsp_kList = ['6', '8']
     scgnnsp_kList = ['6']
-    # scgnnsp_zdimList = ['3', '10', '16', '32', '64', '128', '256']
     scgnnsp_bypassAE_List = [True, False]
-    # sample = 'scGNN'
 
     scgnnsp_bypassAE = scgnnsp_bypassAE_List[1]
     for scgnnsp_dist in scgnnsp_knn_distanceList:
-        # for scgnnsp_zdim in scgnnsp_zdimList:
-        #     for scgnnsp_alpha in scgnnsp_PEalphaList:
                 for scgnnsp_k in scgnnsp_kList:
                     # --------------------------------------------------------------------------------------------------------#
                      # -------------------------------generate_embedding --------------------------------------------------#
@@ -196,13 +189,9 @@ def pseudo_images(h5_path, spatial_path, scale_factor_path, output_folder,method
         # print(core_num)
         pool = Pool(core_num - 5)
         for scgnnsp_zdim in scgnnsp_zdimList:
-                # for scgnnsp_dist in scgnnsp_knn_distanceList:
                     for scgnnsp_alpha in scgnnsp_PEalphaList:
-                        # for scgnnsp_k in scgnnsp_kList:
                         pool.apply_async(pseduo_images_scGNN, (h5_path, spatial_path, scale_factor_path, output_folder,
                                                                scgnnsp_zdim,scgnnsp_alpha,transform_opt,))
-                        # pseduo_images_scGNN(h5_path, spatial_path, scale_factor_path, output_folder,
-                        #                                        scgnnsp_zdim,scgnnsp_alpha,transform_opt)
         pool.close()
         pool.join()
         
@@ -296,7 +285,7 @@ def segmentation_test(h5_path, spatial_path, scale_factor_path, output_path, met
     pseudo_images(h5_path, spatial_path, scale_factor_path, output_path, method,panel_gene_path,pca_opt,transform_opt)   # output_folder+ "/pseudo_images/"
     img_path = output_path + "/RGB_images/"
     label_path = None
-    adata = None
+    adata,spatial_all = load_data(h5_path, spatial_path, scale_factor_path)
     top1_csv_name= segmentation(adata,img_path,label_path,method,checkpoint, device, k)
     return top1_csv_name
 
@@ -304,7 +293,6 @@ def segmentation_test(h5_path, spatial_path, scale_factor_path, output_path, met
 def segmentation_category_map(h5_path, spatial_path, scale_factor_path, optical_path, output_path, method, panel_gene_path, pca_opt, transform_opt, checkpoint, device, k):
     optical_img = cv2.imread(optical_path)
     category_map = segmentation_test(h5_path, spatial_path, scale_factor_path, output_path, method, panel_gene_path, pca_opt, transform_opt, checkpoint, device, k)
-#     category_map = np.loadtxt(top1_csv_name,dtype=np.int32, delimiter=",")  
     seg_category_map(optical_img, category_map, output_path)
 
 

@@ -194,10 +194,12 @@ python evaluation_pipeline.py -expression 151669/151669_filtered_feature_bc_matr
       |__segmentation_evaluation/
             |__segmentation_map/
             |__top5_evaluation.csv
+	    |__predicted_tissue_architecture.csv
    ```
 *	The folder 'RGB_images' contains the generated RGB images of tissue architectures from different embedding parameters.
 *	The folder 'segmentation_map' stores the predicted tissue architectures with top-5 Moran's I.
 *	The file 'top5_evaluation.csv' records various evaluation metrics corresponding to the tissue architectures.  
+*	The file 'predicted_tissue_architecture.csv' records the predicted tissue architecture values of spots with top-5 Moran's I.
 
 This demo takes 30-35 mins to generate all results on the machine with a 64-core CPU.
 
@@ -230,10 +232,12 @@ python test_pipeline.py -expression 151669/151669_filtered_feature_bc_matrix.h5 
    |__segmentation_test/
          |__segmentation_map/
          |__top5_MI_value.csv
+	 |__predicted_tissue_architecture.csv
    ```
 *	The folder 'RGB_images' contains the generated RGB images of tissue architectures from different embedding parameters.
 *	The folder 'segmentation_map' stores the predicted tissue architectures with top-5 Moran's I.
-*	The file 'top5_MI_value.csv' records Moran's I value corresponding to the tissue architectures.  
+*	The file 'top5_MI_value.csv' records Moran's I value corresponding to the tissue architectures.
+*	The file 'predicted_tissue_architecture.csv' records the predicted tissue architecture values of spots with top-5 Moran's I.  
 
 This demo takes 30-35 mins to generate all the results on the machine with a 64-core CPU.
 
@@ -266,6 +270,7 @@ python histological_segmentation_pipeline.py -expression ./cancer/Parent_Visium_
    |__segmentation_test/
    |     |__segmentation_map/
    |     |__top5_MI_value.csv
+   |     |__predicted_tissue_architecture.csv
    |__histological_segmentation/
          |__category_1.png
          |__category_2.png
@@ -275,6 +280,7 @@ python histological_segmentation_pipeline.py -expression ./cancer/Parent_Visium_
 *	The folder 'RGB_images' stores generated RGB images of tissue architectures from different embedding parameters.
 *	The folder 'segmentation_map' provides predicted tissue architectures with top-5 Moran's I.
 *	The file 'top5_MI_value.csv' records Moran's I value corresponding to the tissue architectures.
+*	The file 'predicted_tissue_architecture.csv' records the predicted tissue architecture values of spots with top-5 Moran's I.
 *	The file 'category_```n```.png' refers to the histological image segmentation results, where ```n``` denotes the segmentation number.   
 
 
